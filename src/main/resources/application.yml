@@ -16,3 +16,12 @@ spring:
     redis:
       host: localhost
       port: 6379
+  jpa:
+    database: postgresql
+    hibernate:
+      ddl-auto: create
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/coaster
+    username: user
+    password: root
