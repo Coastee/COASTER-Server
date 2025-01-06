@@ -4,18 +4,16 @@ import com.coastee.server.chatroom.domain.ChatRoom;
 import com.coastee.server.chatroom.domain.ChatRoomType;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class ChatRoomRepository {
     private final Map<Long, ChatRoom> chatRooms = new HashMap<>();
 
     public List<ChatRoom> findAll() {
-        return new ArrayList<>(chatRooms.values());
+        ArrayList<ChatRoom> chatRooms = new ArrayList<>(this.chatRooms.values());
+        Collections.reverse(chatRooms);
+        return chatRooms;
     }
 
     public ChatRoom findById(Long id) {

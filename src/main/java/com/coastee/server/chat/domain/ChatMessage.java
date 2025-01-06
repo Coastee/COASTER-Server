@@ -12,10 +12,10 @@ import static lombok.AccessLevel.PROTECTED;
 public class ChatMessage {
     private Long id;
     private String sender;
-    private ChatMessageType messageType;
+    private ChatMessageType type;
     private Long roomId;
     @Setter
-    private String content;
+    private String message;
 
     @Builder
     public ChatMessage(
@@ -27,6 +27,6 @@ public class ChatMessage {
         this.id = id;
         this.roomId = roomId;
         this.sender = sender;
-        this.messageType = chatMessageType;
+        this.type = chatMessageType;
     }
 }

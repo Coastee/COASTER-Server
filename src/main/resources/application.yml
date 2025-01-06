@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: server
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+  freemarker:
+    cache: false
+    suffix: .ftl
+    check-template-location: true
