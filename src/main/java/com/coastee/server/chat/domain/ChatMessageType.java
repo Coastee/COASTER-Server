@@ -10,7 +10,9 @@ import java.util.Arrays;
 public enum ChatMessageType {
     ENTER("enter"),
     QUIT("quit"),
-    TALK("talk");
+    TALK("talk"),
+    DELETE("delete"),
+    ;
 
     private final String code;
 

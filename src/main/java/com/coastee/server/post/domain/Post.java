@@ -1,9 +1,9 @@
-package com.coastee.server.chatroom.domain;
+package com.coastee.server.post.domain;
 
 import com.coastee.server.community.domain.Community;
 import com.coastee.server.global.BaseEntity;
+import com.coastee.server.user.domain.User;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +14,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @Entity
 @NoArgsConstructor(access = PROTECTED)
-public class ChatRoom extends BaseEntity {
+public class Post extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -23,18 +23,9 @@ public class ChatRoom extends BaseEntity {
     @JoinColumn(name = "community_id")
     private Community community;
 
-    private String title;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    private ChatRoomType chatRoomType;
-
-    @Builder
-    public ChatRoom(
-            final Community community,
-            final String title,
-            final ChatRoomType chatRoomType
-    ) {
-        this.community = community;
-        this.title = title;
-        this.chatRoomType = chatRoomType;
-    }
+    private String content;
 }

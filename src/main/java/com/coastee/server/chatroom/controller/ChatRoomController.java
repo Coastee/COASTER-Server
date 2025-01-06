@@ -1,7 +1,7 @@
 package com.coastee.server.chatroom.controller;
 
 import com.coastee.server.chatroom.domain.ChatRoom;
-import com.coastee.server.chatroom.domain.repository.ChatRoomRepository;
+import com.coastee.server.chatroom.domain.repository.ChatRoomRedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +13,7 @@ import java.util.List;
 @Controller
 public class ChatRoomController {
 
-    private final ChatRoomRepository chatRoomRepository;
+    private final ChatRoomRedisRepository chatRoomRedisRepository;
 
     @GetMapping("/chat/room")
     public String rooms(final Model model) {
@@ -23,13 +23,13 @@ public class ChatRoomController {
     @GetMapping("/chat/rooms")
     @ResponseBody
     public List<ChatRoom> room() {
-        return chatRoomRepository.findAll();
+        return chatRoomRedisRepository.findAll();
     }
 
     @PostMapping("/chat/room")
     @ResponseBody
     public ChatRoom createRoom(@RequestParam("name") String name) {
-        return chatRoomRepository.create(name);
+        return chatRoomRedisRepository.create(name);
     }
 
     @GetMapping("/chat/room/enter/{roomId}")
@@ -41,6 +41,6 @@ public class ChatRoomController {
     @GetMapping("/chat/room/{roomId}")
     @ResponseBody
     public ChatRoom roomInfo(@PathVariable("roomId") Long roomId) {
-        return chatRoomRepository.findById(roomId);
+        return chatRoomRedisRepository.findById(roomId);
     }
 }

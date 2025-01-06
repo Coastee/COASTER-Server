@@ -1,32 +1,47 @@
 package com.coastee.server.chat.domain;
 
+import com.coastee.server.chatroom.domain.ChatRoom;
+import com.coastee.server.global.BaseEntity;
+import com.coastee.server.user.domain.User;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
+import static jakarta.persistence.FetchType.LAZY;
+import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Getter
+@Entity
 @NoArgsConstructor(access = PROTECTED)
-public class ChatMessage {
+public class ChatMessage extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
-    private String sender;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "chatroom_id")
+    private ChatRoom chatRoom;
+
+    private String content;
+
     private ChatMessageType type;
-    private Long roomId;
-    @Setter
-    private String message;
 
     @Builder
     public ChatMessage(
-            final Long id,
-            final Long roomId,
-            final String sender,
+            final User user,
+            final ChatRoom chatRoom,
+            final String content,
             final ChatMessageType chatMessageType
     ) {
-        this.id = id;
-        this.roomId = roomId;
-        this.sender = sender;
+        this.user = user;
+        this.chatRoom = chatRoom;
+        this.content = content;
         this.type = chatMessageType;
     }
 }

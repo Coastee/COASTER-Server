@@ -29,7 +29,7 @@ public class RedisSubscriber implements MessageListener {
                     .deserialize(message.getBody());
             ChatMessage chatMessage = objectMapper.readValue(publishMessage, ChatMessage.class);
             operations.convertAndSend(
-                    "/sub/chat/room/" + chatMessage.getRoomId(),
+                    "/sub/chat/room/" + chatMessage.getChatRoom().getId(),
                     chatMessage
             );
         } catch (Exception e) {
