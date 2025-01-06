@@ -1,4 +1,5 @@
-*.rdb
+### Key ###
+application-secret.yml
 
 ### STS ###
 .apt_generated
@@ -44,3 +45,4 @@ logs
 ### VS Code ###
 .vscode/
 .idea/workspace.xml
+src/main/resources/application-secret.yml
