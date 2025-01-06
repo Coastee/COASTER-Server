@@ -4,11 +4,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 import static lombok.AccessLevel.PROTECTED;
 
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class ChatRoom {
+public class ChatRoom implements Serializable {
+    private static final long serialVersionUID = 6494678977089006639L;
     private Long roomId;
     private String name;
     private ChatRoomType chatRoomType;
