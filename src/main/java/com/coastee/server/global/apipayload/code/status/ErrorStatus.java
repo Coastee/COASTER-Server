@@ -20,7 +20,15 @@ public enum ErrorStatus implements BaseErrorCode {
     _INVALID_AUTHORITY(UNAUTHORIZED, "COMMON401", "해당 리소스에 대한 접근 권한이 없습니다."),
 
     // Global
-    IO_EXCEPTION(INTERNAL_SERVER_ERROR, "COMMON5001", "서버 IO Exception 발생, 관리자에게 문의 바랍니다");
+    IO_EXCEPTION(INTERNAL_SERVER_ERROR, "COMMON5001", "서버 IO Exception 발생, 관리자에게 문의 바랍니다"),
+
+    // Login
+    INVALID_OAUTH_TOKEN(UNAUTHORIZED, "LOGIN4001", "토큰을 가져올 수 없습니다."),
+    NULL_TOKEN(UNAUTHORIZED, "LOGIN4002", "토큰이 존재하지 않습니다."),
+    EXPIRED_ACCESS_TOKEN(UNAUTHORIZED, "LOGIN4003", "만료된 액세스 토큰입니다."),
+    EXPIRED_REFRESH_TOKEN(UNAUTHORIZED, "LOGIN4004", "만료된 리프레시 토큰입니다."),
+    FAIL_VALIDATE_TOKEN(BAD_REQUEST, "LOGIN4005", "토큰 유효성 검사 중 오류가 발생했습니다."),
+    ;
 
     private final HttpStatus httpStatus;
     private final String code;

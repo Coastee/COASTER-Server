@@ -3,9 +3,9 @@ package com.coastee.server.global.apipayload.exception.handler;
 import com.coastee.server.global.apipayload.code.BaseErrorCode;
 import com.coastee.server.global.apipayload.exception.GeneralException;
 
-public class AuthenticationException extends GeneralException {
+public class RefreshTokenException extends GeneralException {
 
-    public AuthenticationException(BaseErrorCode code) {
+    public RefreshTokenException(BaseErrorCode code) {
         super(code);
     }
 }
