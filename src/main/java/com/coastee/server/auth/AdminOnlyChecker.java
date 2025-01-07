@@ -13,13 +13,13 @@ import static com.coastee.server.global.apipayload.code.status.ErrorStatus._INVA
 
 @Aspect
 @Component
-public class MemberOnlyChecker {
-    @Before("@annotation(com.coastee.server.auth.MemberOnly)")
+public class AdminOnlyChecker {
+    @Before("@annotation(com.coastee.server.auth.AdminOnly)")
     public void check(final JoinPoint joinPoint) {
         Arrays.stream(joinPoint.getArgs())
                 .filter(Accessor.class::isInstance)
                 .map(Accessor.class::cast)
-                .filter(a -> a.isMember() || a.isAdmin())
+                .filter(Accessor::isAdmin)
                 .findFirst()
                 .orElseThrow(() -> new AuthenticationException(_INVALID_AUTHORITY));
     }

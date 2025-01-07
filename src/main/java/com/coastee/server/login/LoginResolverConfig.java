@@ -1,6 +1,5 @@
-package com.coastee.server.login.config;
+package com.coastee.server.login;
 
-import com.coastee.server.login.util.LoginArgumentResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

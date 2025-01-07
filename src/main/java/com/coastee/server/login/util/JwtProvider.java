@@ -1,5 +1,6 @@
 package com.coastee.server.login.util;
 
+import com.coastee.server.auth.domain.Authority;
 import com.coastee.server.global.apipayload.exception.handler.ExpiredPeriodJwtException;
 import com.coastee.server.global.apipayload.exception.handler.InvalidJwtException;
 import io.jsonwebtoken.*;
@@ -43,7 +44,18 @@ public class JwtProvider {
         return createToken(EMPTY_SUBJECT, refreshTokenExpirationTime);
     }
 
-    private String createToken(final String subject, final Long validityInMilliseconds) {
+    private String createToken(
+            final String subject,
+            final Long validityInMilliseconds
+    ) {
+        return createToken(subject, validityInMilliseconds, Authority.MEMBER);
+    }
+
+    private String createToken(
+            final String subject,
+            final Long validityInMilliseconds,
+            final Authority authority
+    ) {
         final Date now = new Date();
         final Date validity = new Date(now.getTime() + validityInMilliseconds);
 
@@ -51,7 +63,7 @@ public class JwtProvider {
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setSubject(subject)
                 .setIssuedAt(now)
-                .claim(AUTHORITIES_KEY, "ROLE_USER")
+                .claim(AUTHORITIES_KEY, authority)
                 .setExpiration(validity)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();

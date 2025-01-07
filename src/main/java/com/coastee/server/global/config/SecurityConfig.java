@@ -1,6 +1,5 @@
-package com.coastee.server.login.config;
+package com.coastee.server.global.config;
 
-import com.coastee.server.login.filter.JwtAuthorizationFilter;
 import com.coastee.server.login.util.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

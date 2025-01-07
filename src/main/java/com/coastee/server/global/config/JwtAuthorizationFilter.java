@@ -1,4 +1,4 @@
-package com.coastee.server.login.filter;
+package com.coastee.server.global.config;
 
 import com.coastee.server.global.apipayload.code.ErrorReasonDTO;
 import com.coastee.server.global.apipayload.exception.GeneralException;
@@ -16,7 +16,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -24,7 +23,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import static com.coastee.server.global.Constant.*;
+import static com.coastee.server.global.Constant.AUTHORITIES_KEY;
+import static com.coastee.server.global.Constant.HEADER_AUTHORIZATION;
 
 @Slf4j
 @RequiredArgsConstructor
