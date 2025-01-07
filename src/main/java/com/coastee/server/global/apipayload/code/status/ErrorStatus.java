@@ -21,6 +21,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // Global
     IO_EXCEPTION(INTERNAL_SERVER_ERROR, "COMMON5001", "서버 IO Exception 발생, 관리자에게 문의 바랍니다"),
+    JSON_EXCEPTION(INTERNAL_SERVER_ERROR, "COMMON5001", "서버 JSON Exception 발생, 관리자에게 문의 바랍니다"),
 
     // Login
     INVALID_OAUTH_TOKEN(UNAUTHORIZED, "LOGIN4001", "토큰을 가져올 수 없습니다."),

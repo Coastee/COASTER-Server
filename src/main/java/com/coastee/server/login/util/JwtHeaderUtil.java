@@ -3,6 +3,7 @@ package com.coastee.server.login.util;
 import com.coastee.server.global.apipayload.exception.GeneralException;
 import com.coastee.server.global.apipayload.exception.handler.InvalidJwtException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -15,6 +16,10 @@ public class JwtHeaderUtil {
 
     public static String getAccessToken() {
         return getToken(HEADER_AUTHORIZATION);
+    }
+
+    public static String getAccessToken(final StompHeaderAccessor accessor) {
+        return accessor.getFirstNativeHeader(HEADER_AUTHORIZATION);
     }
 
     public static String getRefreshToken() {

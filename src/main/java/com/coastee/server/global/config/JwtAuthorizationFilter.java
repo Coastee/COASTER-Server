@@ -41,6 +41,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String servletPath = request.getServletPath();
         final String headerValue = request.getHeader(HEADER_AUTHORIZATION);
 
+        // TODO: 나중에 인증 과정 추가하기 (테스트를 위해 잠시 제외함)
 //        if (servletPath.equals("/api/v1/refresh")) {
 //            filterChain.doFilter(request, response);
 //        } else {

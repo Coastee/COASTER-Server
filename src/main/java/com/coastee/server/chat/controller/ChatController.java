@@ -1,27 +1,35 @@
 package com.coastee.server.chat.controller;
 
-import com.coastee.server.auth.MemberOnly;
-import com.coastee.server.chat.domain.ChatMessage;
-import com.coastee.server.chat.domain.ChatMessageType;
-import com.coastee.server.chatroom.domain.repository.ChatRoomRedisRepository;
-import com.coastee.server.global.redis.RedisPublisher;
+import com.coastee.server.chat.dto.request.ChatRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
+@Slf4j
 @RequiredArgsConstructor
 public class ChatController {
-    private final RedisPublisher redisPublisher;
-    private final ChatRoomRedisRepository chatRoomRedisRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final ChannelTopic channelTopic;
 
-//    @MessageMapping("/chat/message")
-//    @MemberOnly
-//    public void message(final ChatMessage message) {
-//        if (message.getType().equals(ChatMessageType.ENTER)) {
-//            chatRoomRedisRepository.enterChatRoom(message.getChatRoom().getId());
-//            message.setMessage(message.getSender() + "님이 입장하셨습니다.");
-//        }
-//        redisPublisher.publish(chatRoomRedisRepository.getTopic(message.getChatRoom().getId()), message);
-//    }
+    @MessageMapping("/chat/message")
+    public void message(
+//            @Auth final Accessor accessor,
+            final ChatRequest chatRequest
+    ) {
+        log.info("==pub== " + chatRequest.getMessage());
+        redisTemplate.convertAndSend(channelTopic.getTopic(), chatRequest);
+    }
+
+    @GetMapping("/chat/room/enter/{roomId}")
+    public String roomDetail(Model model, @PathVariable Long roomId) {
+        model.addAttribute("roomId", roomId);
+        return "/chat/roomdetail";
+    }
 }
