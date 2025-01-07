@@ -1,22 +1,22 @@
 package com.coastee.server.chatroom.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum ChatRoomType {
-    ENTIRE("entire"),
-    GROUP("group"),
-    MEETING("meeting");
+    ENTIRE("ENTIRE"),
+    GROUP("GROUP"),
+    MEETING("MEETING");
 
     private final String code;
 
     public static ChatRoomType of(final String code) {
         return Arrays.stream(ChatRoomType.values())
-                .filter(r -> r.getCode().equals(code.toLowerCase()))
+                .filter(r -> r.getCode().equals(code.toUpperCase()))
                 .findAny()
                 .orElse(null);
     }
