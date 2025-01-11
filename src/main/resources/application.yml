@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: secret
   application:
     name: server
   devtools:
@@ -20,8 +18,16 @@ spring:
     database: postgresql
     hibernate:
       ddl-auto: create
+    properties:
+      hibernate:
+        default_schema: ENC(NHHW3h+Iu3nvpPW/1Toj9CH0hwAYvrvV)
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/coaster
-    username: user
-    password: root
+    url: ENC(YbE5zqnIUB6ekwgzEtUY9+vfU13OSev9N00+dIaSK0JpMQ7ajpK8EcIBlUFg+jdNd0Q3r9ow6e8io/hEtii5z3YN4vpV6jQrKcm4i3a6eqE/FtwTUT0zD/BpWNGA5MG4h3SWmWzWCzG9eLEoUw2ANbxksDXsxJ3xx7mJ+6kAHt0=)
+    username: ENC(1a0kqqs8WICexcTbsqfqmg==)
+    password: ENC(BvKDYlNIWK7fxHjiuEEQpGc+oDqD9XS3vz2d/EWwqok=)
+jwt:
+  secretKey: ENC(bekmp+cZY7Qvbii3ldKJxdKF1Qx+O1J0wmlrxf9GbygY/aIGNzIfIwo0g56qzJ5WqM6FWbg/UjM3+BLjQJ/NHD1G0T1OcUW36rZ2xAI81AfN23y4PSV1J+5ybf/s98D975u/nWr+f3JRbPrpowqkj2R6XW6Vrm4KXqLeDXfPetAaZFYA0rK6XMbit6J/nya7)
+jasypt:
+  encryptor:
+    password: ${JASYPT_KEY}
