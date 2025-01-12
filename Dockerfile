@@ -8,4 +8,4 @@ ARG JASYPT_KEY
 ENV SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-dev}
 ENV JASYPT_KEY=${JASYPT_KEY:-pw}
 
-CMD /wait && java -jar -Duser.timezone=Asia/Seoul app.jar
+CMD java -jar -Duser.timezone=Asia/Seoul app.jar
