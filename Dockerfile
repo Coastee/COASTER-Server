@@ -7,4 +7,6 @@ ARG JASYPT_KEY
 
 ENV JASYPT_KEY=${JASYPT_KEY:-pw}
 
-CMD java -jar -Duser.timezone=Asia/Seoul app.jar
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait /wait
+RUN chmod +x /wait
+CMD /wait && java -jar -Duser.timezone=Asia/Seoul app.jar
