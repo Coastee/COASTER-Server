@@ -5,7 +5,7 @@ import com.coastee.server.fixture.UserFixture;
 import com.coastee.server.global.apipayload.exception.GeneralException;
 import com.coastee.server.user.domain.User;
 import com.coastee.server.user.domain.repository.UserRepository;
-import com.coastee.server.user.dto.response.UserProfileResponse;
+import com.coastee.server.user.dto.response.ProfileResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,10 +38,10 @@ class UserServiceTest extends ServiceTest {
     @Test
     void getProfile() throws Exception{
         // when
-        UserProfileResponse actual = userService.getProfile(user.getId());
+        ProfileResponse actual = userService.getProfile(user.getId());
 
         // then
-        assertThat(actual).usingRecursiveComparison().isEqualTo(UserProfileResponse.from(user));
+        assertThat(actual).usingRecursiveComparison().isEqualTo(ProfileResponse.from(user));
     }
 
     @DisplayName("[프로필 조회] 유효하지 않은 아이디일시, 에러가 발생한다.")

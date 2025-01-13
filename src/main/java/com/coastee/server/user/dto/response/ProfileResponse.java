@@ -13,7 +13,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
-public class UserProfileResponse {
+public class ProfileResponse {
     private Long userId;
     private String name;
     private String headline;
@@ -22,8 +22,8 @@ public class UserProfileResponse {
     private List<String> urlList;
     private List<Experience> experienceList;
 
-    public static UserProfileResponse from(final User user) {
-        return new UserProfileResponse(
+    public static ProfileResponse from(final User user) {
+        return new ProfileResponse(
                 user.getId(),
                 user.getName(),
                 user.getHeadline(),
