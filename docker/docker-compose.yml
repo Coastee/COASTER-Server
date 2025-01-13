@@ -5,17 +5,16 @@ services:
     command: redis-server --port 6379
     container_name: coaster_redis
     hostname: root
+    volumes:
+      - ./redis/data:/data
+      - ./redis/conf/redis.conf:/usr/local/conf/redis.conf
     labels:
       - "name=redis"
       - "mode=standalone"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     ports:
       - 6379:6379
-  postgres:
-    image: postgres:15
-    restart: always
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: coaster

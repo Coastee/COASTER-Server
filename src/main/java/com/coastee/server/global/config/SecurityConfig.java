@@ -11,12 +11,14 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final CorsFilter corsFilter;
     private final JwtProvider jwtProvider;
 
     @Bean
@@ -31,6 +33,7 @@ public class SecurityConfig {
                                 .anyRequest()
                                 .permitAll()
                 )
+                .addFilter(corsFilter)
                 .addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
