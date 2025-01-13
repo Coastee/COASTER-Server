@@ -2,6 +2,7 @@ package com.coastee.server.user.domain;
 
 import com.coastee.server.global.BaseEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -28,17 +29,41 @@ public class User extends BaseEntity {
 
     private String bio;
 
-    private String email;
-
     private String profileImage;
 
     private String refreshToken;
+
+    @JdbcTypeCode(SqlTypes.ARRAY)
+    private List<String> urlList = new ArrayList<>();
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    private List<Experience> experienceList = new ArrayList<>();
 
     @Enumerated(STRING)
     private SocialType socialType;
 
     private String socialId;
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    private List<Experience> experienceList = new ArrayList<>();
+    @Builder(builderMethodName = "of")
+    public User(
+            final String name,
+            final String headline,
+            final String bio,
+            final String profileImage,
+            final String refreshToken,
+            final List<String> urlList,
+            final List<Experience> experienceList,
+            final SocialType socialType,
+            final String socialId
+    ) {
+        this.name = name;
+        this.headline = headline;
+        this.bio = bio;
+        this.profileImage = profileImage;
+        this.refreshToken = refreshToken;
+        this.urlList = urlList;
+        this.experienceList = experienceList;
+        this.socialType = socialType;
+        this.socialId = socialId;
+    }
 }
