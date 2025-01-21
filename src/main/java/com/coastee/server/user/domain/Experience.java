@@ -1,16 +1,34 @@
 package com.coastee.server.user.domain;
 
+import com.coastee.server.global.BaseEntity;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import static jakarta.persistence.FetchType.LAZY;
+import static lombok.AccessLevel.PROTECTED;
+
 @Getter
-public class Experience implements Serializable {
+@Entity
+@NoArgsConstructor(access = PROTECTED)
+public class Experience extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     private String title;
+
     private LocalDateTime startDate;
+
     private LocalDateTime endDate;
+
     private String content;
 
     @Builder(builderMethodName = "of")

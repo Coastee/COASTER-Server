@@ -20,7 +20,6 @@ public class ProfileResponse {
     private String bio;
     private String profileImage;
     private List<String> urlList;
-    private List<Experience> experienceList;
 
     public static ProfileResponse from(final User user) {
         return new ProfileResponse(
@@ -29,8 +28,7 @@ public class ProfileResponse {
                 user.getHeadline(),
                 user.getBio(),
                 user.getProfileImage(),
-                user.getUrlList(),
-                user.getExperienceList()
+                user.getUrlList()
         );
     }
 }

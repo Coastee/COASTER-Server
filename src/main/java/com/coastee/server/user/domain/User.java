@@ -36,9 +36,6 @@ public class User extends BaseEntity {
     @JdbcTypeCode(SqlTypes.ARRAY)
     private List<String> urlList = new ArrayList<>();
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    private List<Experience> experienceList = new ArrayList<>();
-
     @Enumerated(STRING)
     private SocialType socialType;
 
@@ -52,7 +49,6 @@ public class User extends BaseEntity {
             final String profileImage,
             final String refreshToken,
             final List<String> urlList,
-            final List<Experience> experienceList,
             final SocialType socialType,
             final String socialId
     ) {
@@ -62,7 +58,6 @@ public class User extends BaseEntity {
         this.profileImage = profileImage;
         this.refreshToken = refreshToken;
         this.urlList = urlList;
-        this.experienceList = experienceList;
         this.socialType = socialType;
         this.socialId = socialId;
     }
