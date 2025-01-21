@@ -1,3 +1,6 @@
+### data ###
+docker/redis
+
 ### STS ###
 .apt_generated
 .classpath

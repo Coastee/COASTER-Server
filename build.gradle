@@ -40,6 +40,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.security:spring-security-test'
 
+    // azure blob storage
+    implementation 'com.azure.spring:spring-cloud-azure-dependencies:5.19.0'
+    implementation 'com.azure.spring:spring-cloud-azure-starter-storage-blob:5.19.0'
+
     // jasypt encryption
     implementation "com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5"
 
