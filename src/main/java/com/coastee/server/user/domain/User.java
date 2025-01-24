@@ -61,4 +61,8 @@ public class User extends BaseEntity {
         this.socialType = socialType;
         this.socialId = socialId;
     }
+
+    public void updateRefreshToken(final String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 }
