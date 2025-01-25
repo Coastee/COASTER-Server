@@ -1,6 +1,6 @@
 package com.coastee.server.global.config;
 
-import com.coastee.server.jwt.util.JwtProvider;
+import com.coastee.server.login.infrastructure.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

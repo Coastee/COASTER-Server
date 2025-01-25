@@ -1,9 +1,9 @@
 package com.coastee.server.login;
 
 
-import com.coastee.server.login.auth.Auth;
-import com.coastee.server.login.auth.domain.Accessor;
-import com.coastee.server.login.auth.domain.Authority;
+import com.coastee.server.auth.Auth;
+import com.coastee.server.auth.domain.Accessor;
+import com.coastee.server.auth.domain.Authority;
 import com.coastee.server.global.apipayload.exception.handler.AuthenticationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
