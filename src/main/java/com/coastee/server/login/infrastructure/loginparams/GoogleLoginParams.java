@@ -11,7 +11,7 @@ public class GoogleLoginParams implements OAuthLoginParams {
     private String client_id;
     private String client_secret;
     private String code;
-    private String redirect_uri = "https://api.coasterchat.com/api/v1/google/login";
+    private String redirect_uri = "https://api.coasterchat.com/api/v1/login/google-callback";
 
     @Override
     public SocialType socialType() {
