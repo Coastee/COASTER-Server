@@ -1,25 +1,16 @@
 package com.coastee.server.oauth.domain;
 
 import com.coastee.server.user.domain.SocialType;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
 public class NaverLoginParams implements OAuthLoginParams {
-    @JsonProperty("grant_type")
-    private String grantType = "authorization_code";
-
-    @JsonProperty("client_id")
-    private String clientId;
-
-    @JsonProperty("client_secret")
-    private String clientSecret;
-
-    @JsonProperty("code")
+    private String grant_type = "authorization_code";
+    private String client_id;
+    private String client_secret;
     private String code;
-
-    @JsonProperty("state")
     private String state = "STATE_STRING";
+    private String service_provider = "NAVER";
 
     @Override
     public SocialType socialType() {
@@ -34,11 +25,11 @@ public class NaverLoginParams implements OAuthLoginParams {
 
     @Override
     public void updateClientId(final String clientId) {
-        this.clientId = clientId;
+        this.client_id = clientId;
     }
 
     @Override
     public void updateClientSecret(final String clientSecret) {
-        this.clientSecret = clientSecret;
+        this.client_secret = clientSecret;
     }
 }
