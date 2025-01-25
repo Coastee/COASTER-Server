@@ -11,7 +11,6 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Getter
 @Entity
-@Table(name = "users")
 @NoArgsConstructor(access = PROTECTED)
 public class ChatRoomEntry extends BaseEntity {
     @Id

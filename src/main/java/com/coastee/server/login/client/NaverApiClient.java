@@ -1,12 +1,12 @@
 package com.coastee.server.login.client;
 
 import com.coastee.server.global.util.PropertyUtil;
+import com.coastee.server.login.domain.OAuthLoginParams;
+import com.coastee.server.login.domain.OAuthUserInfo;
+import com.coastee.server.login.domain.SocialTokens;
 import com.coastee.server.login.infrastructure.loginparams.NaverLoginParams;
 import com.coastee.server.login.infrastructure.socialtokens.NaverSocialTokens;
-import com.coastee.server.login.domain.OAuthLoginParams;
-import com.coastee.server.login.domain.SocialTokens;
 import com.coastee.server.login.infrastructure.userinfo.NaverUserInfo;
-import com.coastee.server.login.domain.OAuthUserInfo;
 import com.coastee.server.user.domain.SocialType;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
@@ -18,7 +18,6 @@ import java.net.URI;
 
 @FeignClient(name = "naverApiClient", url = "https://nid.naver.com")
 public interface NaverApiClient extends OAuthApiClient {
-    String ACCESS_TOKEN_HEADER = "Bearer ";
     URI OAUTH_INFO_BASEURL = URI.create("https://openapi.naver.com");
 
     @Override
@@ -36,7 +35,7 @@ public interface NaverApiClient extends OAuthApiClient {
         return requestOAuthInfo(ACCESS_TOKEN_HEADER + socialTokens.getAccessToken(), OAUTH_INFO_BASEURL);
     }
 
-    @GetMapping(value = "/v1/nid/me")
+    @GetMapping(value = "/v1/nid/me", consumes = MediaType.APPLICATION_JSON_VALUE)
     NaverUserInfo requestOAuthInfo(
             @RequestHeader("Authorization") final String accessToken,
             final URI uri

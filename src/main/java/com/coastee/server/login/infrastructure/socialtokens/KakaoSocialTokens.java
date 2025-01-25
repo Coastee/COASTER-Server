@@ -12,11 +12,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class NaverSocialTokens implements SocialTokens {
+public class KakaoSocialTokens implements SocialTokens {
     private String accessToken;
     private String refreshToken;
     private String tokenType;
     private String expiresIn;
-    private String error;
-    private String errorDescription;
+    private String refreshTokenExpiresIn;
+    private String scope;
 }

@@ -5,6 +5,7 @@ import com.coastee.server.auth.Auth;
 import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.auth.domain.Authority;
 import com.coastee.server.global.apipayload.exception.handler.AuthenticationException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +18,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import static com.coastee.server.global.apipayload.code.status.ErrorStatus._INVALID_AUTHORITY;
 
 @Component
+@RequiredArgsConstructor
 public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
