@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,11 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String nickname;
+
+    private LocalDateTime birthDate;
+
+    private String email;
 
     private String headline;
 
@@ -43,22 +48,18 @@ public class User extends BaseEntity {
 
     @Builder(builderMethodName = "of")
     public User(
-            final String name,
-            final String headline,
-            final String bio,
-            final String profileImage,
-            final String refreshToken,
-            final List<String> urlList,
+            final String nickname,
+            final String email,
             final SocialType socialType,
             final String socialId
     ) {
-        this.name = name;
-        this.headline = headline;
-        this.bio = bio;
-        this.profileImage = profileImage;
-        this.refreshToken = refreshToken;
-        this.urlList = urlList;
+        this.nickname = nickname;
+        this.email = email;
         this.socialType = socialType;
         this.socialId = socialId;
+    }
+
+    public void updateRefreshToken(final String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }

@@ -1,6 +1,5 @@
 package com.coastee.server.user.dto.response;
 
-import com.coastee.server.user.domain.Experience;
 import com.coastee.server.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +14,7 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor
 public class ProfileResponse {
     private Long userId;
-    private String name;
+    private String nickname;
     private String headline;
     private String bio;
     private String profileImage;
@@ -24,7 +23,7 @@ public class ProfileResponse {
     public static ProfileResponse from(final User user) {
         return new ProfileResponse(
                 user.getId(),
-                user.getName(),
+                user.getNickname(),
                 user.getHeadline(),
                 user.getBio(),
                 user.getProfileImage(),

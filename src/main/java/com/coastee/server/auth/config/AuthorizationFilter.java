@@ -1,8 +1,8 @@
-package com.coastee.server.global.config;
+package com.coastee.server.auth.config;
 
 import com.coastee.server.global.apipayload.code.ErrorReasonDTO;
 import com.coastee.server.global.apipayload.exception.GeneralException;
-import com.coastee.server.login.util.JwtProvider;
+import com.coastee.server.login.infrastructure.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -28,7 +28,7 @@ import static com.coastee.server.global.Constant.HEADER_AUTHORIZATION;
 
 @Slf4j
 @RequiredArgsConstructor
-public class JwtAuthorizationFilter extends OncePerRequestFilter {
+public class AuthorizationFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
 
     @Override

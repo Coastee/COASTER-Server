@@ -8,7 +8,7 @@ import java.util.Arrays;
 @Getter
 @RequiredArgsConstructor
 public enum Authority {
-    MEMBER("MEMBER"),
+    USER("USER"),
     ADMIN("ADMIN");
 
     private final String code;

@@ -17,8 +17,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import static com.coastee.server.global.apipayload.code.status.ErrorStatus._INVALID_AUTHORITY;
 
-@RequiredArgsConstructor
 @Component
+@RequiredArgsConstructor
 public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
@@ -39,7 +39,7 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
         try {
             final Long memberId = Long.valueOf(authentication.getPrincipal().toString());
             if (isAdmin(authentication)) return Accessor.admin(memberId);
-            if (isMember(authentication)) return Accessor.member(memberId);
+            if (isMember(authentication)) return Accessor.user(memberId);
             throw new AuthenticationException(_INVALID_AUTHORITY);
         } catch (NumberFormatException | NullPointerException e) {
             throw new AuthenticationException(_INVALID_AUTHORITY);
@@ -53,6 +53,6 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
 
     private boolean isMember(final Authentication authentication) {
         return authentication.getAuthorities().stream()
-                .anyMatch(auth -> auth.getAuthority().equals(Authority.MEMBER.toString()));
+                .anyMatch(auth -> auth.getAuthority().equals(Authority.USER.toString()));
     }
 }

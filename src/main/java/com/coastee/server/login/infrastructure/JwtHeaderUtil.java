@@ -1,4 +1,4 @@
-package com.coastee.server.login.util;
+package com.coastee.server.login.infrastructure;
 
 import com.coastee.server.global.apipayload.exception.GeneralException;
 import com.coastee.server.global.apipayload.exception.handler.InvalidJwtException;

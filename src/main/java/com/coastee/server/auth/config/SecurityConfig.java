@@ -1,6 +1,6 @@
-package com.coastee.server.global.config;
+package com.coastee.server.auth.config;
 
-import com.coastee.server.login.util.JwtProvider;
+import com.coastee.server.login.infrastructure.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,12 +34,12 @@ public class SecurityConfig {
                                 .permitAll()
                 )
                 .addFilter(corsFilter)
-                .addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(authorizationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
     @Bean
-    public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter(jwtProvider);
+    public AuthorizationFilter authorizationFilter() {
+        return new AuthorizationFilter(jwtProvider);
     }
 }
