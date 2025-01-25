@@ -1,6 +1,7 @@
 package com.coastee.server.oauth.dto.response;
 
-import lombok.AllArgsConstructor;
+import com.coastee.server.jwt.domain.AuthTokens;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,15 +9,16 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-@AllArgsConstructor
 public class OAuthUserResponse {
     private Long userId;
-    private String socialId;
-    private String name;
-    private String email;
-    private String handle;
-    private String socialType;
-    private String accessToken;
-    private String refreshToken;
-    private Boolean isNewMember;
+    private AuthTokens authTokens;
+
+    @Builder(builderMethodName = "of")
+    public OAuthUserResponse(
+            final Long userId,
+            final AuthTokens authTokens
+    ) {
+        this.userId = userId;
+        this.authTokens = authTokens;
+    }
 }

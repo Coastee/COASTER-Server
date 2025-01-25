@@ -12,14 +12,14 @@ import org.springframework.context.ApplicationContext;
 @EnableFeignClients
 @RequiredArgsConstructor
 public class ServerApplication {
-	private final ApplicationContext context;
+    private final ApplicationContext context;
 
-	public static void main(String[] args) {
-		SpringApplication.run(ServerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ServerApplication.class, args);
+    }
 
-	@PostConstruct
-	public void init(){
-		BeanContext.init(context);
-	}
+    @PostConstruct
+    public void init() {
+        BeanContext.init(context);
+    }
 }

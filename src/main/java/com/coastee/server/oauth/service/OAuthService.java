@@ -1,5 +1,6 @@
 package com.coastee.server.oauth.service;
 
+import com.coastee.server.jwt.domain.AuthTokens;
 import com.coastee.server.jwt.util.JwtProvider;
 import com.coastee.server.oauth.domain.OAuthLoginParams;
 import com.coastee.server.oauth.dto.info.OAuthInfoResponse;
@@ -20,15 +21,27 @@ public class OAuthService {
 
     public OAuthUserResponse login(final OAuthLoginParams params) {
         OAuthInfoResponse oAuthInfoResponse = requestOAuthInfoService.request(params);
-        User user = userRepository
-                .findBySocialId(oAuthInfoResponse.getSocialId())
-                .orElse(null);
-//        if (user == null) {
-//
-//        }
-//
-//        AuthTokens tokens = jwtProvider.createTokens(user.getId().toString());
-//        user.updateRefreshToken(authTokens.getRefreshToken());
-        return null;
+        User user = findOrCreateUser(oAuthInfoResponse);
+        AuthTokens tokens = jwtProvider.createTokens(user.getId().toString());
+        user.updateRefreshToken(tokens.getRefreshToken());
+        return OAuthUserResponse.of()
+                .userId(user.getId())
+                .authTokens(tokens)
+                .build();
+    }
+
+    private User findOrCreateUser(final OAuthInfoResponse oAuthInfoResponse) {
+        return userRepository.findBySocialId(oAuthInfoResponse.getSocialId())
+                .orElseGet(() -> newUser(oAuthInfoResponse));
+    }
+
+    private User newUser(final OAuthInfoResponse oAuthInfoResponse) {
+        User user = User.of()
+                .name(oAuthInfoResponse.getName())
+                .email(oAuthInfoResponse.getEmail())
+                .socialType(oAuthInfoResponse.getSocialType())
+                .socialId(oAuthInfoResponse.getSocialId())
+                .build();
+        return userRepository.save(user);
     }
 }
