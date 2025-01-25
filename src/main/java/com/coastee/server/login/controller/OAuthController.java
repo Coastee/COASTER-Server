@@ -16,17 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class OAuthController {
     private final OAuthService oAuthService;
 
-    @GetMapping("/api/v1/naver/login")
+    @GetMapping("/api/v1/login/naver-callback")
     public ApiResponse<OAuthUserResponse> naverLogin(@ModelAttribute final NaverLoginParams naverLoginParams) {
         return ApiResponse.onSuccess(oAuthService.login(naverLoginParams));
     }
 
-    @GetMapping("/api/v1/kakao/login")
+    @GetMapping("/api/v1/login/kakao-callback")
     public ApiResponse<OAuthUserResponse> kakaoLogin(@ModelAttribute final KakaoLoginParams kakaoLoginParams) {
         return ApiResponse.onSuccess(oAuthService.login(kakaoLoginParams));
     }
 
-    @GetMapping("/api/v1/google/login")
+    @GetMapping("/api/v1/login/google-callback")
     public ApiResponse<OAuthUserResponse> googleLogin(@ModelAttribute final GoogleLoginParams googleLoginParams) {
         return ApiResponse.onSuccess(oAuthService.login(googleLoginParams));
     }
