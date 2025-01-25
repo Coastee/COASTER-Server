@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class AuthTokens {
+    private String tokenType = "Bearer";
     private String accessToken;
     private String refreshToken;
 
@@ -16,6 +17,6 @@ public class AuthTokens {
             final String accessToken,
             final String refreshToken
     ) {
-        return new AuthTokens(accessToken, refreshToken);
+        return new AuthTokens("Bearer", accessToken, refreshToken);
     }
 }
