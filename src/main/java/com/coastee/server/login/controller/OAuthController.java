@@ -2,6 +2,7 @@ package com.coastee.server.login.controller;
 
 import com.coastee.server.global.apipayload.ApiResponse;
 import com.coastee.server.login.dto.response.OAuthUserResponse;
+import com.coastee.server.login.infrastructure.loginparams.GoogleLoginParams;
 import com.coastee.server.login.infrastructure.loginparams.KakaoLoginParams;
 import com.coastee.server.login.infrastructure.loginparams.NaverLoginParams;
 import com.coastee.server.login.service.OAuthService;
@@ -16,12 +17,17 @@ public class OAuthController {
     private final OAuthService oAuthService;
 
     @GetMapping("/api/v1/naver/login")
-    public ApiResponse<OAuthUserResponse> naverLogin(@ModelAttribute NaverLoginParams naverLoginParams) {
+    public ApiResponse<OAuthUserResponse> naverLogin(@ModelAttribute final NaverLoginParams naverLoginParams) {
         return ApiResponse.onSuccess(oAuthService.login(naverLoginParams));
     }
 
     @GetMapping("/api/v1/kakao/login")
-    public ApiResponse<OAuthUserResponse> kakaoLogin(@ModelAttribute KakaoLoginParams kakaoLoginParams) {
+    public ApiResponse<OAuthUserResponse> kakaoLogin(@ModelAttribute final KakaoLoginParams kakaoLoginParams) {
         return ApiResponse.onSuccess(oAuthService.login(kakaoLoginParams));
+    }
+
+    @GetMapping("/api/v1/google/login")
+    public ApiResponse<OAuthUserResponse> googleLogin(@ModelAttribute final GoogleLoginParams googleLoginParams) {
+        return ApiResponse.onSuccess(oAuthService.login(googleLoginParams));
     }
 }

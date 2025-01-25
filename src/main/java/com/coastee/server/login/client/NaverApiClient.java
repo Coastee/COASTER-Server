@@ -27,7 +27,7 @@ public interface NaverApiClient extends OAuthApiClient {
         return requestAccessToken((NaverLoginParams) params);
     }
 
-    @GetMapping(value = "/oauth2.0/token", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/oauth2.0/token")
     NaverSocialTokens requestAccessToken(@SpringQueryMap final NaverLoginParams params);
 
     @Override
@@ -35,7 +35,7 @@ public interface NaverApiClient extends OAuthApiClient {
         return requestOAuthInfo(ACCESS_TOKEN_HEADER + socialTokens.getAccessToken(), OAUTH_INFO_BASEURL);
     }
 
-    @GetMapping(value = "/v1/nid/me", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/v1/nid/me")
     NaverUserInfo requestOAuthInfo(
             @RequestHeader("Authorization") final String accessToken,
             final URI uri
