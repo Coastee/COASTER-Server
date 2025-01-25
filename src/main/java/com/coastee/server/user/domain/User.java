@@ -24,8 +24,6 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-
     private String nickname;
 
     private LocalDateTime birthDate;
@@ -50,12 +48,12 @@ public class User extends BaseEntity {
 
     @Builder(builderMethodName = "of")
     public User(
-            final String name,
+            final String nickname,
             final String email,
             final SocialType socialType,
             final String socialId
     ) {
-        this.name = name;
+        this.nickname = nickname;
         this.email = email;
         this.socialType = socialType;
         this.socialId = socialId;

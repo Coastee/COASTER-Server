@@ -1,10 +1,10 @@
 package com.coastee.server.login.service;
 
 import com.coastee.server.login.domain.AuthTokens;
-import com.coastee.server.login.infrastructure.JwtProvider;
 import com.coastee.server.login.domain.OAuthLoginParams;
 import com.coastee.server.login.domain.OAuthUserInfo;
 import com.coastee.server.login.dto.response.OAuthUserResponse;
+import com.coastee.server.login.infrastructure.JwtProvider;
 import com.coastee.server.user.domain.User;
 import com.coastee.server.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class OAuthService {
 
     private User newUser(final OAuthUserInfo userInfo) {
         User user = User.of()
-                .name(userInfo.getName())
+                .nickname(userInfo.getName())
                 .email(userInfo.getEmail())
                 .socialType(userInfo.getSocialType())
                 .socialId(userInfo.getSocialId())

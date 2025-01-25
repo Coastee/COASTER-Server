@@ -7,7 +7,7 @@ public class UserFixture {
 
     public static User get() {
         return User.of()
-                .name("user")
+                .nickname("user")
                 .email("aaa2naver.com")
                 .socialType(SocialType.NAVER)
                 .socialId("ABCDE")
