@@ -19,7 +19,7 @@ public class UserOnlyChecker {
         Arrays.stream(joinPoint.getArgs())
                 .filter(Accessor.class::isInstance)
                 .map(Accessor.class::cast)
-                .filter(a -> a.isMember() || a.isAdmin())
+                .filter(a -> a.isUser() || a.isAdmin())
                 .findFirst()
                 .orElseThrow(() -> new AuthenticationException(_INVALID_AUTHORITY));
     }

@@ -1,4 +1,4 @@
-package com.coastee.server.global.config;
+package com.coastee.server.auth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
