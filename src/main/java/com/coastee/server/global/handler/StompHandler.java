@@ -1,7 +1,7 @@
 package com.coastee.server.global.handler;
 
-import com.coastee.server.jwt.util.JwtHeaderUtil;
-import com.coastee.server.jwt.util.JwtProvider;
+import com.coastee.server.login.jwt.util.JwtHeaderUtil;
+import com.coastee.server.login.jwt.util.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;

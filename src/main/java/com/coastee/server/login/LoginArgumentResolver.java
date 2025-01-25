@@ -1,9 +1,9 @@
 package com.coastee.server.login;
 
 
-import com.coastee.server.auth.Auth;
-import com.coastee.server.auth.domain.Accessor;
-import com.coastee.server.auth.domain.Authority;
+import com.coastee.server.login.auth.Auth;
+import com.coastee.server.login.auth.domain.Accessor;
+import com.coastee.server.login.auth.domain.Authority;
 import com.coastee.server.global.apipayload.exception.handler.AuthenticationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
@@ -39,7 +39,7 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
         try {
             final Long memberId = Long.valueOf(authentication.getPrincipal().toString());
             if (isAdmin(authentication)) return Accessor.admin(memberId);
-            if (isMember(authentication)) return Accessor.member(memberId);
+            if (isMember(authentication)) return Accessor.user(memberId);
             throw new AuthenticationException(_INVALID_AUTHORITY);
         } catch (NumberFormatException | NullPointerException e) {
             throw new AuthenticationException(_INVALID_AUTHORITY);
@@ -53,6 +53,6 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
 
     private boolean isMember(final Authentication authentication) {
         return authentication.getAuthorities().stream()
-                .anyMatch(auth -> auth.getAuthority().equals(Authority.MEMBER.toString()));
+                .anyMatch(auth -> auth.getAuthority().equals(Authority.USER.toString()));
     }
 }

@@ -1,6 +1,6 @@
-package com.coastee.server.auth;
+package com.coastee.server.login.auth;
 
-import com.coastee.server.auth.domain.Accessor;
+import com.coastee.server.login.auth.domain.Accessor;
 import com.coastee.server.global.apipayload.exception.handler.AuthenticationException;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -13,13 +13,13 @@ import static com.coastee.server.global.apipayload.code.status.ErrorStatus._INVA
 
 @Aspect
 @Component
-public class AdminOnlyChecker {
-    @Before("@annotation(com.coastee.server.auth.AdminOnly)")
+public class UserOnlyChecker {
+    @Before("@annotation(com.coastee.server.login.auth.UserOnly)")
     public void check(final JoinPoint joinPoint) {
         Arrays.stream(joinPoint.getArgs())
                 .filter(Accessor.class::isInstance)
                 .map(Accessor.class::cast)
-                .filter(Accessor::isAdmin)
+                .filter(a -> a.isMember() || a.isAdmin())
                 .findFirst()
                 .orElseThrow(() -> new AuthenticationException(_INVALID_AUTHORITY));
     }

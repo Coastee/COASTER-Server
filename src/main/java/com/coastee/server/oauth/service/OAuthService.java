@@ -1,7 +1,7 @@
 package com.coastee.server.oauth.service;
 
-import com.coastee.server.jwt.domain.AuthTokens;
-import com.coastee.server.jwt.util.JwtProvider;
+import com.coastee.server.login.jwt.domain.AuthTokens;
+import com.coastee.server.login.jwt.util.JwtProvider;
 import com.coastee.server.oauth.domain.OAuthLoginParams;
 import com.coastee.server.oauth.dto.info.OAuthInfoResponse;
 import com.coastee.server.oauth.dto.response.OAuthUserResponse;

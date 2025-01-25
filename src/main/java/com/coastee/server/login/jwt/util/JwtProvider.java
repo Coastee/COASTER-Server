@@ -1,9 +1,9 @@
-package com.coastee.server.jwt.util;
+package com.coastee.server.login.jwt.util;
 
-import com.coastee.server.auth.domain.Authority;
+import com.coastee.server.login.auth.domain.Authority;
 import com.coastee.server.global.apipayload.exception.handler.ExpiredPeriodJwtException;
 import com.coastee.server.global.apipayload.exception.handler.InvalidJwtException;
-import com.coastee.server.jwt.domain.AuthTokens;
+import com.coastee.server.login.jwt.domain.AuthTokens;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -56,7 +56,7 @@ public class JwtProvider {
             final String subject,
             final Long validityInMilliseconds
     ) {
-        return createToken(subject, validityInMilliseconds, Authority.MEMBER);
+        return createToken(subject, validityInMilliseconds, Authority.USER);
     }
 
     private String createToken(

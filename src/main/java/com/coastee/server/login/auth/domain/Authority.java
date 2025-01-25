@@ -1,4 +1,4 @@
-package com.coastee.server.auth.domain;
+package com.coastee.server.login.auth.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +8,7 @@ import java.util.Arrays;
 @Getter
 @RequiredArgsConstructor
 public enum Authority {
-    MEMBER("MEMBER"),
+    USER("USER"),
     ADMIN("ADMIN");
 
     private final String code;

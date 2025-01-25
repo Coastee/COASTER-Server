@@ -1,9 +1,12 @@
-package com.coastee.server.jwt.domain;
+package com.coastee.server.login.jwt.domain;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class AuthTokens {
     private String accessToken;
