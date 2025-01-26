@@ -1,6 +1,6 @@
 package com.coastee.server.global.redis;
 
-import com.coastee.server.chat.domain.ChatMessage;
+import com.coastee.server.chat.domain.Chat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -12,7 +12,7 @@ public class RedisPublisher {
     private final ChannelTopic channelTopic;
     private final RedisTemplate redisTemplate;
 
-    public void publish(final ChatMessage message) {
+    public void publish(final Chat message) {
         redisTemplate.convertAndSend(channelTopic.getTopic(), message);
     }
 }

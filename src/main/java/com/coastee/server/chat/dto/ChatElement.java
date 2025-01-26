@@ -1,6 +1,6 @@
 package com.coastee.server.chat.dto;
 
-import com.coastee.server.chat.domain.ChatMessageType;
+import com.coastee.server.chat.domain.ChatType;
 import com.coastee.server.user.dto.UserElement;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,5 +19,5 @@ public class ChatElement {
     private UserElement user;
     private String content;
     private LocalDateTime createdDate;
-    private ChatMessageType type;
+    private ChatType type;
 }

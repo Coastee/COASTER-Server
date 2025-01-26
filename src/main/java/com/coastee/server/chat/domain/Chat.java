@@ -15,7 +15,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @Entity
 @NoArgsConstructor(access = PROTECTED)
-public class ChatMessage extends BaseEntity {
+public class Chat extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -30,18 +30,18 @@ public class ChatMessage extends BaseEntity {
 
     private String content;
 
-    private ChatMessageType type;
+    private ChatType type;
 
     @Builder
-    public ChatMessage(
+    public Chat(
             final User user,
             final ChatRoom chatRoom,
             final String content,
-            final ChatMessageType chatMessageType
+            final ChatType chatType
     ) {
         this.user = user;
         this.chatRoom = chatRoom;
         this.content = content;
-        this.type = chatMessageType;
+        this.type = chatType;
     }
 }
