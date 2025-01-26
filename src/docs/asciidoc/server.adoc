@@ -11,6 +11,36 @@ ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
 
+== `GET` Find All Servers
+모든 서버 조회
+```
+/api/v1/servers
+```
+include::{snippets}/find-all-server/curl-request.adoc[]
+
+=== Response
+==== response body
+include::{snippets}/find-all-server/response-body.adoc[]
+include::{snippets}/find-all-server/response-fields.adoc[]
+
+== `DELETE` Exit Server
+서버 탈퇴
+```
+/api/v1/{serverId}
+```
+include::{snippets}/exit-server/curl-request.adoc[]
+
+==== header
+include::{snippets}/exit-server/request-headers.adoc[]
+
+==== path variable
+include::{snippets}/exit-server/path-parameters.adoc[]
+
+=== Response
+==== response body
+include::{snippets}/exit-server/response-body.adoc[]
+include::{snippets}/exit-server/response-fields.adoc[]
+
 == `POST` Enter Server
 서버 참여
 

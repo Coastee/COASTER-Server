@@ -73,7 +73,6 @@ class ServerControllerTest extends ControllerTest {
         // when & then
         RestAssured.given(spec).log().all()
                 .header(ACCESS_TOKEN_HEADER, ACCESS_TOKEN)
-                .body(request)
                 .contentType(ContentType.JSON)
                 .filter(
                         document("exit-server",
