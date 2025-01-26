@@ -38,10 +38,11 @@ public class JwtProvider {
     }
 
     public AuthTokens createTokens(final String subject) {
-        return AuthTokens.of(
-                createAccessToken(subject),
-                createRefreshToken()
-        );
+        return AuthTokens.of()
+                .subject(subject)
+                .accessToken(createAccessToken(subject))
+                .refreshToken(createRefreshToken())
+                .build();
     }
 
     public String createAccessToken(final String subject) {

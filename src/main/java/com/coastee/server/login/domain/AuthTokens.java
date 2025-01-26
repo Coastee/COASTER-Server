@@ -1,22 +1,30 @@
 package com.coastee.server.login.domain;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static com.coastee.server.global.Constant.TOKEN_PREFIX;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class AuthTokens {
-    private String tokenType = "Bearer";
+    private String tokenType = TOKEN_PREFIX;
+    private Long userId;
     private String accessToken;
     private String refreshToken;
 
-    public static AuthTokens of(
+    @Builder(builderMethodName = "of")
+    public AuthTokens(
+            final String tokenType,
+            final String subject,
             final String accessToken,
             final String refreshToken
     ) {
-        return new AuthTokens("Bearer", accessToken, refreshToken);
+        this.tokenType = tokenType;
+        this.userId = Long.valueOf(subject);
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
     }
 }
