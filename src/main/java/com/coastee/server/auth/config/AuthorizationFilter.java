@@ -16,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -23,8 +24,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import static com.coastee.server.global.Constant.AUTHORITIES_KEY;
-import static com.coastee.server.global.Constant.HEADER_AUTHORIZATION;
+import static com.coastee.server.global.Constant.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -41,23 +41,22 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         String servletPath = request.getServletPath();
         final String headerValue = request.getHeader(HEADER_AUTHORIZATION);
 
-        // TODO: 나중에 인증 과정 추가하기 (테스트를 위해 잠시 제외함)
-//        if (servletPath.equals("/api/v1/refresh")) {
-//            filterChain.doFilter(request, response);
-//        } else {
-//            try {
-//                if (headerValue != null && headerValue.startsWith(TOKEN_PREFIX)) {
-//                    String accessToken = headerValue.substring(TOKEN_PREFIX.length());
-//                    if (jwtProvider.validateAccessToken(accessToken)) {
-//                        Authentication authentication = getAuthentication(accessToken);
-//                        SecurityContextHolder.getContext().setAuthentication(authentication);
-//                    }
-//                }
-//                filterChain.doFilter(request, response);
-//            } catch (GeneralException e) {
-//                exceptionHandler(response, e);
-//            }
-//        }
+        if (servletPath.equals("/api/v1/refresh")) {
+            filterChain.doFilter(request, response);
+        } else {
+            try {
+                if (headerValue != null && headerValue.startsWith(TOKEN_PREFIX)) {
+                    String accessToken = headerValue.substring(TOKEN_PREFIX.length());
+                    if (jwtProvider.validateAccessToken(accessToken)) {
+                        Authentication authentication = getAuthentication(accessToken);
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
+                }
+                filterChain.doFilter(request, response);
+            } catch (GeneralException e) {
+                exceptionHandler(response, e);
+            }
+        }
 
         filterChain.doFilter(request, response);
     }

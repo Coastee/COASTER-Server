@@ -120,7 +120,7 @@ public class JwtProvider {
                 .parseClaimsJws(token);
     }
 
-    public boolean isValidRefreshAndInvalidAccess(final String refreshToken, final String accessToken) {
+    public boolean isValidRefreshAndExpiredAccess(final String refreshToken, final String accessToken) {
         validateRefreshToken(refreshToken);
         try {
             validateAccessToken(accessToken);

@@ -9,7 +9,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import static com.coastee.server.global.Constant.*;
-import static com.coastee.server.global.apipayload.code.status.ErrorStatus.INVALID_OAUTH_TOKEN;
+import static com.coastee.server.global.apipayload.code.status.ErrorStatus.FAIL_VALIDATE_TOKEN;
 import static com.coastee.server.global.apipayload.code.status.ErrorStatus.NULL_TOKEN;
 
 public class JwtHeaderUtil {
@@ -35,6 +35,6 @@ public class JwtHeaderUtil {
         if (StringUtils.hasText(headerValue) && headerValue.startsWith(TOKEN_PREFIX)) {
             return headerValue.substring(TOKEN_PREFIX.length());
         }
-        throw new InvalidJwtException(INVALID_OAUTH_TOKEN);
+        throw new InvalidJwtException(FAIL_VALIDATE_TOKEN);
     }
 }
