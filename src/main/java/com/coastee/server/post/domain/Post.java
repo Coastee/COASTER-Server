@@ -1,6 +1,6 @@
 package com.coastee.server.post.domain;
 
-import com.coastee.server.community.domain.Community;
+import com.coastee.server.server.domain.Server;
 import com.coastee.server.global.BaseEntity;
 import com.coastee.server.user.domain.User;
 import jakarta.persistence.*;
@@ -22,8 +22,8 @@ public class Post extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "community_id")
-    private Community community;
+    @JoinColumn(name = "server_id")
+    private Server server;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")

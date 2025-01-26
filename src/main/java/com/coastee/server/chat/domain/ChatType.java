@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 @Getter
 @AllArgsConstructor
-public enum ChatMessageType {
+public enum ChatType {
     ENTER("ENTER"),
     QUIT("QUIT"),
     TALK("TALK"),
@@ -16,8 +16,8 @@ public enum ChatMessageType {
 
     private final String code;
 
-    public static ChatMessageType of(final String code) {
-        return Arrays.stream(ChatMessageType.values())
+    public static ChatType of(final String code) {
+        return Arrays.stream(ChatType.values())
                 .filter(r -> r.getCode().equals(code.toUpperCase()))
                 .findAny()
                 .orElse(null);

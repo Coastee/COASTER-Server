@@ -25,6 +25,10 @@ public class ApiResponse<T> {
     private T result;
 
     // success
+    public static <T> ApiResponse<T> onSuccess() {
+        return new ApiResponse<>(true, _OK.getCode(), _OK.getMessage(), null);
+    }
+
     public static <T> ApiResponse<T> onSuccess(T result) {
         return new ApiResponse<>(true, _OK.getCode(), _OK.getMessage(), result);
     }
