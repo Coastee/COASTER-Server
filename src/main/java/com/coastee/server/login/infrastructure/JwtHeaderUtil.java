@@ -28,7 +28,7 @@ public class JwtHeaderUtil {
         return extractToken(headerValue);
     }
 
-    private static String extractToken(final String headerValue) {
+    public static String extractToken(final String headerValue) {
         if (headerValue == null || headerValue.isEmpty()) throw new GeneralException(NULL_TOKEN);
         if (StringUtils.hasText(headerValue) && headerValue.startsWith(TOKEN_PREFIX)) {
             return headerValue.substring(TOKEN_PREFIX.length());

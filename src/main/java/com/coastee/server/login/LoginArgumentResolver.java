@@ -37,9 +37,9 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
     ) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         try {
-            final Long memberId = Long.valueOf(authentication.getPrincipal().toString());
-            if (isAdmin(authentication)) return Accessor.admin(memberId);
-            if (isMember(authentication)) return Accessor.user(memberId);
+            final Long userId = Long.valueOf(authentication.getPrincipal().toString());
+            if (isAdmin(authentication)) return Accessor.admin(userId);
+            if (isUser(authentication)) return Accessor.user(userId);
             throw new AuthenticationException(_INVALID_AUTHORITY);
         } catch (NumberFormatException | NullPointerException e) {
             throw new AuthenticationException(_INVALID_AUTHORITY);
@@ -51,7 +51,7 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
                 .anyMatch(auth -> auth.getAuthority().equals(Authority.ADMIN.toString()));
     }
 
-    private boolean isMember(final Authentication authentication) {
+    private boolean isUser(final Authentication authentication) {
         return authentication.getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals(Authority.USER.toString()));
     }

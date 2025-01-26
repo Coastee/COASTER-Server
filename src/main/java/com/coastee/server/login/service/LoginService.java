@@ -44,7 +44,7 @@ public class LoginService {
         return userRepository.save(user);
     }
 
-    public String refreshToken(final String accessToken, final String refreshToken) {
+    public String renewalToken(final String accessToken, final String refreshToken) {
         if (jwtProvider.isValidRefreshAndExpiredAccess(refreshToken, accessToken)) {
             User user = userRepository.findByRefreshToken(refreshToken)
                     .orElseThrow(() -> new InvalidJwtException(INVALID_REFRESH_TOKEN));

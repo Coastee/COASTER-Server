@@ -3,6 +3,7 @@ package com.coastee.server.login.controller;
 import com.coastee.server.global.apipayload.ApiResponse;
 import com.coastee.server.login.domain.AuthTokens;
 import com.coastee.server.login.dto.response.AccessTokenResponse;
+import com.coastee.server.login.infrastructure.JwtHeaderUtil;
 import com.coastee.server.login.infrastructure.loginparams.GoogleLoginParams;
 import com.coastee.server.login.infrastructure.loginparams.KakaoLoginParams;
 import com.coastee.server.login.infrastructure.loginparams.NaverLoginParams;
@@ -34,11 +35,14 @@ public class LoginController {
     }
 
     @PostMapping("/api/v1/refresh")
-    public ApiResponse<AccessTokenResponse> refreshToken(
+    public ApiResponse<AccessTokenResponse> renewalToken(
             @RequestHeader(HEADER_AUTHORIZATION) final String accessToken,
             @RequestHeader(HEADER_REFRESH_TOKEN) final String refreshToken
     ) {
-        String renewalToken = loginService.refreshToken(accessToken, refreshToken);
+        String renewalToken = loginService.renewalToken(
+                JwtHeaderUtil.extractToken(accessToken),
+                JwtHeaderUtil.extractToken(refreshToken)
+        );
         return ApiResponse.onSuccess(new AccessTokenResponse(renewalToken));
     }
 }

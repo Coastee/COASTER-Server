@@ -1,0 +1,34 @@
+= Login API
+coaster server
+:doctype: book
+:icons: font
+:source-highlighter: highlishtjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+== `GET` Login API
+
+로그인 API
+
+=== Request
+
+include::{snippets}/login/curl-request.adoc[]
+
+==== query params
+include::{snippets}/login/query-parameters.adoc[]
+
+=== Response
+==== response body
+include::{snippets}/login/response-body.adoc[]
+include::{snippets}/login/response-fields.adoc[]
+
+
+
+
+
+

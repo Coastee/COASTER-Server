@@ -17,12 +17,10 @@ public class AuthTokens {
 
     @Builder(builderMethodName = "of")
     public AuthTokens(
-            final String tokenType,
             final String subject,
             final String accessToken,
             final String refreshToken
     ) {
-        this.tokenType = tokenType;
         this.userId = Long.valueOf(subject);
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;

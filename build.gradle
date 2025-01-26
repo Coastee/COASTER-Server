@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.4.1'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.asciidoctor.jvm.convert' version '4.0.4'
 }
 
 group = 'com.coastee'
@@ -14,6 +15,7 @@ java {
 }
 
 configurations {
+    asciidoctorExt
     compileOnly {
         extendsFrom annotationProcessor
     }
@@ -73,11 +75,56 @@ dependencies {
     // feign
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.2.0'
 
+    // restdocs
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    testImplementation 'io.rest-assured:rest-assured:5.5.0'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-restassured'
+
     // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // h2
+    implementation 'com.h2database:h2'
+    runtimeOnly 'com.h2database:h2'
 }
 
-tasks.named('test') {
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
+test {
     useJUnitPlatform()
+    outputs.dir snippetsDir
+}
+
+asciidoctor {
+    inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+    baseDirFollowsSourceFile()
+    dependsOn test
+}
+
+tasks.resolveMainClassName {
+    dependsOn 'copyDocument'
+}
+
+tasks.register('copyDocument', Copy) {
+    dependsOn asciidoctor
+
+    from file("build/docs/asciidoc/")
+    into file("build/resources/main/static/docs")
+}
+
+bootJar {
+    dependsOn copyDocument
+}
+
+// -plain.jar 제거
+jar {
+    enabled = false
+}
+
+build {
+    dependsOn copyDocument
 }
