@@ -11,24 +11,33 @@ ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
 
-== `GET` Login API
+== `GET` Login
 
-로그인 API
+로그인
 
-=== Request
-
-include::{snippets}/login/curl-request.adoc[]
-
-==== query params
-include::{snippets}/login/query-parameters.adoc[]
+- Request는 social login callback으로 처리되어 Response로 전달되는 token 값만 처리하면 됩니다.
 
 === Response
 ==== response body
 include::{snippets}/login/response-body.adoc[]
 include::{snippets}/login/response-fields.adoc[]
 
+== `POST` Refresh Token
 
+토큰 재발급
 
+=== Request
+```
+/api/v1/refresh
+```
+include::{snippets}/refresh-token/curl-request.adoc[]
 
+==== Header
+include::{snippets}/refresh-token/request-headers.adoc[]
 
+- 만료된 리프레시 토큰을 전송할 경우, 401 UNAUTHORIZED 에러가 발생합니다.
 
+=== Response
+==== response body
+include::{snippets}/refresh-token/response-body.adoc[]
+include::{snippets}/refresh-token/response-fields.adoc[]
