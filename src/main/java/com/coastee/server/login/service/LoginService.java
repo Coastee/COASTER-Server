@@ -1,9 +1,9 @@
 package com.coastee.server.login.service;
 
+import com.coastee.server.global.apipayload.exception.handler.InvalidJwtException;
 import com.coastee.server.login.domain.AuthTokens;
 import com.coastee.server.login.domain.OAuthLoginParams;
 import com.coastee.server.login.domain.OAuthUserInfo;
-import com.coastee.server.login.dto.response.OAuthUserResponse;
 import com.coastee.server.login.infrastructure.JwtProvider;
 import com.coastee.server.user.domain.User;
 import com.coastee.server.user.domain.repository.UserRepository;
@@ -11,23 +11,22 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.coastee.server.global.apipayload.code.status.ErrorStatus.*;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class OAuthService {
-    private final UserRepository userRepository;
+public class LoginService {
     private final RequestOAuthInfoService requestOAuthInfoService;
+    private final UserRepository userRepository;
     private final JwtProvider jwtProvider;
 
-    public OAuthUserResponse login(final OAuthLoginParams params) {
+    public AuthTokens login(final OAuthLoginParams params) {
         OAuthUserInfo userInfo = requestOAuthInfoService.request(params);
         User user = findOrCreateUser(userInfo);
         AuthTokens tokens = jwtProvider.createTokens(user.getId().toString());
         user.updateRefreshToken(tokens.getRefreshToken());
-        return OAuthUserResponse.of()
-                .userId(user.getId())
-                .authTokens(tokens)
-                .build();
+        return tokens;
     }
 
     private User findOrCreateUser(final OAuthUserInfo userInfo) {
@@ -43,5 +42,17 @@ public class OAuthService {
                 .socialId(userInfo.getSocialId())
                 .build();
         return userRepository.save(user);
+    }
+
+    public String renewalToken(final String accessToken, final String refreshToken) {
+        if (jwtProvider.isValidRefreshAndExpiredAccess(refreshToken, accessToken)) {
+            User user = userRepository.findByRefreshToken(refreshToken)
+                    .orElseThrow(() -> new InvalidJwtException(INVALID_REFRESH_TOKEN));
+            return jwtProvider.createAccessToken(user.getId().toString());
+        }
+        if (jwtProvider.isValidRefreshAndValidAccess(refreshToken, accessToken)) {
+            return accessToken;
+        }
+        throw new InvalidJwtException(FAIL_VALIDATE_TOKEN);
     }
 }

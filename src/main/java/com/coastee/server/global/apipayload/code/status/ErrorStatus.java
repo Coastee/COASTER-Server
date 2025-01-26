@@ -24,7 +24,8 @@ public enum ErrorStatus implements BaseErrorCode {
     JSON_EXCEPTION(INTERNAL_SERVER_ERROR, "COMMON5001", "서버 JSON Exception 발생, 관리자에게 문의 바랍니다"),
 
     // Login
-    INVALID_OAUTH_TOKEN(UNAUTHORIZED, "LOGIN4001", "토큰을 가져올 수 없습니다."),
+    INVALID_OAUTH_TOKEN(UNAUTHORIZED, "LOGIN4001", "유효하지 않은 접근 토큰입니다."),
+    INVALID_REFRESH_TOKEN(BAD_REQUEST, "LOGIN4002", "유효하지 않은 재발급 토큰입니다."),
     NULL_TOKEN(UNAUTHORIZED, "LOGIN4002", "토큰이 존재하지 않습니다."),
     EXPIRED_ACCESS_TOKEN(UNAUTHORIZED, "LOGIN4003", "만료된 액세스 토큰입니다."),
     EXPIRED_REFRESH_TOKEN(UNAUTHORIZED, "LOGIN4004", "만료된 리프레시 토큰입니다."),

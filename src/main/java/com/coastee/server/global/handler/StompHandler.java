@@ -11,6 +11,8 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
 
+import static com.coastee.server.global.Constant.HEADER_AUTHORIZATION;
+
 @Slf4j
 @RequiredArgsConstructor
 @Component
@@ -24,7 +26,7 @@ public class StompHandler implements ChannelInterceptor {
     ) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         if (StompCommand.CONNECT == accessor.getCommand()) {
-            jwtProvider.validateAccessToken(JwtHeaderUtil.getAccessToken(accessor));
+            jwtProvider.validateAccessToken(JwtHeaderUtil.getToken(HEADER_AUTHORIZATION, accessor));
         }
         return message;
     }

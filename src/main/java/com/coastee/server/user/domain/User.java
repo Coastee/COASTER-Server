@@ -49,12 +49,24 @@ public class User extends BaseEntity {
     @Builder(builderMethodName = "of")
     public User(
             final String nickname,
+            final LocalDateTime birthDate,
             final String email,
+            final String headline,
+            final String bio,
+            final String profileImage,
+            final String refreshToken,
+            final List<String> urlList,
             final SocialType socialType,
             final String socialId
     ) {
         this.nickname = nickname;
+        this.birthDate = birthDate;
         this.email = email;
+        this.headline = headline;
+        this.bio = bio;
+        this.profileImage = profileImage;
+        this.refreshToken = refreshToken;
+        this.urlList = urlList;
         this.socialType = socialType;
         this.socialId = socialId;
     }

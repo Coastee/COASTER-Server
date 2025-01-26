@@ -2,6 +2,7 @@ package com.coastee.server.auth.config;
 
 import com.coastee.server.global.apipayload.code.ErrorReasonDTO;
 import com.coastee.server.global.apipayload.exception.GeneralException;
+import com.coastee.server.login.infrastructure.JwtHeaderUtil;
 import com.coastee.server.login.infrastructure.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
@@ -16,6 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -23,8 +25,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import static com.coastee.server.global.Constant.AUTHORITIES_KEY;
-import static com.coastee.server.global.Constant.HEADER_AUTHORIZATION;
+import static com.coastee.server.global.Constant.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -39,27 +40,25 @@ public class AuthorizationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
 
         String servletPath = request.getServletPath();
-        final String headerValue = request.getHeader(HEADER_AUTHORIZATION);
-
-        // TODO: 나중에 인증 과정 추가하기 (테스트를 위해 잠시 제외함)
-//        if (servletPath.equals("/api/v1/refresh")) {
-//            filterChain.doFilter(request, response);
-//        } else {
-//            try {
-//                if (headerValue != null && headerValue.startsWith(TOKEN_PREFIX)) {
-//                    String accessToken = headerValue.substring(TOKEN_PREFIX.length());
-//                    if (jwtProvider.validateAccessToken(accessToken)) {
-//                        Authentication authentication = getAuthentication(accessToken);
-//                        SecurityContextHolder.getContext().setAuthentication(authentication);
-//                    }
-//                }
-//                filterChain.doFilter(request, response);
-//            } catch (GeneralException e) {
-//                exceptionHandler(response, e);
-//            }
-//        }
-
-        filterChain.doFilter(request, response);
+        try {
+            if (servletPath.equals("/api/v1/refresh")) {
+                String refreshToken = JwtHeaderUtil.getToken(HEADER_REFRESH_TOKEN, request);
+                jwtProvider.validateRefreshToken(refreshToken);
+                filterChain.doFilter(request, response);
+            } else {
+                String headerValue = request.getHeader(HEADER_AUTHORIZATION);
+                if (headerValue != null && headerValue.startsWith(TOKEN_PREFIX)) {
+                    String accessToken = headerValue.substring(TOKEN_PREFIX.length());
+                    if (jwtProvider.validateAccessToken(accessToken)) {
+                        Authentication authentication = getAuthentication(accessToken);
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
+                }
+                filterChain.doFilter(request, response);
+            }
+        } catch (GeneralException e) {
+            exceptionHandler(response, e);
+        }
     }
 
     private Authentication getAuthentication(final String accessToken) {
