@@ -34,4 +34,8 @@ public class ServerFixture {
     public static List<Server> getAll() {
         return serverTitleList.stream().map(Server::new).toList();
     }
+
+    public static Server get() {
+        return new Server(serverTitleList.get(0));
+    }
 }

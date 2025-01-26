@@ -1,0 +1,40 @@
+= GroupChat API
+coaster server
+:doctype: book
+:icons: font
+:source-highlighter: highlishtjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+== `POST` Create GroupChat
+
+그룹챗 개설
+
+=== Request
+
+```
+/api/v1/groups
+```
+
+include::{snippets}/create-groupchat/curl-request.adoc[]
+
+==== header
+
+include::{snippets}/create-groupchat/request-headers.adoc[]
+
+==== request body
+
+include::{snippets}/create-groupchat/request-body.adoc[]
+include::{snippets}/create-groupchat/request-fields.adoc[]
+
+=== Response
+
+==== response body
+
+include::{snippets}/create-groupchat/response-body.adoc[]
+include::{snippets}/create-groupchat/response-fields.adoc[]
