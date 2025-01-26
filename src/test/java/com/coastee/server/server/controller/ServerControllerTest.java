@@ -1,9 +1,12 @@
 package com.coastee.server.server.controller;
 
+import com.coastee.server.fixture.ServerFixture;
 import com.coastee.server.global.ControllerTest;
+import com.coastee.server.server.domain.Server;
+import com.coastee.server.server.domain.repository.ServerRepository;
 import com.coastee.server.server.dto.request.ServerEntryRequest;
+import com.coastee.server.server.dto.response.ServerElements;
 import com.coastee.server.server.facade.ServerFacade;
-import com.coastee.server.user.domain.repository.UserRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.DisplayName;
@@ -15,10 +18,10 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
-import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -26,15 +29,43 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 
 @DisplayName("서버 컨트롤러 테스트")
 class ServerControllerTest extends ControllerTest {
-    @Autowired
-    private UserRepository userRepository;
 
     @MockitoBean
     private ServerFacade serverFacade;
-    
+
+    @Autowired
+    private ServerRepository serverRepository;
+
+    @DisplayName("모든 서버를 조회한다.")
+    @Test
+    void findAll() throws Exception {
+        // given
+        List<Server> servers = serverRepository.saveAll(ServerFixture.getAll());
+        when(serverFacade.findAll()).thenReturn(new ServerElements(servers));
+
+        // when & then
+        RestAssured.given(spec).log().all()
+                .contentType(ContentType.JSON)
+                .filter(
+                        document("find-all-server",
+                                responseFields(
+                                        fieldWithPath("isSuccess").type(BOOLEAN).description("성공 여부"),
+                                        fieldWithPath("code").type(STRING).description("결과 코드"),
+                                        fieldWithPath("message").type(STRING).description("결과 메세지"),
+                                        fieldWithPath("result").type(OBJECT).description("결과 데이터"),
+                                        fieldWithPath("result.count").type(NUMBER).description("서버 개수"),
+                                        fieldWithPath("result.serverList").type(ARRAY).description("서버 리스트"),
+                                        fieldWithPath("result.serverList[].id").type(NUMBER).description("서버 리스트 ; 서버 아이디"),
+                                        fieldWithPath("result.serverList[].title").type(STRING).description("서버 리스트 ; 서버 제목")
+                                )
+                        ))
+                .when().get("/api/v1/servers")
+                .then().log().all().statusCode(200);
+    }
+
     @DisplayName("서버에서 탈퇴한다.")
     @Test
-    void exit() throws Exception{
+    void exit() throws Exception {
         // given
         doNothing().when(serverFacade).enter(any(), any());
         ServerEntryRequest request = new ServerEntryRequest(List.of(1L, 2L, 3L));
@@ -47,7 +78,7 @@ class ServerControllerTest extends ControllerTest {
                 .filter(
                         document("exit-server",
                                 pathParameters(
-                                    parameterWithName("serverId").description("서버 아이디")
+                                        parameterWithName("serverId").description("서버 아이디")
                                 ),
                                 requestHeaders(
                                         headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰")
@@ -80,7 +111,7 @@ class ServerControllerTest extends ControllerTest {
                                         headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰")
                                 ),
                                 requestFields(
-                                        fieldWithPath("serverIdList").type(ARRAY)
+                                        fieldWithPath("idList").type(ARRAY)
                                                 .description("사용자가 참여한 서버의 아이디들을 모두 리스트 형태로 전달하면 됩니다.")
                                 ),
                                 responseFields(

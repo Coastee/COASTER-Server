@@ -19,4 +19,8 @@ public class Server {
     private Long id;
 
     private String title;
+
+    public Server(final String title) {
+        this.title = title;
+    }
 }
