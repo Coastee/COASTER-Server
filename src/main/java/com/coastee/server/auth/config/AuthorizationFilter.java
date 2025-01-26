@@ -40,7 +40,6 @@ public class AuthorizationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
 
         String servletPath = request.getServletPath();
-
         try {
             if (servletPath.equals("/api/v1/refresh")) {
                 String refreshToken = JwtHeaderUtil.getToken(HEADER_REFRESH_TOKEN, request);
@@ -60,8 +59,6 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         } catch (GeneralException e) {
             exceptionHandler(response, e);
         }
-
-        filterChain.doFilter(request, response);
     }
 
     private Authentication getAuthentication(final String accessToken) {

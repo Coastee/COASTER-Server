@@ -5,7 +5,6 @@ import com.coastee.server.global.apipayload.code.ErrorReasonDTO;
 import com.coastee.server.global.apipayload.code.status.ErrorStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
@@ -23,11 +22,9 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.coastee.server.global.apipayload.code.status.ErrorStatus._INTERNAL_SERVER_ERROR;
-import static com.coastee.server.global.util.RequestInfo.createRequestFullPath;
 
 @Slf4j
 @RestControllerAdvice(annotations = {RestController.class})
-@RequiredArgsConstructor
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
     @Override
@@ -47,7 +44,6 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
                 });
 
         ErrorStatus errorStatus = ErrorStatus.valueOf("_BAD_REQUEST");
-
         ApiResponse<Map<String, String>> body = ApiResponse.onFailure(errorStatus.getCode(), errorStatus.getMessage(), errors);
 
         return super.handleExceptionInternal(
@@ -65,12 +61,10 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
             final WebRequest request
     ) {
         ErrorStatus errorCommonStatus = _INTERNAL_SERVER_ERROR;
-
         String errorPoint = e.getMessage();
         ApiResponse<Object> body = ApiResponse.onFailure(errorCommonStatus.getCode(), errorCommonStatus.getMessage(), errorPoint);
 
-        e.printStackTrace();
-
+//        e.printStackTrace();
         return super.handleExceptionInternal(
                 e,
                 body,
@@ -98,7 +92,6 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
                 webRequest
         );
     }
-
 
     @ExceptionHandler
     public ResponseEntity<Object> validation(
