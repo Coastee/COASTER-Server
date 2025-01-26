@@ -33,6 +33,10 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // User
     INVALID_USER_ID(BAD_REQUEST, "USER4001", "유효하지 않은 유저의 아이디입니다."),
+
+    // Server
+    INVALID_SERVER_ID(BAD_REQUEST, "SERVER4001", "유효하지 않은 서버 아이디입니다."),
+    NOT_IN_SERVER(BAD_REQUEST, "SERVER4002", "해당 유저는 이 서버에 참여하고 있지 않습니다.")
     ;
 
     private final HttpStatus httpStatus;

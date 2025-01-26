@@ -27,4 +27,11 @@ public class ServerFacade {
         List<Server> serverList = serverService.findAllById(request.getServerIdList());
         serverEntryService.save(user, serverList);
     }
+
+    @Transactional
+    public void exit(final Accessor accessor, final Long serverId) {
+        User user = userService.findById(accessor.getUserId());
+        Server server = serverService.findById(serverId);
+        serverEntryService.exit(user, server);
+    }
 }
