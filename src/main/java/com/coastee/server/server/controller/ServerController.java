@@ -5,18 +5,31 @@ import com.coastee.server.auth.UserOnly;
 import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.global.apipayload.ApiResponse;
 import com.coastee.server.server.dto.request.ServerEntryRequest;
+import com.coastee.server.server.dto.response.ServerElements;
 import com.coastee.server.server.facade.ServerFacade;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/servers")
 public class ServerController {
     private final ServerFacade serverFacade;
+
+    @GetMapping("")
+    public ApiResponse<ServerElements> findAll() {
+        return ApiResponse.onSuccess(serverFacade.findAll());
+    }
+
+    @DeleteMapping("/{serverId}")
+    @UserOnly
+    public ApiResponse<Void> exitServer(
+            @Auth final Accessor accessor,
+            @PathVariable final Long serverId
+    ) {
+        serverFacade.exit(accessor, serverId);
+        return ApiResponse.onSuccess();
+    }
 
     @PostMapping("/enter")
     @UserOnly

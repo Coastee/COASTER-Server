@@ -12,5 +12,5 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
 public class ServerEntryRequest {
-    private List<Long> serverIdList;
+    private List<Long> idList;
 }

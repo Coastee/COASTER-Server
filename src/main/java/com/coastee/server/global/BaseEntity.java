@@ -43,8 +43,8 @@ public abstract class BaseEntity {
         }
     }
 
-    public void updateStatus(final BaseEntityStatus status) {
-        this.status = status;
+    public void delete() {
+        this.status = DELETED;
     }
 
     public boolean isActive() {
