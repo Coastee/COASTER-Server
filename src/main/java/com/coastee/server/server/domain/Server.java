@@ -1,4 +1,4 @@
-package com.coastee.server.community.domain;
+package com.coastee.server.server.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +12,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class Community {
+public class Server {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
