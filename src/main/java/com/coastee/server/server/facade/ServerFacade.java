@@ -3,6 +3,7 @@ package com.coastee.server.server.facade;
 import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.server.domain.Server;
 import com.coastee.server.server.dto.request.ServerEntryRequest;
+import com.coastee.server.server.dto.response.ServerElements;
 import com.coastee.server.server.service.ServerEntryService;
 import com.coastee.server.server.service.ServerService;
 import com.coastee.server.user.domain.User;
@@ -21,10 +22,15 @@ public class ServerFacade {
     private final ServerService serverService;
     private final ServerEntryService serverEntryService;
 
+    public ServerElements findAll() {
+        List<Server> serverList = serverService.findAll();
+        return new ServerElements(serverList);
+    }
+
     @Transactional
     public void enter(final Accessor accessor, final ServerEntryRequest request) {
         User user = userService.findById(accessor.getUserId());
-        List<Server> serverList = serverService.findAllById(request.getServerIdList());
+        List<Server> serverList = serverService.findAllById(request.getIdList());
         serverEntryService.save(user, serverList);
     }
 

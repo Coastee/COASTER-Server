@@ -23,6 +23,10 @@ public class ServerService {
         return serverRepository.findById(id).orElseThrow(() -> new GeneralException(INVALID_SERVER_ID));
     }
 
+    public List<Server> findAll() {
+        return serverRepository.findAll();
+    }
+
     public List<Server> findAllById(final List<Long> idList) {
         return serverRepository.findAllById(idList);
     }
