@@ -1,23 +1,16 @@
 package com.coastee.server.login.controller;
 
-import com.coastee.server.auth.domain.Accessor;
-import com.coastee.server.fixture.UserFixture;
 import com.coastee.server.global.ControllerTest;
 import com.coastee.server.login.domain.AuthTokens;
 import com.coastee.server.login.service.LoginService;
-import com.coastee.server.user.domain.User;
-import com.coastee.server.user.domain.repository.UserRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -30,22 +23,12 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 
 @DisplayName("로그인 컨트롤러 테스트")
 class LoginControllerTest extends ControllerTest {
-    @Autowired
-    private UserRepository userRepository;
-
     @MockitoBean
     private LoginService loginService;
 
-    private User user;
-
     @BeforeEach
     void setUp() {
-        user = userRepository.save(UserFixture.get());
-        given(jwtProvider.validateAccessToken(any())).willReturn(true);
-        doNothing().when(jwtProvider).validateRefreshToken(any());
-        given(jwtProvider.getSubject(any())).willReturn(user.getId().toString());
-        given(loginArgumentResolver.resolveArgument(any(), any(), any(), any()))
-                .willReturn(Accessor.user(user.getId()));
+
     }
 
     @DisplayName("소셜 로그인을 한다.")
@@ -57,7 +40,7 @@ class LoginControllerTest extends ControllerTest {
                         AuthTokens.of()
                                 .accessToken(ACCESS_TOKEN)
                                 .refreshToken(REFRESH_TOKEN)
-                                .subject(user.getId().toString())
+                                .subject(currentUser.getId().toString())
                                 .build()
                 );
 

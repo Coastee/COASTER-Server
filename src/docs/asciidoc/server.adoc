@@ -1,0 +1,33 @@
+= Server API
+coaster server
+:doctype: book
+:icons: font
+:source-highlighter: highlishtjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+== `POST` Enter Server
+서버 참여
+
+=== Request
+```
+/api/v1/servers/enter
+```
+include::{snippets}/enter-server/curl-request.adoc[]
+
+==== header
+include::{snippets}/enter-server/request-headers.adoc[]
+
+==== request body
+include::{snippets}/enter-server/request-body.adoc[]
+include::{snippets}/enter-server/request-fields.adoc[]
+
+=== Response
+==== response body
+include::{snippets}/enter-server/response-body.adoc[]
+include::{snippets}/enter-server/response-fields.adoc[]
