@@ -89,7 +89,7 @@ public class JwtProvider {
         }
     }
 
-    private void validateRefreshToken(final String refreshToken) {
+    public void validateRefreshToken(final String refreshToken) {
         try {
             parseToken(refreshToken);
         } catch (ExpiredJwtException e) {

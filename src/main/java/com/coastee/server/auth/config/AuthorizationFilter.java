@@ -2,6 +2,7 @@ package com.coastee.server.auth.config;
 
 import com.coastee.server.global.apipayload.code.ErrorReasonDTO;
 import com.coastee.server.global.apipayload.exception.GeneralException;
+import com.coastee.server.login.infrastructure.JwtHeaderUtil;
 import com.coastee.server.login.infrastructure.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
@@ -39,12 +40,14 @@ public class AuthorizationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
 
         String servletPath = request.getServletPath();
-        final String headerValue = request.getHeader(HEADER_AUTHORIZATION);
 
-        if (servletPath.equals("/api/v1/refresh")) {
-            filterChain.doFilter(request, response);
-        } else {
-            try {
+        try {
+            if (servletPath.equals("/api/v1/refresh")) {
+                String refreshToken = JwtHeaderUtil.getToken(HEADER_REFRESH_TOKEN, request);
+                jwtProvider.validateRefreshToken(refreshToken);
+                filterChain.doFilter(request, response);
+            } else {
+                String headerValue = request.getHeader(HEADER_AUTHORIZATION);
                 if (headerValue != null && headerValue.startsWith(TOKEN_PREFIX)) {
                     String accessToken = headerValue.substring(TOKEN_PREFIX.length());
                     if (jwtProvider.validateAccessToken(accessToken)) {
@@ -53,9 +56,9 @@ public class AuthorizationFilter extends OncePerRequestFilter {
                     }
                 }
                 filterChain.doFilter(request, response);
-            } catch (GeneralException e) {
-                exceptionHandler(response, e);
             }
+        } catch (GeneralException e) {
+            exceptionHandler(response, e);
         }
 
         filterChain.doFilter(request, response);

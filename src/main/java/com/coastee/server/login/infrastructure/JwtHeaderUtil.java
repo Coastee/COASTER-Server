@@ -26,10 +26,17 @@ public class JwtHeaderUtil {
         return getToken(HEADER_REFRESH_TOKEN);
     }
 
-    private static String getToken(final String tokenHeader) {
+    public static String getToken(final String tokenHeader) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
                 .currentRequestAttributes())
                 .getRequest();
+        return getToken(tokenHeader, request);
+    }
+
+    public static String getToken(
+            final String tokenHeader,
+            final HttpServletRequest request
+    ) {
         String headerValue = request.getHeader(tokenHeader);
         if (headerValue == null || headerValue.isEmpty()) throw new GeneralException(NULL_TOKEN);
         if (StringUtils.hasText(headerValue) && headerValue.startsWith(TOKEN_PREFIX)) {
