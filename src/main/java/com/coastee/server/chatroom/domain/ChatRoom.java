@@ -2,6 +2,7 @@ package com.coastee.server.chatroom.domain;
 
 import com.coastee.server.global.BaseEntity;
 import com.coastee.server.server.domain.Server;
+import com.coastee.server.user.domain.User;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,18 +24,28 @@ public class ChatRoom extends BaseEntity {
     @JoinColumn(name = "server_id")
     private Server server;
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     private String title;
+
+    private String content;
 
     private ChatRoomType chatRoomType;
 
-    @Builder
+    @Builder(builderMethodName = "of")
     public ChatRoom(
             final Server server,
+            final User user,
             final String title,
+            final String content,
             final ChatRoomType chatRoomType
     ) {
         this.server = server;
+        this.user = user;
         this.title = title;
+        this.content = content;
         this.chatRoomType = chatRoomType;
     }
 }
