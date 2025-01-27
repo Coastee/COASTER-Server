@@ -24,7 +24,7 @@ import static com.coastee.server.chatroom.domain.ChatRoomType.GROUP;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class ChatRoomFacade {
+public class GroupChatRoomFacade {
     private final UserService userService;
     private final ServerService serverService;
     private final ChatRoomService chatRoomService;

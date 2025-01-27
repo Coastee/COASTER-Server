@@ -1,7 +1,7 @@
 package com.coastee.server.chatroom.controller;
 
 import com.coastee.server.chatroom.dto.request.CreateGroupChatRequest;
-import com.coastee.server.chatroom.facade.ChatRoomFacade;
+import com.coastee.server.chatroom.facade.GroupChatRoomFacade;
 import com.coastee.server.global.ControllerTest;
 import com.coastee.server.server.domain.repository.ServerRepository;
 import io.restassured.RestAssured;
@@ -26,7 +26,7 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 class GroupChatRoomControllerTest extends ControllerTest {
 
     @MockitoBean
-    private ChatRoomFacade chatRoomFacade;
+    private GroupChatRoomFacade groupChatRoomFacade;
 
     @Autowired
     private ServerRepository serverRepository;
@@ -35,7 +35,7 @@ class GroupChatRoomControllerTest extends ControllerTest {
     @Test
     void findAll() throws Exception {
         // given
-        doNothing().when(chatRoomFacade).create(any(), any(), any());
+        doNothing().when(groupChatRoomFacade).create(any(), any(), any());
         CreateGroupChatRequest body = new CreateGroupChatRequest("title", "content");
 
         // when & then
