@@ -57,14 +57,12 @@ public class ChatRoom extends BaseEntity {
     public ChatRoom(
             final Server server,
             final User user,
-            final String thumbnail,
             final String title,
             final String content,
             final ChatRoomType chatRoomType
     ) {
         this.server = server;
         this.user = user;
-        this.thumbnail = thumbnail;
         this.title = title;
         this.content = content;
         this.chatRoomType = chatRoomType;
@@ -78,5 +76,9 @@ public class ChatRoom extends BaseEntity {
     public void increaseMaxCount(final int count) {
         maxCount += count;
         remainCount = maxCount - currentCount;
+    }
+
+    public void updateThumbnail(final String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }
