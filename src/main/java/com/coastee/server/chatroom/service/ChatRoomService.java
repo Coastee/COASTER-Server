@@ -31,12 +31,12 @@ public class ChatRoomService {
         return chatRoomRepository.findByServerAndChatRoomType(server, chatRoomType, pageable);
     }
 
-    public Page<ChatRoom> findAllByServerAndUserAndType(
+    public Page<ChatRoom> findAllByServerAndParticipantAndType(
             final Server server,
             final User user,
             final ChatRoomType chatRoomType,
             final Pageable pageable
     ) {
-        return chatRoomRepository.findByServerAndUserAndChatRoomType(server, user, chatRoomType, pageable);
+        return chatRoomRepository.findByServerAndParticipantAndChatRoomType(server, user, chatRoomType, pageable);
     }
 }

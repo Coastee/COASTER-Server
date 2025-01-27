@@ -68,7 +68,7 @@ public class GroupChatRoomFacade {
                     PageableUtil.setSortOrder(pageable)
             );
         } else {
-            chatRoomPage = chatRoomService.findAllByServerAndUserAndType(
+            chatRoomPage = chatRoomService.findAllByServerAndParticipantAndType(
                     server,
                     user,
                     GROUP,

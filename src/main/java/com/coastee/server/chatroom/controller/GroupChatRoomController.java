@@ -28,7 +28,7 @@ public class GroupChatRoomController {
     public ApiResponse<ChatRoomElements> findByScope(
             @Auth final Accessor accessor,
             @PathVariable("serverId") final Long serverId,
-            @RequestParam(value = "scope", required = false) Scope scope,
+            @RequestParam(value = "scope", required = false) final Scope scope,
             @PageableDefault(DEFAULT_PAGING_SIZE) final Pageable pageable
     ) {
         return ApiResponse.onSuccess(groupChatRoomFacade.findByScope(accessor, serverId, scope, pageable));

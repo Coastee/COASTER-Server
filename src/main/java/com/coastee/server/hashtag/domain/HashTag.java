@@ -19,4 +19,8 @@ public class HashTag extends BaseEntity {
     private Long id;
 
     private String content;
+
+    public HashTag(final String content) {
+        this.content = content;
+    }
 }

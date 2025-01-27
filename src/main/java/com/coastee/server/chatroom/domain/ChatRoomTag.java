@@ -24,4 +24,10 @@ public class ChatRoomTag extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "hashtag_id")
     private HashTag hashTag;
+
+    public ChatRoomTag(final ChatRoom chatRoom, final HashTag hashTag) {
+        this.chatRoom = chatRoom;
+        chatRoom.getTagList().add(this);
+        this.hashTag = hashTag;
+    }
 }
