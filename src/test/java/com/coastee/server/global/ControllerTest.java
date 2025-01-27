@@ -56,7 +56,7 @@ public abstract class ControllerTest {
     private UserOnlyChecker userOnlyChecker;
 
     @Autowired
-    private UserRepository userRepository;
+    protected UserRepository userRepository;
 
     @BeforeEach
     void setPort(RestDocumentationContextProvider restDocumentation) {
