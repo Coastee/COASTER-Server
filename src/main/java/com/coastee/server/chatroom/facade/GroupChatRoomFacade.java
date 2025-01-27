@@ -7,7 +7,6 @@ import com.coastee.server.chatroom.dto.ChatRoomElements;
 import com.coastee.server.chatroom.dto.request.CreateGroupChatRequest;
 import com.coastee.server.chatroom.service.ChatRoomEntryService;
 import com.coastee.server.chatroom.service.ChatRoomService;
-import com.coastee.server.global.util.PageableUtil;
 import com.coastee.server.image.domain.DirName;
 import com.coastee.server.image.service.BlobStorageService;
 import com.coastee.server.server.domain.Server;
@@ -22,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import static com.coastee.server.chatroom.domain.ChatRoomType.GROUP;
+import static com.coastee.server.global.util.PageableUtil.setSortOrder;
 
 @Service
 @Transactional(readOnly = true)
@@ -60,21 +60,49 @@ public class GroupChatRoomFacade {
     ) {
         User user = userService.findById(accessor.getUserId());
         Server server = serverService.findById(serverId);
-        Page<ChatRoom> chatRoomPage;
-        if (scope.equals(Scope.joined)) {
-            chatRoomPage = chatRoomService.findAllByServerAndType(
-                    server,
-                    GROUP,
-                    PageableUtil.setSortOrder(pageable)
-            );
+        if (scope.equals(Scope.owner)) {
+            return findAllByServerAndOwner(server, user, setSortOrder(pageable));
+        } else if (scope.equals(Scope.joined)) {
+            return findAllByServerAndParticipant(server, user, setSortOrder(pageable));
         } else {
-            chatRoomPage = chatRoomService.findAllByServerAndParticipantAndType(
-                    server,
-                    user,
-                    GROUP,
-                    PageableUtil.setSortOrder(pageable)
-            );
+            return findAllByServer(server, setSortOrder(pageable));
         }
-        return new ChatRoomElements(chatRoomPage);
+    }
+
+    private ChatRoomElements findAllByServer(final Server server, final Pageable pageable) {
+        Page<ChatRoom> chatRoomPage = chatRoomService.findAllByServerAndType(
+                server,
+                GROUP,
+                pageable
+        );
+        return ChatRoomElements.detail(chatRoomPage);
+    }
+
+    private ChatRoomElements findAllByServerAndOwner(
+            final Server server,
+            final User user,
+            final Pageable pageable
+    ) {
+        Page<ChatRoom> chatRoomPage = chatRoomService.findAllByServerAndUserAndType(
+                server,
+                user,
+                GROUP,
+                pageable
+        );
+        return ChatRoomElements.from(chatRoomPage);
+    }
+
+    private ChatRoomElements findAllByServerAndParticipant(
+            final Server server,
+            final User participant,
+            final Pageable pageable
+    ) {
+        Page<ChatRoom> chatRoomPage = chatRoomService.findAllByServerAndParticipantAndType(
+                server,
+                participant,
+                GROUP,
+                pageable
+        );
+        return ChatRoomElements.from(chatRoomPage);
     }
 }

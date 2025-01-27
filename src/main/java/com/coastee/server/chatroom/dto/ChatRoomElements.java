@@ -16,10 +16,24 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor
 public class ChatRoomElements {
     private PageInfo pageInfo;
-    private List<ChatRoomElement> chatRoomList;
+    private List<? extends ChatRoomElement> chatRoomList;
 
     public ChatRoomElements(Page<ChatRoom> chatRoomPage) {
         this.pageInfo = new PageInfo(chatRoomPage);
         this.chatRoomList = chatRoomPage.getContent().stream().map(ChatRoomElement::new).toList();
+    }
+
+    public static ChatRoomElements from(Page<ChatRoom> chatRoomPage) {
+        return new ChatRoomElements(
+                new PageInfo(chatRoomPage),
+                chatRoomPage.getContent().stream().map(ChatRoomElement::new).toList()
+        );
+    }
+
+    public static ChatRoomElements detail(Page<ChatRoom> chatRoomPage) {
+        return new ChatRoomElements(
+                new PageInfo(chatRoomPage),
+                chatRoomPage.getContent().stream().map(ChatRoomDetailElement::new).toList()
+        );
     }
 }

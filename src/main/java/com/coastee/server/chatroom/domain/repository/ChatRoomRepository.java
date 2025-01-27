@@ -20,13 +20,20 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
             final Pageable pageable
     );
 
-    @EntityGraph(attributePaths = {"user"})
+    Page<ChatRoom> findByServerAndUserAndChatRoomType(
+            final Server server,
+            final User user,
+            final ChatRoomType type,
+            final Pageable pageable
+    );
+
     @Query("""
             select c from ChatRoom c
             right join ChatRoomEntry e
                 on c = e.chatRoom
-                and c.server = :server
                 and :user = e.user
+                and c.server = :server
+                and c.user != :user
                 and e.status = 'ACTIVE'
             """)
     Page<ChatRoom> findByServerAndParticipantAndChatRoomType(

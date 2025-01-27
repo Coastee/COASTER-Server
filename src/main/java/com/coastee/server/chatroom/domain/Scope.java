@@ -10,6 +10,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public enum Scope {
     all("all"),
+    owner("owner"),
     joined("joined"),
     ;
 

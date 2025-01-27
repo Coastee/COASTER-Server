@@ -39,4 +39,13 @@ public class ChatRoomService {
     ) {
         return chatRoomRepository.findByServerAndParticipantAndChatRoomType(server, user, chatRoomType, pageable);
     }
+
+    public Page<ChatRoom> findAllByServerAndUserAndType(
+            final Server server,
+            final User user,
+            final ChatRoomType chatRoomType,
+            final Pageable pageable
+    ) {
+        return chatRoomRepository.findByServerAndUserAndChatRoomType(server, user, chatRoomType, pageable);
+    }
 }
