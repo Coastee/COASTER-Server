@@ -43,9 +43,9 @@ public class GroupChatRoomFacade {
         User user = userService.findById(accessor.getUserId());
         Server server = serverService.findById(serverId);
         ChatRoom chatRoom = chatRoomService.save(
-                new ChatRoom(server, user, request.getTitle(), request.getContent(), GROUP)
+                ChatRoom.groupChatRoom(server, user, request.getTitle(), request.getContent())
         );
-        if (image == null) {
+        if (image != null) {
             String imageUrl = blobStorageService.upload(image, DirName.GROUP, chatRoom.getId());
             chatRoom.updateThumbnail(imageUrl);
         }

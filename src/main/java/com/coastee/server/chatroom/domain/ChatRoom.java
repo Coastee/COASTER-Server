@@ -59,13 +59,39 @@ public class ChatRoom extends BaseEntity {
             final User user,
             final String title,
             final String content,
-            final ChatRoomType chatRoomType
+            final ChatRoomType chatRoomType,
+            final LocalDateTime startDate,
+            final LocalDateTime endDate,
+            final int maxCount
     ) {
         this.server = server;
         this.user = user;
         this.title = title;
         this.content = content;
         this.chatRoomType = chatRoomType;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.maxCount = maxCount;
+        this.currentCount = 0;
+        this.remainCount = maxCount;
+    }
+
+    public static ChatRoom groupChatRoom(
+            final Server server,
+            final User user,
+            final String title,
+            final String content
+    ) {
+        return new ChatRoom(
+                server,
+                user,
+                title,
+                content,
+                ChatRoomType.GROUP,
+                null,
+                null,
+                500
+        );
     }
 
     public void enter() {
