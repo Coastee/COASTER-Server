@@ -15,8 +15,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.payload.JsonFieldType.*;
+import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
+import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 
 @DisplayName("그룹챗 테스트")
@@ -32,8 +35,8 @@ class GroupChatRoomControllerTest extends ControllerTest {
     @Test
     void findAll() throws Exception {
         // given
-        doNothing().when(chatRoomFacade).create(any(), any());
-        CreateGroupChatRequest body = new CreateGroupChatRequest(1L, "title", "content");
+        doNothing().when(chatRoomFacade).create(any(), any(), any());
+        CreateGroupChatRequest body = new CreateGroupChatRequest("title", "content");
 
         // when & then
         RestAssured.given(spec).log().all()
@@ -42,11 +45,13 @@ class GroupChatRoomControllerTest extends ControllerTest {
                 .body(body)
                 .filter(
                         document("create-groupchat",
+                                pathParameters(
+                                        parameterWithName("serverId").description("서버 아이디")
+                                ),
                                 requestHeaders(
                                         headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰 - 그룹챗 개설자")
                                 ),
                                 requestFields(
-                                        fieldWithPath("serverId").type(NUMBER).description("그룹챗이 속한 서버 아이디"),
                                         fieldWithPath("title").type(STRING).description("그룹챗 제목"),
                                         fieldWithPath("content").type(STRING).description("그룹챗 설명")
                                 ),
@@ -56,7 +61,7 @@ class GroupChatRoomControllerTest extends ControllerTest {
                                         fieldWithPath("message").type(STRING).description("결과 메세지")
                                 )
                         ))
-                .when().post("/api/v1/groups")
+                .when().post("/api/v1/servers/{serverId}/groups", 1)
                 .then().log().all().statusCode(200);
     }
 

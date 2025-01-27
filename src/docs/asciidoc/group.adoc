@@ -18,7 +18,7 @@ endif::[]
 === Request
 
 ```
-/api/v1/groups
+/api/v1/servers/{serverId}/groups
 ```
 
 include::{snippets}/create-groupchat/curl-request.adoc[]
@@ -31,6 +31,9 @@ include::{snippets}/create-groupchat/request-headers.adoc[]
 
 include::{snippets}/create-groupchat/request-body.adoc[]
 include::{snippets}/create-groupchat/request-fields.adoc[]
+
+==== path parameters
+include::{snippets}/create-groupchat/path-parameters.adoc[]
 
 === Response
 

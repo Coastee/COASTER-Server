@@ -10,7 +10,6 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
 public class CreateGroupChatRequest {
-    private Long serverId;
     private String title;
     private String content;
 }

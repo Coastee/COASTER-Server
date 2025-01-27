@@ -7,14 +7,11 @@ import com.coastee.server.chatroom.dto.request.CreateGroupChatRequest;
 import com.coastee.server.chatroom.facade.ChatRoomFacade;
 import com.coastee.server.global.apipayload.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/groups")
+@RequestMapping("/api/v1/servers/{serverId}/groups")
 public class GroupChatRoomController {
     private final ChatRoomFacade chatRoomFacade;
 
@@ -22,9 +19,10 @@ public class GroupChatRoomController {
     @UserOnly
     public ApiResponse<Void> createGroupChatRoom(
             @Auth final Accessor accessor,
+            @PathVariable("serverId") Long serverId,
             @RequestBody CreateGroupChatRequest request
     ) {
-        chatRoomFacade.create(accessor, request);
+        chatRoomFacade.create(accessor, serverId, request);
         return ApiResponse.onSuccess();
     }
 }

@@ -26,9 +26,13 @@ public class ChatRoomFacade {
     private final ChatRoomEntryService chatRoomEntryService;
 
     @Transactional
-    public void create(final Accessor accessor, final CreateGroupChatRequest request) {
+    public void create(
+            final Accessor accessor,
+            final Long serverId,
+            final CreateGroupChatRequest request
+    ) {
         User user = userService.findById(accessor.getUserId());
-        Server server = serverService.findById(request.getServerId());
+        Server server = serverService.findById(serverId);
         ChatRoom chatRoom = chatRoomService.save(
                 new ChatRoom(server, user, request.getTitle(), request.getContent(), GROUP)
         );
