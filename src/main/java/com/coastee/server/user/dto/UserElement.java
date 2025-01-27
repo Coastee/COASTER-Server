@@ -1,5 +1,6 @@
 package com.coastee.server.user.dto;
 
+import com.coastee.server.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +11,15 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
 public class UserElement {
-    private Long userId;
+    private Long id;
     private String profileImage;
-    private String name;
+    private String nickname;
     private String headline;
+
+    public UserElement(final User user) {
+        this.id = user.getId();
+        this.profileImage = user.getProfileImage();
+        this.nickname = user.getNickname();
+        this.headline = user.getHeadline();
+    }
 }

@@ -7,7 +7,7 @@ public class Constant {
     public static final String HEADER_REFRESH_TOKEN = "RefreshToken";
     public static final String AUTHORITIES_KEY = "role";
     // api
-    public static final int DEFAULT_PAGING_SIZE = 30;
+    public static final int DEFAULT_PAGING_SIZE = 40;
     // redis
     public static final String CHANNEL_NAME = "chatroom";
 }

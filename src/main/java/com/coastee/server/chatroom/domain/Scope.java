@@ -1,4 +1,4 @@
-package com.coastee.server.image.domain;
+package com.coastee.server.chatroom.domain;
 
 import com.coastee.server.auth.domain.Authority;
 import lombok.Getter;
@@ -8,8 +8,10 @@ import java.util.Arrays;
 
 @Getter
 @RequiredArgsConstructor
-public enum DirName {
-    USER("user"), POST("post"), CHAT("chat");
+public enum Scope {
+    all("all"),
+    joined("joined"),
+    ;
 
     private final String code;
 
