@@ -3,7 +3,7 @@ package com.coastee.server.chatroom.facade;
 import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.chatroom.domain.ChatRoom;
 import com.coastee.server.chatroom.domain.Scope;
-import com.coastee.server.chatroom.dto.ChatRoomElement;
+import com.coastee.server.chatroom.dto.ChatRoomElements;
 import com.coastee.server.chatroom.dto.request.CreateGroupChatRequest;
 import com.coastee.server.chatroom.service.ChatRoomEntryService;
 import com.coastee.server.chatroom.service.ChatRoomService;
@@ -52,7 +52,7 @@ public class GroupChatRoomFacade {
         chatRoomEntryService.enter(user, chatRoom);
     }
 
-    public ChatRoomElement findByScope(
+    public ChatRoomElements findByScope(
             final Accessor accessor,
             final Long serverId,
             final Scope scope,
@@ -60,21 +60,21 @@ public class GroupChatRoomFacade {
     ) {
         User user = userService.findById(accessor.getUserId());
         Server server = serverService.findById(serverId);
-        Page<ChatRoom> chatRoomList;
-        if (scope.equals(Scope.all))
-            chatRoomList = chatRoomService.findAllByServerAndType(
+        Page<ChatRoom> chatRoomPage;
+        if (scope.equals(Scope.joined)) {
+            chatRoomPage = chatRoomService.findAllByServerAndType(
                     server,
                     GROUP,
                     PageableUtil.setSortOrder(pageable)
             );
-        if (scope.equals(Scope.joined)) {
-            chatRoomList = chatRoomService.findAllByServerAndUserAndType(
+        } else {
+            chatRoomPage = chatRoomService.findAllByServerAndUserAndType(
                     server,
                     user,
                     GROUP,
                     PageableUtil.setSortOrder(pageable)
             );
         }
-        return null;
+        return new ChatRoomElements(chatRoomPage);
     }
 }

@@ -2,7 +2,6 @@ package com.coastee.server.chatroom.dto;
 
 import com.coastee.server.chatroom.domain.ChatRoom;
 import com.coastee.server.hashtag.dto.HashTagElements;
-import com.coastee.server.user.domain.User;
 import com.coastee.server.user.dto.UserElement;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,15 +25,12 @@ public class ChatRoomElement {
     private int currentCount;
     private HashTagElements hashTagElements;
 
-    public ChatRoomElement(
-            final ChatRoom chatRoom,
-            final User user
-    ) {
+    public ChatRoomElement(final ChatRoom chatRoom) {
         this.id = chatRoom.getId();
         this.thumbnail = chatRoom.getThumbnail();
         this.title = chatRoom.getTitle();
         this.content = chatRoom.getContent();
-        this.user = new UserElement(user);
+        this.user = new UserElement(chatRoom.getUser());
         this.startDate = chatRoom.getStartDate();
         this.maxCount = chatRoom.getMaxCount();
         this.currentCount = chatRoom.getCurrentCount();

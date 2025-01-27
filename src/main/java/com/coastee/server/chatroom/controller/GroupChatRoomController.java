@@ -4,7 +4,7 @@ import com.coastee.server.auth.Auth;
 import com.coastee.server.auth.UserOnly;
 import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.chatroom.domain.Scope;
-import com.coastee.server.chatroom.dto.ChatRoomElement;
+import com.coastee.server.chatroom.dto.ChatRoomElements;
 import com.coastee.server.chatroom.dto.request.CreateGroupChatRequest;
 import com.coastee.server.chatroom.facade.GroupChatRoomFacade;
 import com.coastee.server.global.apipayload.ApiResponse;
@@ -25,7 +25,7 @@ public class GroupChatRoomController {
 
     @GetMapping("")
     @UserOnly
-    public ApiResponse<ChatRoomElement> getChatRooms(
+    public ApiResponse<ChatRoomElements> findByScope(
             @Auth final Accessor accessor,
             @PathVariable("serverId") final Long serverId,
             @RequestParam(value = "scope", required = false) Scope scope,
