@@ -11,6 +11,49 @@ ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
 
+== `GET` Find GroupChat
+
+그룹챗 조회
+
+=== Request
+
+```
+/api/v1/servers/{serverId}/groups
+```
+
+- 모든 그룹챗을 조회할 경우
+include::{snippets}/find-all-groupchat/curl-request.adoc[]
+
+- 일부 (개설한 혹은 참여한) 그룹챗을 조회할 경우
+include::{snippets}/find-owner-groupchat/curl-request.adoc[]
+
+==== header
+
+include::{snippets}/find-all-groupchat/request-headers.adoc[]
+
+==== path parameters
+
+include::{snippets}/find-all-groupchat/path-parameters.adoc[]
+
+==== query parameters
+
+include::{snippets}/find-all-groupchat/query-parameters.adoc[]
+
+=== Response
+
+==== response body
+
+- 모든 그룹챗을 조회할 경우
+
+include::{snippets}/find-all-groupchat/response-body.adoc[]
+include::{snippets}/find-all-groupchat/response-fields.adoc[]
+
+- 일부 (개설한 혹은 참여한) 그룹챗을 조회할 경우
+
+include::{snippets}/find-owner-groupchat/response-body.adoc[]
+include::{snippets}/find-owner-groupchat/response-fields.adoc[]
+
+
 == `POST` Create GroupChat
 
 그룹챗 개설
