@@ -16,7 +16,7 @@ import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 
-import static com.coastee.server.global.Constant.AUTHORITIES_KEY;
+import static com.coastee.server.global.domain.Constant.AUTHORITIES_KEY;
 import static com.coastee.server.global.apipayload.code.status.ErrorStatus.*;
 
 @Getter

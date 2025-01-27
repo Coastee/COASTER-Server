@@ -1,6 +1,6 @@
 package com.coastee.server.chatroom.domain;
 
-import com.coastee.server.global.BaseEntity;
+import com.coastee.server.global.domain.BaseEntity;
 import com.coastee.server.hashtag.domain.HashTag;
 import jakarta.persistence.*;
 import lombok.Getter;

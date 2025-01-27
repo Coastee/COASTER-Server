@@ -8,7 +8,6 @@ import com.coastee.server.login.LoginArgumentResolver;
 import com.coastee.server.login.infrastructure.JwtProvider;
 import com.coastee.server.user.domain.User;
 import com.coastee.server.user.domain.repository.UserRepository;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.impl.DefaultClaims;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -26,7 +25,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.HashMap;
 
-import static com.coastee.server.global.Constant.AUTHORITIES_KEY;
+import static com.coastee.server.global.domain.Constant.AUTHORITIES_KEY;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;

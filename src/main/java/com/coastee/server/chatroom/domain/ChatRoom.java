@@ -1,6 +1,6 @@
 package com.coastee.server.chatroom.domain;
 
-import com.coastee.server.global.BaseEntity;
+import com.coastee.server.global.domain.BaseEntity;
 import com.coastee.server.server.domain.Server;
 import com.coastee.server.user.domain.User;
 import jakarta.persistence.*;
@@ -28,6 +28,8 @@ public class ChatRoom extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private String thumbnail;
+
     private String title;
 
     private String content;
@@ -38,12 +40,14 @@ public class ChatRoom extends BaseEntity {
     public ChatRoom(
             final Server server,
             final User user,
+            final String thumbnail,
             final String title,
             final String content,
             final ChatRoomType chatRoomType
     ) {
         this.server = server;
         this.user = user;
+        this.thumbnail = thumbnail;
         this.title = title;
         this.content = content;
         this.chatRoomType = chatRoomType;

@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static com.coastee.server.global.Constant.TOKEN_PREFIX;
+import static com.coastee.server.global.domain.Constant.TOKEN_PREFIX;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

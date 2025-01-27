@@ -1,6 +1,6 @@
 package com.coastee.server.server.domain.repository;
 
-import com.coastee.server.global.BaseEntityStatus;
+import com.coastee.server.global.domain.BaseEntityStatus;
 import com.coastee.server.server.domain.Server;
 import com.coastee.server.server.domain.ServerEntry;
 import com.coastee.server.user.domain.User;

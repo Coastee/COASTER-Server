@@ -1,4 +1,4 @@
-package com.coastee.server.global;
+package com.coastee.server.global.domain;
 
 public class Constant {
     // auth

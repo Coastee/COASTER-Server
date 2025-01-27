@@ -1,19 +1,18 @@
-package com.coastee.server.global;
+package com.coastee.server.global.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-import static com.coastee.server.global.BaseEntityStatus.ACTIVE;
-import static com.coastee.server.global.BaseEntityStatus.DELETED;
+import static com.coastee.server.global.domain.BaseEntityStatus.ACTIVE;
+import static com.coastee.server.global.domain.BaseEntityStatus.DELETED;
 import static jakarta.persistence.EnumType.STRING;
 
 @Getter

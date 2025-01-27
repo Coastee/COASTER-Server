@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.coastee.server.global.BaseEntityStatus.ACTIVE;
+import static com.coastee.server.global.domain.BaseEntityStatus.ACTIVE;
 import static com.coastee.server.global.apipayload.code.status.ErrorStatus.NOT_IN_SERVER;
 
 @Service

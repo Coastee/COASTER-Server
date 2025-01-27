@@ -11,8 +11,8 @@ import com.coastee.server.login.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import static com.coastee.server.global.Constant.HEADER_AUTHORIZATION;
-import static com.coastee.server.global.Constant.HEADER_REFRESH_TOKEN;
+import static com.coastee.server.global.domain.Constant.HEADER_AUTHORIZATION;
+import static com.coastee.server.global.domain.Constant.HEADER_REFRESH_TOKEN;
 
 @RestController
 @RequiredArgsConstructor

@@ -10,4 +10,6 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
 public class HashTagElement {
+    private Long id;
+    private String content;
 }
