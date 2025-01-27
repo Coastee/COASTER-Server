@@ -34,7 +34,7 @@ public class ChatRoomFacade {
         User user = userService.findById(accessor.getUserId());
         Server server = serverService.findById(serverId);
         ChatRoom chatRoom = chatRoomService.save(
-                new ChatRoom(server, user, request.getTitle(), request.getContent(), GROUP)
+                new ChatRoom(server, user, request.getTitle(), request.getContent(), "", GROUP)
         );
         chatRoomEntryService.save(new ChatRoomEntry(user, chatRoom));
     }

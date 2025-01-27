@@ -3,7 +3,7 @@ package com.coastee.server.server.facade;
 import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.server.domain.Server;
 import com.coastee.server.server.dto.request.ServerEntryRequest;
-import com.coastee.server.server.dto.response.ServerElements;
+import com.coastee.server.server.dto.ServerElements;
 import com.coastee.server.server.service.ServerEntryService;
 import com.coastee.server.server.service.ServerService;
 import com.coastee.server.user.domain.User;
