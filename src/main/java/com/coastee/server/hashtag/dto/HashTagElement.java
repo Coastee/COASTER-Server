@@ -1,4 +1,4 @@
-package com.coastee.server.user.dto;
+package com.coastee.server.hashtag.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,9 +9,5 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
-public class UserElement {
-    private Long userId;
-    private String profileImage;
-    private String name;
-    private String headline;
+public class HashTagElement {
 }
