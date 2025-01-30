@@ -10,7 +10,9 @@ import java.util.Arrays;
 public enum ChatRoomType {
     ENTIRE("ENTIRE"),
     GROUP("GROUP"),
-    MEETING("MEETING");
+    MEETING("MEETING"),
+    DM("DM"),
+    ;
 
     private final String code;
 

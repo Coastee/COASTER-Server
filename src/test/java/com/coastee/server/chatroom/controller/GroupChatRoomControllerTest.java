@@ -30,6 +30,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.coastee.server.util.FileUtil.getFile;
 import static org.mockito.ArgumentMatchers.any;
@@ -217,7 +218,7 @@ class GroupChatRoomControllerTest extends ControllerTest {
     void create() throws Exception {
         // given
         doNothing().when(groupChatRoomFacade).create(any(), any(), any(), any());
-        CreateGroupChatRequest requestDTO = new CreateGroupChatRequest("title", "content");
+        CreateGroupChatRequest requestDTO = new CreateGroupChatRequest("title", "content", Set.of("#A", "#B"));
 
         MultiPartSpecification request = new MultiPartSpecBuilder(requestDTO, ObjectMapperType.JACKSON_2)
                 .controlName("request")
@@ -250,7 +251,8 @@ class GroupChatRoomControllerTest extends ControllerTest {
                                 requestPartFields(
                                         "request",
                                         fieldWithPath("title").type(STRING).description("``request.title`` 그룹챗 제목 : 최소 1자 ~ 최대 20자"),
-                                        fieldWithPath("content").type(STRING).description("``request.content`` 그룹챗 설명 : 최대 150자")
+                                        fieldWithPath("content").type(STRING).description("``request.content`` 그룹챗 설명 : 최대 80자"),
+                                        fieldWithPath("hashTags").type(ARRAY).description("``request.hashTags`` 해시태그 : 최대 10개")
                                 ),
                                 requestHeaders(
                                         headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰 - 그룹챗 개설자")

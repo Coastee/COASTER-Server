@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.coastee.server.global.domain.Constant.MAX_COUNT;
+import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
@@ -40,6 +41,7 @@ public class ChatRoom extends BaseEntity {
 
     private String content;
 
+    @Enumerated(STRING)
     private ChatRoomType chatRoomType;
 
     private LocalDateTime startDate;
@@ -55,7 +57,7 @@ public class ChatRoom extends BaseEntity {
     @OneToMany(mappedBy = "chatRoom")
     private List<ChatRoomTag> tagList = new ArrayList<>();
 
-    public ChatRoom(
+    private ChatRoom(
             final Server server,
             final User user,
             final String title,

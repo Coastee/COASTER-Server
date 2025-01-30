@@ -53,7 +53,6 @@ include::{snippets}/find-all-groupchat/response-fields.adoc[]
 include::{snippets}/find-owner-groupchat/response-body.adoc[]
 include::{snippets}/find-owner-groupchat/response-fields.adoc[]
 
-
 == `POST` Create GroupChat
 
 그룹챗 개설
@@ -63,6 +62,7 @@ include::{snippets}/find-owner-groupchat/response-fields.adoc[]
 ```
 /api/v1/servers/{serverId}/groups
 ```
+
 include::{snippets}/create-groupchat/curl-request.adoc[]
 - 테스트에서는 png 파일로 사용하여 file type을 ``image/png``로 설정하였으나, 실제로는 file type에 맞게 MediaType을 설정해주어야 합니다.
 
@@ -79,6 +79,17 @@ include::{snippets}/create-groupchat/path-parameters.adoc[]
 include::{snippets}/create-groupchat/request-parts.adoc[]
 
 - ``request``의 fields
+
+다음과 같이 json 형태로 전송합니다. `application/json` 타입 명시 필수!
+
+```json
+{
+  "title" : "title test",
+  "content" : "content test",
+  "hashTags" : ["#A", "#B", "#C"]
+}
+```
+
 include::{snippets}/create-groupchat/request-part-request-fields.adoc[]
 
 === Response

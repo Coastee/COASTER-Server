@@ -7,6 +7,7 @@ import com.coastee.server.chatroom.dto.ChatRoomElements;
 import com.coastee.server.chatroom.dto.request.CreateGroupChatRequest;
 import com.coastee.server.chatroom.service.ChatRoomEntryService;
 import com.coastee.server.chatroom.service.ChatRoomService;
+import com.coastee.server.hashtag.service.HashTagService;
 import com.coastee.server.image.domain.DirName;
 import com.coastee.server.image.service.BlobStorageService;
 import com.coastee.server.server.domain.Server;
@@ -34,6 +35,7 @@ public class GroupChatRoomFacade {
     private final ChatRoomService chatRoomService;
     private final ChatRoomEntryService chatRoomEntryService;
     private final BlobStorageService blobStorageService;
+    private final HashTagService hashTagService;
 
     @Transactional
     public void create(
@@ -47,6 +49,7 @@ public class GroupChatRoomFacade {
         ChatRoom chatRoom = chatRoomService.save(
                 ChatRoom.groupChatRoom(server, user, request.getTitle(), request.getContent())
         );
+        hashTagService.tag(chatRoom, request.getHashTags());
         if (image != null) {
             String imageUrl = blobStorageService.upload(image, DirName.GROUP, chatRoom.getId());
             chatRoom.updateThumbnail(imageUrl);
@@ -54,7 +57,7 @@ public class GroupChatRoomFacade {
         chatRoomEntryService.enter(user, chatRoom);
     }
 
-    // TODO: 쿼리 몇번 나가는지 확인 필요함
+    // TODO: 쿼리 몇번 나가는지 확인 필요
     public ChatRoomElements findByScope(
             final Accessor accessor,
             final Long serverId,
