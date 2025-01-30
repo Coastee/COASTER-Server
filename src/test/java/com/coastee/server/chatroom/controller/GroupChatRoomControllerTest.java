@@ -43,7 +43,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 
-@DisplayName("그룹챗 테스트")
+@DisplayName("그룹챗 Controller 테스트")
 class GroupChatRoomControllerTest extends ControllerTest {
 
     @MockitoBean

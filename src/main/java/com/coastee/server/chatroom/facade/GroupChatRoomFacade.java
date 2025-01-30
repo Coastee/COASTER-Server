@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import static com.coastee.server.chatroom.domain.ChatRoomType.GROUP;
 import static com.coastee.server.global.util.PageableUtil.setSortOrder;
@@ -85,11 +85,11 @@ public class GroupChatRoomFacade {
                 GROUP,
                 pageable
         );
-        HashMap<Long, Boolean> hasEnteredByChatRoomList = chatRoomEntryService.findHasEnteredByChatRoomList(
+        Map<Long, Boolean> hasEnteredMap = chatRoomEntryService.findHasEnteredByChatRoomList(
                 currentUser,
                 chatRoomPage.getContent()
         );
-        return ChatRoomElements.detail(chatRoomPage, hasEnteredByChatRoomList);
+        return ChatRoomElements.detail(chatRoomPage, hasEnteredMap);
     }
 
     private ChatRoomElements findAllByServerAndOwner(

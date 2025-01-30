@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -21,7 +22,7 @@ public class ChatRoomDetailElement extends ChatRoomElement {
     private int currentCount;
     private List<HashTagElement> hashTagList;
 
-    public ChatRoomDetailElement(final ChatRoom chatRoom, final boolean hasEntered) {
+    public ChatRoomDetailElement(final ChatRoom chatRoom, final Boolean hasEntered) {
         super(chatRoom);
         this.user = new UserElement(chatRoom.getUser());
         this.hasEntered = hasEntered;

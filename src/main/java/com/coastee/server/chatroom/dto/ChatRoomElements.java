@@ -7,8 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -33,13 +33,13 @@ public class ChatRoomElements {
 
     public static ChatRoomElements detail(
             final Page<ChatRoom> chatRoomPage,
-            final HashMap<Long, Boolean> hasEnteredByChatRoomList
+            final Map<Long, Boolean> hasEnteredMap
     ) {
         return new ChatRoomElements(
                 new PageInfo(chatRoomPage),
                 chatRoomPage.getContent().stream().map(chatRoom -> new ChatRoomDetailElement(
                         chatRoom,
-                        hasEnteredByChatRoomList.get(chatRoom.getId())
+                        hasEnteredMap.get(chatRoom.getId())
                 )).toList()
         );
     }

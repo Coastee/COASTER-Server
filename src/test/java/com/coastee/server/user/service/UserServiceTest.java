@@ -1,25 +1,22 @@
 package com.coastee.server.user.service;
 
 import com.coastee.server.fixture.UserFixture;
-import com.coastee.server.util.ServiceTest;
 import com.coastee.server.global.apipayload.exception.GeneralException;
 import com.coastee.server.user.domain.User;
 import com.coastee.server.user.domain.repository.UserRepository;
 import com.coastee.server.user.dto.response.ProfileResponse;
+import com.coastee.server.util.ServiceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import static com.coastee.server.global.apipayload.code.status.ErrorStatus.INVALID_USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@Transactional
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+
 class UserServiceTest extends ServiceTest {
 
     @Autowired

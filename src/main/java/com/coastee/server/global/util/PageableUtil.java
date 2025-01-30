@@ -12,19 +12,19 @@ public class PageableUtil {
             return PageRequest.of(
                     pageable.getPageNumber(),
                     pageable.getPageSize(),
-                    Sort.by(Sort.Direction.ASC, "chat_room.title")
+                    Sort.by(Sort.Direction.ASC, "title")
             );
         } else if (isSortBy(pageable, SortType.remain.getCode())) {
             return PageRequest.of(
                     pageable.getPageNumber(),
                     pageable.getPageSize(),
-                    Sort.by(Sort.Direction.ASC, "chat_room.remain_count")
+                    Sort.by(Sort.Direction.ASC, "remainCount")
             );
         } else {
             return PageRequest.of(
                     pageable.getPageNumber(),
                     pageable.getPageSize(),
-                    Sort.by(Sort.Direction.ASC, "chat_room.created_date")
+                    Sort.by(Sort.Direction.DESC, "createdDate")
             );
         }
     }

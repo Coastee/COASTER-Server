@@ -59,7 +59,7 @@ public abstract class ControllerTest {
     protected UserRepository userRepository;
 
     @BeforeEach
-    void setPort(RestDocumentationContextProvider restDocumentation) {
+    void setUp(RestDocumentationContextProvider restDocumentation) {
         RestAssured.port = port;
         spec = new RequestSpecBuilder()
                 .addFilter(
