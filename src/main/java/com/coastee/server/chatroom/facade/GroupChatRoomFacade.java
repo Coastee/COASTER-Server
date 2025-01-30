@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
+
 import static com.coastee.server.chatroom.domain.ChatRoomType.GROUP;
 import static com.coastee.server.global.util.PageableUtil.setSortOrder;
 
@@ -52,6 +54,7 @@ public class GroupChatRoomFacade {
         chatRoomEntryService.enter(user, chatRoom);
     }
 
+    // TODO: 쿼리 몇번 나가는지 확인 필요함
     public ChatRoomElements findByScope(
             final Accessor accessor,
             final Long serverId,
@@ -65,17 +68,25 @@ public class GroupChatRoomFacade {
         } else if (scope.equals(Scope.joined)) {
             return findAllByServerAndParticipant(server, user, setSortOrder(pageable));
         } else {
-            return findAllByServer(server, setSortOrder(pageable));
+            return findAllByServer(server, user, setSortOrder(pageable));
         }
     }
 
-    private ChatRoomElements findAllByServer(final Server server, final Pageable pageable) {
+    private ChatRoomElements findAllByServer(
+            final Server server,
+            final User currentUser,
+            final Pageable pageable
+    ) {
         Page<ChatRoom> chatRoomPage = chatRoomService.findAllByServerAndType(
                 server,
                 GROUP,
                 pageable
         );
-        return ChatRoomElements.detail(chatRoomPage);
+        HashMap<Long, Boolean> hasEnteredByChatRoomList = chatRoomEntryService.findHasEnteredByChatRoomList(
+                currentUser,
+                chatRoomPage.getContent()
+        );
+        return ChatRoomElements.detail(chatRoomPage, hasEnteredByChatRoomList);
     }
 
     private ChatRoomElements findAllByServerAndOwner(

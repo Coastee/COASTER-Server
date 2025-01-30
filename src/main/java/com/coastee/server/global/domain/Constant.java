@@ -11,4 +11,6 @@ public class Constant {
     public static final int DEFAULT_PAGING_SIZE = 40;
     // redis
     public static final String CHANNEL_NAME = "chatroom";
+    // chatroom
+    public static final int MAX_COUNT = 1000;
 }

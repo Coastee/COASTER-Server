@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.coastee.server.global.domain.Constant.MAX_COUNT;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
@@ -90,7 +91,7 @@ public class ChatRoom extends BaseEntity {
                 ChatRoomType.GROUP,
                 null,
                 null,
-                500
+                MAX_COUNT
         );
     }
 

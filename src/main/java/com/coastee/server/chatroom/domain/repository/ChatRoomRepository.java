@@ -29,12 +29,12 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 
     @Query("""
             select c from ChatRoom c
-            right join ChatRoomEntry e
+            join ChatRoomEntry e
                 on c = e.chatRoom
-                and :user = e.user
+                and e.user = :user
+                and e.status = 'ACTIVE'
                 and c.server = :server
                 and c.user != :user
-                and e.status = 'ACTIVE'
             """)
     Page<ChatRoom> findByServerAndParticipantAndChatRoomType(
             @Param("server") final Server server,

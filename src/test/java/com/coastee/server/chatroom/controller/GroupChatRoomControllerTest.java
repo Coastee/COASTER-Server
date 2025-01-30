@@ -83,12 +83,14 @@ class GroupChatRoomControllerTest extends ControllerTest {
         chatRoomTagRepository.save(new ChatRoomTag(chatRoomList.get(1), hashTagC));
         chatRoomTagRepository.save(new ChatRoomTag(chatRoomList.get(2), hashTagA));
 
-        when(groupChatRoomFacade.findByScope(any(), any(), any(), any()))
-                .thenReturn(new ChatRoomElements(
-                                new PageInfo(true, 0, 3, 40),
-                                chatRoomList.stream().map(ChatRoomDetailElement::new).toList()
-                        )
-                );
+        when(groupChatRoomFacade.findByScope(any(), any(), any(), any())).thenReturn(
+                new ChatRoomElements(
+                        new PageInfo(true, 0, 3, 40),
+                        chatRoomList.stream().map(chatRoom -> new ChatRoomDetailElement(
+                                chatRoom, false
+                        )).toList()
+                )
+        );
 
         // when & then
         RestAssured.given(spec).log().all()
@@ -105,7 +107,7 @@ class GroupChatRoomControllerTest extends ControllerTest {
                                 queryParameters(
                                         parameterWithName("page").description("페이지 번호 (default: 0)"),
                                         parameterWithName("sort")
-                                                .description("정렬기준 - `name` : 기본순, `remain` : 마감임박순 (default: 최신순)"),
+                                                .description("정렬기준 - `name` : 이름순, `remain` : 마감임박순 (default: 최신순)"),
                                         parameterWithName("scope")
                                                 .description("조회 기준 - `joined` : 참여한 그룹챗 조회, `owner` : 개설한 그룹챗 조회 (default: 전체 조회)")
                                 ),
@@ -132,6 +134,7 @@ class GroupChatRoomControllerTest extends ControllerTest {
                                         fieldWithPath("result.chatRoomList[].user.profileImage").type(STRING).description("개설자 프로필 사진"),
                                         fieldWithPath("result.chatRoomList[].user.nickname").type(STRING).description("개설자 닉네임"),
                                         fieldWithPath("result.chatRoomList[].user.headline").type(STRING).description("개설자 한줄소개"),
+                                        fieldWithPath("result.chatRoomList[].hasEntered").type(BOOLEAN).description("현재 유저가 해당 채팅방에 이미 참여하였는지에 대한 여부"),
                                         fieldWithPath("result.chatRoomList[].startDate").type(STRING).description("채팅방 만남 시각").optional(),
                                         fieldWithPath("result.chatRoomList[].maxCount").type(NUMBER).description("채팅방의 최대 유저 수"),
                                         fieldWithPath("result.chatRoomList[].currentCount").type(NUMBER).description("채팅방의 현재 유저 수"),
@@ -180,7 +183,7 @@ class GroupChatRoomControllerTest extends ControllerTest {
                                 queryParameters(
                                         parameterWithName("page").description("페이지 번호 (default: 0)"),
                                         parameterWithName("sort")
-                                                .description("정렬기준 - `name` : 기본순, `remain` : 마감임박순 (default: 최신순)"),
+                                                .description("정렬기준 - `name` : 이름순, `remain` : 마감임박순 (default: 최신순)"),
                                         parameterWithName("scope")
                                                 .description("조회 기준 - `joined` : 참여한 그룹챗 조회, `owner` : 개설한 그룹챗 조회 (default: 전체 조회)")
                                 ),
