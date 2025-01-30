@@ -1,4 +1,4 @@
-package com.coastee.server.global;
+package com.coastee.server.util;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;

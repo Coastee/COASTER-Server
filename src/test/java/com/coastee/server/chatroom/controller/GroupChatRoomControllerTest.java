@@ -12,7 +12,7 @@ import com.coastee.server.chatroom.facade.GroupChatRoomFacade;
 import com.coastee.server.fixture.HashTagFixture;
 import com.coastee.server.fixture.ServerFixture;
 import com.coastee.server.fixture.UserFixture;
-import com.coastee.server.global.ControllerTest;
+import com.coastee.server.util.ControllerTest;
 import com.coastee.server.global.domain.PageInfo;
 import com.coastee.server.hashtag.domain.HashTag;
 import com.coastee.server.hashtag.domain.repository.HashTagRepository;

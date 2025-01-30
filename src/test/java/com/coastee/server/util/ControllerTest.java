@@ -1,4 +1,4 @@
-package com.coastee.server.global;
+package com.coastee.server.util;
 
 import com.coastee.server.auth.UserOnlyChecker;
 import com.coastee.server.auth.domain.Accessor;

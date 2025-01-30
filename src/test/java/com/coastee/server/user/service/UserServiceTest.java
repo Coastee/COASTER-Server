@@ -1,7 +1,7 @@
 package com.coastee.server.user.service;
 
 import com.coastee.server.fixture.UserFixture;
-import com.coastee.server.global.ServiceTest;
+import com.coastee.server.util.ServiceTest;
 import com.coastee.server.global.apipayload.exception.GeneralException;
 import com.coastee.server.user.domain.User;
 import com.coastee.server.user.domain.repository.UserRepository;

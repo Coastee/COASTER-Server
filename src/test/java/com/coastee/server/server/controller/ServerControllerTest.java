@@ -1,7 +1,7 @@
 package com.coastee.server.server.controller;
 
 import com.coastee.server.fixture.ServerFixture;
-import com.coastee.server.global.ControllerTest;
+import com.coastee.server.util.ControllerTest;
 import com.coastee.server.server.domain.Server;
 import com.coastee.server.server.domain.repository.ServerRepository;
 import com.coastee.server.server.dto.request.ServerEntryRequest;
