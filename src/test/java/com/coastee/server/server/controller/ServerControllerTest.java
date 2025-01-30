@@ -1,11 +1,11 @@
 package com.coastee.server.server.controller;
 
 import com.coastee.server.fixture.ServerFixture;
-import com.coastee.server.global.ControllerTest;
+import com.coastee.server.util.ControllerTest;
 import com.coastee.server.server.domain.Server;
 import com.coastee.server.server.domain.repository.ServerRepository;
 import com.coastee.server.server.dto.request.ServerEntryRequest;
-import com.coastee.server.server.dto.response.ServerElements;
+import com.coastee.server.server.dto.ServerElements;
 import com.coastee.server.server.facade.ServerFacade;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;

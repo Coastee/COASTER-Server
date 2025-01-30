@@ -1,7 +1,7 @@
 package com.coastee.server.chat.domain;
 
 import com.coastee.server.chatroom.domain.ChatRoom;
-import com.coastee.server.global.BaseEntity;
+import com.coastee.server.global.domain.BaseEntity;
 import com.coastee.server.user.domain.User;
 import jakarta.persistence.*;
 import lombok.Builder;

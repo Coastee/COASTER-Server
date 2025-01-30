@@ -1,4 +1,4 @@
-package com.coastee.server.server.dto.response;
+package com.coastee.server.server.dto;
 
 import com.coastee.server.server.domain.Server;
 import lombok.AllArgsConstructor;

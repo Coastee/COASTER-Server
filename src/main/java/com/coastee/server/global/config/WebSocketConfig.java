@@ -28,9 +28,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .withSockJS();
     }
 
-    // TODO: 나중에 인증 과정 추가하기 (테스트를 위해 잠시 제외함)
-//    @Override
-//    public void configureClientInboundChannel(final ChannelRegistration registration) {
-//        registration.interceptors(stompHandler);
-//    }
+    @Override
+    public void configureClientInboundChannel(final ChannelRegistration registration) {
+        registration.interceptors(stompHandler);
+    }
 }

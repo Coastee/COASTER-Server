@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.util.StringUtils;
 
-import static com.coastee.server.global.Constant.TOKEN_PREFIX;
+import static com.coastee.server.global.domain.Constant.TOKEN_PREFIX;
 import static com.coastee.server.global.apipayload.code.status.ErrorStatus.FAIL_VALIDATE_TOKEN;
 import static com.coastee.server.global.apipayload.code.status.ErrorStatus.NULL_TOKEN;
 

@@ -1,6 +1,6 @@
 package com.coastee.server.user.domain;
 
-import com.coastee.server.global.BaseEntity;
+import com.coastee.server.global.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

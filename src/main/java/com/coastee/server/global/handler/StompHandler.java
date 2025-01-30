@@ -11,7 +11,7 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
 
-import static com.coastee.server.global.Constant.HEADER_AUTHORIZATION;
+import static com.coastee.server.global.domain.Constant.HEADER_AUTHORIZATION;
 
 @Slf4j
 @RequiredArgsConstructor

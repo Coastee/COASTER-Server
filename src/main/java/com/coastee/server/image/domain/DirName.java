@@ -9,7 +9,12 @@ import java.util.Arrays;
 @Getter
 @RequiredArgsConstructor
 public enum DirName {
-    USER("user"), POST("post"), CHAT("chat");
+    USER("user"),
+    POST("post"),
+    CHAT("chat"),
+    GROUP("group"),
+    MEETING("meeting"),
+    ;
 
     private final String code;
 
@@ -20,7 +25,7 @@ public enum DirName {
 
     public static Authority of(final String code) {
         return Arrays.stream(Authority.values())
-                .filter(r -> r.getCode().equals(code.toUpperCase()))
+                .filter(r -> r.getCode().equals(code.toLowerCase()))
                 .findAny()
                 .orElse(null);
     }

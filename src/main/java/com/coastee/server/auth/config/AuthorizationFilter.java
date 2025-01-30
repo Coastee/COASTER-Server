@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import static com.coastee.server.global.Constant.*;
+import static com.coastee.server.global.domain.Constant.*;
 
 @Slf4j
 @RequiredArgsConstructor

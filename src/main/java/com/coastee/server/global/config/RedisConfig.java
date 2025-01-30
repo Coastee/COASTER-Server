@@ -11,7 +11,7 @@ import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-import static com.coastee.server.global.Constant.CHANNEL_NAME;
+import static com.coastee.server.global.domain.Constant.CHANNEL_NAME;
 
 @Configuration
 public class RedisConfig {

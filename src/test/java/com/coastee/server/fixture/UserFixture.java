@@ -27,4 +27,24 @@ public class UserFixture {
                 .socialId("SOCIAL-ID")
                 .build();
     }
+
+    public static User get(String nickname) {
+        return User.of()
+                .nickname(nickname)
+                .birthDate(LocalDateTime.now())
+                .email(nickname + "@naver.com")
+                .headline("headline")
+                .bio("bio")
+                .profileImage("https://avatars.githubusercontent.com/u/193146868?s=200&v=4")
+                .urlList(
+                        List.of(
+                                "https://github.com/Coastee",
+                                "https://github.com/Coastee/COASTER-Client",
+                                "https://github.com/Coastee/COASTER-Server"
+                        )
+                )
+                .socialType(SocialType.NAVER)
+                .socialId("SOCIAL-ID")
+                .build();
+    }
 }

@@ -11,6 +11,48 @@ ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
 
+== `GET` Find GroupChat
+
+그룹챗 조회
+
+=== Request
+
+```
+/api/v1/servers/{serverId}/groups
+```
+
+- 모든 그룹챗을 조회할 경우
+include::{snippets}/find-all-groupchat/curl-request.adoc[]
+
+- 일부 (개설한 혹은 참여한) 그룹챗을 조회할 경우
+include::{snippets}/find-owner-groupchat/curl-request.adoc[]
+
+==== header
+
+include::{snippets}/find-all-groupchat/request-headers.adoc[]
+
+==== path parameters
+
+include::{snippets}/find-all-groupchat/path-parameters.adoc[]
+
+==== query parameters
+
+include::{snippets}/find-all-groupchat/query-parameters.adoc[]
+
+=== Response
+
+==== response body
+
+- 모든 그룹챗을 조회할 경우
+
+include::{snippets}/find-all-groupchat/response-body.adoc[]
+include::{snippets}/find-all-groupchat/response-fields.adoc[]
+
+- 일부 (개설한 혹은 참여한) 그룹챗을 조회할 경우
+
+include::{snippets}/find-owner-groupchat/response-body.adoc[]
+include::{snippets}/find-owner-groupchat/response-fields.adoc[]
+
 == `POST` Create GroupChat
 
 그룹챗 개설
@@ -18,19 +60,37 @@ endif::[]
 === Request
 
 ```
-/api/v1/groups
+/api/v1/servers/{serverId}/groups
 ```
 
 include::{snippets}/create-groupchat/curl-request.adoc[]
+- 테스트에서는 png 파일로 사용하여 file type을 ``image/png``로 설정하였으나, 실제로는 file type에 맞게 MediaType을 설정해주어야 합니다.
 
 ==== header
 
 include::{snippets}/create-groupchat/request-headers.adoc[]
 
-==== request body
+==== path parameters
 
-include::{snippets}/create-groupchat/request-body.adoc[]
-include::{snippets}/create-groupchat/request-fields.adoc[]
+include::{snippets}/create-groupchat/path-parameters.adoc[]
+
+==== request parts
+
+include::{snippets}/create-groupchat/request-parts.adoc[]
+
+- ``request``의 fields
+
+다음과 같이 json 형태로 전송합니다. `application/json` 타입 명시 필수!
+
+```json
+{
+  "title" : "title test",
+  "content" : "content test",
+  "hashTags" : ["#A", "#B", "#C"]
+}
+```
+
+include::{snippets}/create-groupchat/request-part-request-fields.adoc[]
 
 === Response
 

@@ -1,6 +1,6 @@
 package com.coastee.server.login.controller;
 
-import com.coastee.server.global.ControllerTest;
+import com.coastee.server.util.ControllerTest;
 import com.coastee.server.login.domain.AuthTokens;
 import com.coastee.server.login.service.LoginService;
 import io.restassured.RestAssured;
