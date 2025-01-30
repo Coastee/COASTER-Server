@@ -6,6 +6,7 @@ import com.coastee.server.login.dto.response.AccessTokenResponse;
 import com.coastee.server.login.infrastructure.JwtHeaderUtil;
 import com.coastee.server.login.infrastructure.loginparams.GoogleLoginParams;
 import com.coastee.server.login.infrastructure.loginparams.KakaoLoginParams;
+import com.coastee.server.login.infrastructure.loginparams.LinkedInLoginParams;
 import com.coastee.server.login.infrastructure.loginparams.NaverLoginParams;
 import com.coastee.server.login.service.LoginService;
 import jakarta.validation.constraints.Size;
@@ -34,6 +35,12 @@ public class LoginController {
     @GetMapping("/api/v1/login/google-callback")
     public ApiResponse<AuthTokens> googleLogin(@ModelAttribute final GoogleLoginParams googleLoginParams) {
         return ApiResponse.onSuccess(loginService.login(googleLoginParams));
+    }
+
+    @GetMapping("/api/v1/login/linkedin-callback")
+    public ApiResponse<Void> connectLinkedin(@ModelAttribute final LinkedInLoginParams linkedInLoginParams) {
+        loginService.connect(linkedInLoginParams);
+        return ApiResponse.onSuccess();
     }
 
     @PostMapping("/api/v1/refresh")

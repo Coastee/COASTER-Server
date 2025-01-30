@@ -5,6 +5,7 @@ import com.coastee.server.login.domain.AuthTokens;
 import com.coastee.server.login.domain.OAuthLoginParams;
 import com.coastee.server.login.domain.OAuthUserInfo;
 import com.coastee.server.login.infrastructure.JwtProvider;
+import com.coastee.server.login.infrastructure.loginparams.LinkedInLoginParams;
 import com.coastee.server.user.domain.User;
 import com.coastee.server.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,10 @@ public class LoginService {
         AuthTokens tokens = jwtProvider.createTokens(user.getId().toString());
         user.updateRefreshToken(tokens.getRefreshToken());
         return tokens;
+    }
+
+    public void connect(final LinkedInLoginParams params) {
+        OAuthUserInfo userInfo = requestOAuthInfoService.request(params);
     }
 
     private User findOrCreateUser(final OAuthUserInfo userInfo) {
