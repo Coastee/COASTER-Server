@@ -28,7 +28,7 @@ public class UserFixture {
                 .build();
     }
 
-    public static User get(String nickname) {
+    public static User get(final String nickname) {
         return User.of()
                 .nickname(nickname)
                 .birthDate(LocalDateTime.now())

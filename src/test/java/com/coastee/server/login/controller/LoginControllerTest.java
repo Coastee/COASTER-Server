@@ -57,6 +57,7 @@ class LoginControllerTest extends ControllerTest {
                                         fieldWithPath("isSuccess").type(BOOLEAN).description("성공 여부"),
                                         fieldWithPath("code").type(STRING).description("결과 코드"),
                                         fieldWithPath("message").type(STRING).description("결과 메세지"),
+                                        fieldWithPath("result").type(OBJECT).description("결과 데이터"),
                                         fieldWithPath("result.tokenType").type(STRING).description("토큰 타입: Bearer로 고정"),
                                         fieldWithPath("result.userId").type(NUMBER).description("유저 아이디"),
                                         fieldWithPath("result.accessToken").type(STRING).description("액세스 토큰"),
@@ -89,6 +90,7 @@ class LoginControllerTest extends ControllerTest {
                                         fieldWithPath("isSuccess").type(BOOLEAN).description("성공 여부"),
                                         fieldWithPath("code").type(STRING).description("결과 코드"),
                                         fieldWithPath("message").type(STRING).description("결과 메세지"),
+                                        fieldWithPath("result").type(OBJECT).description("결과 데이터"),
                                         fieldWithPath("result.accessToken").type(STRING).description("재발급된 코드")
                                 )
                         ))

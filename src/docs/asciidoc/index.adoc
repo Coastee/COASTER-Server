@@ -33,6 +33,7 @@ coaster server
 == API List
 === User
 * link:login.html[로그인 기능]
+* link:user.html[유저 기능]
 
 === Server
 * link:server.html[서버 기능]

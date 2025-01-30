@@ -1,0 +1,39 @@
+= User API
+coaster server
+:doctype: book
+:icons: font
+:source-highlighter: highlishtjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+== `GET` User Detail
+
+유저 프로필 정보 조회
+
+```
+/api/v1/users/{userId}
+```
+
+include::{snippets}/get-profile/curl-request.adoc[]
+
+=== Request
+
+==== path params
+
+include::{snippets}/get-profile/path-parameters.adoc[]
+
+==== query params
+
+include::{snippets}/get-profile/query-parameters.adoc[]
+
+=== Response
+
+==== response body
+
+include::{snippets}/get-profile/response-body.adoc[]
+include::{snippets}/get-profile/response-fields.adoc[]
