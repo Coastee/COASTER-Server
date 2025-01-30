@@ -27,22 +27,24 @@ public class Experience extends BaseEntity {
 
     private String title;
 
+    private String content;
+
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
 
-    private String content;
-
     @Builder(builderMethodName = "of")
     public Experience(
+            final User user,
             final String title,
             final LocalDateTime startDate,
             final LocalDateTime endDate,
             final String content
     ) {
+        this.user = user;
         this.title = title;
+        this.content = content;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.content = content;
     }
 }

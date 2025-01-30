@@ -18,7 +18,7 @@ import static lombok.AccessLevel.PROTECTED;
 public class UserDetailElement extends UserElement {
     private String bio;
     private List<String> urlList;
-    private ExperienceElements experienceElements;
+    private ExperienceElements experience;
 
     @Builder(builderMethodName = "from")
     public UserDetailElement(
@@ -28,6 +28,6 @@ public class UserDetailElement extends UserElement {
         super(user);
         this.bio = user.getBio();
         this.urlList = user.getUrlList();
-        this.experienceElements = new ExperienceElements(experiencePage);
+        this.experience = new ExperienceElements(experiencePage);
     }
 }

@@ -15,15 +15,15 @@ import static lombok.AccessLevel.PROTECTED;
 public class ExperienceElement {
     private Long id;
     private String title;
+    private String content;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private String content;
 
     public ExperienceElement(final Experience experience) {
         this.id = experience.getId();
         this.title = experience.getTitle();
+        this.content = experience.getContent();
         this.startDate = experience.getStartDate();
         this.endDate = experience.getEndDate();
-        this.content = experience.getContent();
     }
 }

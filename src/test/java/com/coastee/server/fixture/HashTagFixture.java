@@ -8,7 +8,7 @@ public class HashTagFixture {
         return new HashTag("#coaster");
     }
 
-    public static HashTag get(String content) {
+    public static HashTag get(final String content) {
         return new HashTag(content);
     }
 }
