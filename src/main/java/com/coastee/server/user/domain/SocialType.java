@@ -8,7 +8,11 @@ import java.util.Arrays;
 @Getter
 @RequiredArgsConstructor
 public enum SocialType {
-    GOOGLE("GOOGLE"), KAKAO("KAKAO"), NAVER("NAVER");
+    GOOGLE("GOOGLE"),
+    KAKAO("KAKAO"),
+    NAVER("NAVER"),
+    LINKEDIN("LINKEDIN")
+    ;
 
     private final String code;
 

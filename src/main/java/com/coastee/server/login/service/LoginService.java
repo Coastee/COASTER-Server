@@ -1,23 +1,28 @@
 package com.coastee.server.login.service;
 
+import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.global.apipayload.exception.handler.InvalidJwtException;
 import com.coastee.server.login.domain.AuthTokens;
 import com.coastee.server.login.domain.OAuthLoginParams;
 import com.coastee.server.login.domain.OAuthUserInfo;
 import com.coastee.server.login.infrastructure.JwtProvider;
+import com.coastee.server.login.infrastructure.loginparams.LinkedInLoginParams;
 import com.coastee.server.user.domain.User;
 import com.coastee.server.user.domain.repository.UserRepository;
+import com.coastee.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.coastee.server.global.apipayload.code.status.ErrorStatus.*;
+import static com.coastee.server.global.apipayload.code.status.ErrorStatus.FAIL_VALIDATE_TOKEN;
+import static com.coastee.server.global.apipayload.code.status.ErrorStatus.INVALID_REFRESH_TOKEN;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class LoginService {
     private final RequestOAuthInfoService requestOAuthInfoService;
+    private final UserService userService;
     private final UserRepository userRepository;
     private final JwtProvider jwtProvider;
 
@@ -27,6 +32,15 @@ public class LoginService {
         AuthTokens tokens = jwtProvider.createTokens(user.getId().toString());
         user.updateRefreshToken(tokens.getRefreshToken());
         return tokens;
+    }
+
+    public void connect(
+            final Accessor accessor,
+            final LinkedInLoginParams params
+    ) {
+        User user = userService.findById(accessor.getUserId());
+        OAuthUserInfo userInfo = requestOAuthInfoService.request(params);
+        user.verify(userInfo.getSocialId());
     }
 
     private User findOrCreateUser(final OAuthUserInfo userInfo) {

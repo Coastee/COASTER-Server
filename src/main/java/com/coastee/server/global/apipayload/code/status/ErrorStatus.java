@@ -31,6 +31,9 @@ public enum ErrorStatus implements BaseErrorCode {
     EXPIRED_REFRESH_TOKEN(UNAUTHORIZED, "LOGIN4004", "만료된 리프레시 토큰입니다."),
     FAIL_VALIDATE_TOKEN(BAD_REQUEST, "LOGIN4005", "토큰 유효성 검사 중 오류가 발생했습니다."),
 
+    // Session
+    FAIL_VALIDATE_SESSION(UNAUTHORIZED, "SESSION4001", "세션 유효성 검사 중 오류가 발생하였습니다. 다시 시도하여주세요."),
+
     // User
     INVALID_USER_ID(BAD_REQUEST, "USER4001", "유효하지 않은 유저의 아이디입니다."),
 
