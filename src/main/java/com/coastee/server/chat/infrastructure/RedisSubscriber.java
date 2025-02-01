@@ -1,4 +1,4 @@
-package com.coastee.server.global.redis;
+package com.coastee.server.chat.infrastructure;
 
 import com.coastee.server.chat.dto.request.ChatRequest;
 import com.coastee.server.global.apipayload.exception.handler.JsonException;

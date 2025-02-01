@@ -38,7 +38,6 @@ public class AuthorizationFilter extends OncePerRequestFilter {
             final HttpServletResponse response,
             final FilterChain filterChain
     ) throws ServletException, IOException {
-
         String servletPath = request.getServletPath();
         try {
             if (servletPath.equals("/api/v1/refresh")) {

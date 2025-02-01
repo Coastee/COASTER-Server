@@ -7,7 +7,7 @@ import org.springframework.data.domain.Sort;
 
 public class PageableUtil {
 
-    public static Pageable setSortOrder(final Pageable pageable) {
+    public static Pageable setChatRoomOrder(final Pageable pageable) {
         if (isSortBy(pageable, SortType.name.getCode())) {
             return PageRequest.of(
                     pageable.getPageNumber(),
@@ -27,6 +27,14 @@ public class PageableUtil {
                     Sort.by(Sort.Direction.DESC, "createdDate")
             );
         }
+    }
+
+    public static Pageable setChatOrder(final Pageable pageable) {
+        return PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by(Sort.Direction.DESC, "createdDate")
+        );
     }
 
     private static boolean isSortBy(final Pageable pageable, final String property) {

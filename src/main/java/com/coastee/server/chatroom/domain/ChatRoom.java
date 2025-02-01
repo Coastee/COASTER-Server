@@ -46,9 +46,11 @@ public class ChatRoom extends BaseEntity {
     @Enumerated(STRING)
     private ChatRoomType chatRoomType;
 
-    private LocalDateTime startDate;
+    @Embedded
+    private Period period;
 
-    private LocalDateTime endDate;
+    @Embedded
+    private Address address;
 
     private int maxCount;
 
@@ -65,8 +67,8 @@ public class ChatRoom extends BaseEntity {
             final String title,
             final String content,
             final ChatRoomType chatRoomType,
-            final LocalDateTime startDate,
-            final LocalDateTime endDate,
+            final Period period,
+            final Address address,
             final int maxCount
     ) {
         this.server = server;
@@ -74,8 +76,8 @@ public class ChatRoom extends BaseEntity {
         this.title = title;
         this.content = content;
         this.chatRoomType = chatRoomType;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.period = period;
+        this.address = address;
         this.maxCount = maxCount;
         this.currentCount = 0;
         this.remainCount = maxCount;
@@ -99,6 +101,29 @@ public class ChatRoom extends BaseEntity {
         );
     }
 
+    public static ChatRoom meetingChatRoom(
+            final Server server,
+            final User user,
+            final String title,
+            final String content,
+            final LocalDateTime startDate,
+            final LocalDateTime endDate,
+            final String location,
+            final String details,
+            final int maxCount
+    ) {
+        return new ChatRoom(
+                server,
+                user,
+                title,
+                content,
+                ChatRoomType.MEETING,
+                new Period(startDate, endDate),
+                new Address(location, details),
+                maxCount
+        );
+    }
+
     public void enter() {
         if (remainCount <= 0) {
             throw new GeneralException(MAX_PARTICIPANT);
@@ -107,13 +132,13 @@ public class ChatRoom extends BaseEntity {
         remainCount = maxCount - currentCount;
     }
 
-    public void increaseMaxCount(final int count) {
-        maxCount += count;
+    public void exit() {
+        currentCount -= 1;
         remainCount = maxCount - currentCount;
     }
 
-    public void exit() {
-        currentCount -= 1;
+    public void increaseMaxCount(final int count) {
+        maxCount += count;
         remainCount = maxCount - currentCount;
     }
 

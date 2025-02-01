@@ -10,10 +10,8 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public enum DirName {
     USER("user"),
-    POST("post"),
     CHAT("chat"),
-    GROUP("group"),
-    MEETING("meeting"),
+    CHATROOM("chatroom"),
     ;
 
     private final String code;

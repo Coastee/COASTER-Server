@@ -26,7 +26,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 
-@DisplayName("유저 controller 테스트")
+@DisplayName("유저 컨트롤러 테스트")
 class UserControllerTest extends ControllerTest {
 
     @Autowired

@@ -8,17 +8,25 @@ import java.util.Arrays;
 @Getter
 @RequiredArgsConstructor
 public enum ChatRoomType {
-    ENTIRE("ENTIRE"),
-    GROUP("GROUP"),
-    MEETING("MEETING"),
-    DM("DM"),
+    ENTIRE("ENTIRE", "entire"),
+    GROUP("GROUP", "groups"),
+    MEETING("MEETING", "meetings"),
+    DM("DM", "dms"),
     ;
 
     private final String code;
+    private final String pathParam;
 
-    public static ChatRoomType of(final String code) {
+    public static ChatRoomType code(final String code) {
         return Arrays.stream(ChatRoomType.values())
                 .filter(r -> r.getCode().equals(code.toUpperCase()))
+                .findAny()
+                .orElse(null);
+    }
+
+    public static ChatRoomType url(final String url) {
+        return Arrays.stream(ChatRoomType.values())
+                .filter(r -> r.getPathParam().equals(url.toLowerCase()))
                 .findAny()
                 .orElse(null);
     }

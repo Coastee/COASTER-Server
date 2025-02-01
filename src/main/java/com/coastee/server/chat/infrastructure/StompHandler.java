@@ -1,4 +1,4 @@
-package com.coastee.server.global.handler;
+package com.coastee.server.chat.infrastructure;
 
 import com.coastee.server.login.infrastructure.JwtHeaderUtil;
 import com.coastee.server.login.infrastructure.JwtProvider;

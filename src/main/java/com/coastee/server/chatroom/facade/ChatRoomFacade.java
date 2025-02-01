@@ -1,10 +1,14 @@
 package com.coastee.server.chatroom.facade;
 
 import com.coastee.server.auth.domain.Accessor;
+import com.coastee.server.chat.domain.Chat;
+import com.coastee.server.chat.dto.ChatElements;
+import com.coastee.server.chat.service.ChatService;
 import com.coastee.server.chatroom.domain.ChatRoom;
+import com.coastee.server.chatroom.domain.ChatRoomType;
 import com.coastee.server.chatroom.domain.Scope;
 import com.coastee.server.chatroom.dto.ChatRoomElements;
-import com.coastee.server.chatroom.dto.request.CreateGroupChatRequest;
+import com.coastee.server.chatroom.dto.request.CreateChatRoomRequest;
 import com.coastee.server.chatroom.service.ChatRoomEntryService;
 import com.coastee.server.chatroom.service.ChatRoomService;
 import com.coastee.server.hashtag.service.HashTagService;
@@ -23,17 +27,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
-import static com.coastee.server.chatroom.domain.ChatRoomType.GROUP;
-import static com.coastee.server.global.util.PageableUtil.setSortOrder;
+import static com.coastee.server.global.util.PageableUtil.setChatRoomOrder;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class GroupChatRoomFacade {
+public class ChatRoomFacade {
     private final UserService userService;
     private final ServerService serverService;
     private final ChatRoomService chatRoomService;
     private final ChatRoomEntryService chatRoomEntryService;
+    private final ChatService chatService;
     private final BlobStorageService blobStorageService;
     private final HashTagService hashTagService;
 
@@ -41,17 +45,16 @@ public class GroupChatRoomFacade {
     public void create(
             final Accessor accessor,
             final Long serverId,
-            final CreateGroupChatRequest request,
+            final ChatRoomType type,
+            final CreateChatRoomRequest request,
             final MultipartFile image
     ) {
         User user = userService.findById(accessor.getUserId());
         Server server = serverService.findById(serverId);
-        ChatRoom chatRoom = chatRoomService.save(
-                ChatRoom.groupChatRoom(server, user, request.getTitle(), request.getContent())
-        );
+        ChatRoom chatRoom = chatRoomService.save(request.toEntity(server, user, type));
         hashTagService.tag(chatRoom, request.getHashTags());
         if (image != null) {
-            String imageUrl = blobStorageService.upload(image, DirName.GROUP, chatRoom.getId());
+            String imageUrl = blobStorageService.upload(image, DirName.CHATROOM, chatRoom.getId());
             chatRoom.updateThumbnail(imageUrl);
         }
         chatRoomEntryService.enter(user, chatRoom);
@@ -60,46 +63,57 @@ public class GroupChatRoomFacade {
     public ChatRoomElements findByScope(
             final Accessor accessor,
             final Long serverId,
+            final ChatRoomType type,
             final Scope scope,
             final Pageable pageable
     ) {
         User user = userService.findById(accessor.getUserId());
         Server server = serverService.findById(serverId);
         if (scope.equals(Scope.owner)) {
-            return findAllByServerAndOwner(server, user, setSortOrder(pageable));
+            return findAllByServerAndOwner(server, user, type, setChatRoomOrder(pageable));
         } else if (scope.equals(Scope.joined)) {
-            return findAllByServerAndParticipant(server, user, setSortOrder(pageable));
+            return findAllByServerAndParticipant(server, user, type, setChatRoomOrder(pageable));
         } else {
-            return findAllByServer(server, user, setSortOrder(pageable));
+            return findAllByServer(server, user, type, setChatRoomOrder(pageable));
         }
     }
 
-    private ChatRoomElements findAllByServer(
-            final Server server,
-            final User currentUser,
+    public ChatElements getChats(
+            final Accessor accessor,
+            final Long chatRoomId,
             final Pageable pageable
     ) {
-        Page<ChatRoom> chatRoomPage = chatRoomService.findAllByServerAndType(
-                server,
-                GROUP,
-                pageable
-        );
-        Map<Long, Boolean> hasEnteredMap = chatRoomEntryService.findHasEnteredByChatRoomList(
-                currentUser,
-                chatRoomPage.getContent()
-        );
-        return ChatRoomElements.detail(chatRoomPage, hasEnteredMap);
+        User user = userService.findById(accessor.getUserId());
+        ChatRoom chatRoom = chatRoomService.findById(chatRoomId);
+        chatRoomEntryService.validateJoin(user, chatRoom);
+        Page<Chat> chatPage = chatService.findAllByChatRoom(chatRoom, pageable);
+        return new ChatElements(chatPage);
+    }
+
+    @Transactional
+    public void enter(final Accessor accessor, final Long chatRoomId) {
+        User user = userService.findById(accessor.getUserId());
+        ChatRoom chatRoom = chatRoomService.findById(chatRoomId);
+        chatRoomEntryService.enter(user, chatRoom);
+    }
+
+    @Transactional
+    public void exit(final Accessor accessor, final Long chatRoomId) {
+        User user = userService.findById(accessor.getUserId());
+        ChatRoom chatRoom = chatRoomService.findById(chatRoomId);
+        chatRoomEntryService.exit(user, chatRoom);
     }
 
     private ChatRoomElements findAllByServerAndOwner(
             final Server server,
             final User user,
+            final ChatRoomType type,
             final Pageable pageable
     ) {
         Page<ChatRoom> chatRoomPage = chatRoomService.findAllByServerAndUserAndType(
                 server,
                 user,
-                GROUP,
+                type,
                 pageable
         );
         return ChatRoomElements.from(chatRoomPage);
@@ -108,28 +122,33 @@ public class GroupChatRoomFacade {
     private ChatRoomElements findAllByServerAndParticipant(
             final Server server,
             final User participant,
+            final ChatRoomType type,
             final Pageable pageable
     ) {
         Page<ChatRoom> chatRoomPage = chatRoomService.findAllByServerAndParticipantAndType(
                 server,
                 participant,
-                GROUP,
+                type,
                 pageable
         );
         return ChatRoomElements.from(chatRoomPage);
     }
 
-    @Transactional
-    public void enter(final Accessor accessor, final Long groupId) {
-        User user = userService.findById(accessor.getUserId());
-        ChatRoom chatRoom = chatRoomService.findById(groupId);
-        chatRoomEntryService.enter(user, chatRoom);
-    }
-
-    @Transactional
-    public void exit(final Accessor accessor, final Long groupId) {
-        User user = userService.findById(accessor.getUserId());
-        ChatRoom chatRoom = chatRoomService.findById(groupId);
-        chatRoomEntryService.exit(user, chatRoom);
+    private ChatRoomElements findAllByServer(
+            final Server server,
+            final User currentUser,
+            final ChatRoomType type,
+            final Pageable pageable
+    ) {
+        Page<ChatRoom> chatRoomPage = chatRoomService.findAllByServerAndType(
+                server,
+                type,
+                pageable
+        );
+        Map<Long, Boolean> hasEnteredMap = chatRoomEntryService.findHasEnteredByChatRoomList(
+                currentUser,
+                chatRoomPage.getContent()
+        );
+        return ChatRoomElements.detail(chatRoomPage, hasEnteredMap);
     }
 }

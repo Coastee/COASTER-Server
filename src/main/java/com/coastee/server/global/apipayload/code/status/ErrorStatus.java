@@ -32,7 +32,7 @@ public enum ErrorStatus implements BaseErrorCode {
     FAIL_VALIDATE_TOKEN(BAD_REQUEST, "LOGIN4005", "토큰 유효성 검사 중 오류가 발생했습니다."),
 
     // Session
-    FAIL_VALIDATE_SESSION(UNAUTHORIZED, "SESSION4001", "세션 유효성 검사 중 오류가 발생하였습니다. 다시 시도하여주세요."),
+    FAIL_VALIDATE_SESSION(UNAUTHORIZED, "SESSION4001", "세션 유효성 검사 중 오류가 발생하였습니다. 다시 시도하세요."),
 
     // User
     INVALID_USER_ID(BAD_REQUEST, "USER4001", "유효하지 않은 유저의 아이디입니다."),
@@ -45,7 +45,7 @@ public enum ErrorStatus implements BaseErrorCode {
     INVALID_CHATROOM_ID(BAD_REQUEST, "CHATROOM4001", "유효하지 않은 채팅방 아이디입니다."),
     MAX_PARTICIPANT(BAD_REQUEST, "CHATROOM4002", "최대 참여자 수에 도달하여 더 이상 참여할 수 없는 채팅방입니다."),
     NOT_PARTICIPANT(BAD_REQUEST, "CHATROOM4003", "해당 채팅방의 참여자가 아닙니다."),
-    ;
+    FAIL_CREATE_CHATROOM(BAD_REQUEST, "CHATROOM4004", "채팅방 생성 과정에 실패하였습니다. 요청 엔드포인트가 잘못되었습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

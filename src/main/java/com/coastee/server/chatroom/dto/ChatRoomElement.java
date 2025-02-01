@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 import static lombok.AccessLevel.PROTECTED;
 
 @Getter
@@ -17,13 +15,14 @@ public class ChatRoomElement {
     private String thumbnail;
     private String title;
     private String content;
-    private LocalDateTime startDate;
+    private PeriodElement period;
 
     public ChatRoomElement(final ChatRoom chatRoom) {
         this.id = chatRoom.getId();
         this.thumbnail = chatRoom.getThumbnail();
         this.title = chatRoom.getTitle();
         this.content = chatRoom.getContent();
-        this.startDate = chatRoom.getStartDate();
+        if (chatRoom.getPeriod() != null)
+            this.period = new PeriodElement(chatRoom.getPeriod());
     }
 }

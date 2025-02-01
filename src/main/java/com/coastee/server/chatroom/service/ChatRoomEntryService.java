@@ -47,6 +47,13 @@ public class ChatRoomEntryService {
         chatRoomEntry.delete();
     }
 
+    public void validateJoin(final User user, final ChatRoom chatRoom) {
+        ChatRoomEntry chatRoomEntry = chatRoomEntryRepository
+                .findByUserAndChatRoom(user, chatRoom)
+                .orElseThrow(() -> new GeneralException(NOT_PARTICIPANT));
+        if (chatRoomEntry.isDeleted()) throw new GeneralException(NOT_PARTICIPANT);
+    }
+
     public Map<Long, Boolean> findHasEnteredByChatRoomList(
             final User user,
             final List<ChatRoom> chatRoomList
