@@ -1,6 +1,7 @@
 package com.coastee.server.chatroom.facade;
 
 import com.coastee.server.auth.domain.Accessor;
+import com.coastee.server.chatroom.domain.ChatRoomType;
 import com.coastee.server.chatroom.domain.Scope;
 import com.coastee.server.chatroom.dto.ChatRoomElement;
 import com.coastee.server.chatroom.dto.ChatRoomElements;
@@ -24,14 +25,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("그룹챗 Facade 테스트")
-class GroupChatRoomServiceTest extends ServiceTest {
+@DisplayName("채팅방 파사드 테스트")
+class ChatRoomFacadeTest extends ServiceTest {
 
     @Autowired
     EntityManager em;
-
-    @Autowired
-    private GroupChatRoomFacade groupChatRoomFacade;
 
     @Autowired
     private ChatRoomFacade chatRoomFacade;
@@ -49,26 +47,30 @@ class GroupChatRoomServiceTest extends ServiceTest {
         chatRoomFacade.create(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
+                ChatRoomType.GROUP,
                 new CreateChatRoomRequest("title A", "content A", Set.of("#A", "#B", "C")),
                 null
         );
         chatRoomFacade.create(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
+                ChatRoomType.GROUP,
                 new CreateChatRoomRequest("title B", "content B", Set.of("#D", "#E", "F")),
                 null
         );
         chatRoomFacade.create(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
+                ChatRoomType.GROUP,
                 new CreateChatRoomRequest("title C", "content C", Set.of("#G", "#H", "I")),
                 null
         );
 
         // when
-        ChatRoomElements elements = groupChatRoomFacade.findByScope(
+        ChatRoomElements elements = chatRoomFacade.findByScope(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
+                ChatRoomType.GROUP,
                 Scope.all,
                 PageRequest.of(0, 40)
         );
@@ -90,26 +92,30 @@ class GroupChatRoomServiceTest extends ServiceTest {
         chatRoomFacade.create(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
+                ChatRoomType.GROUP,
                 new CreateChatRoomRequest("title A", "content A", Set.of("#A", "#B", "C")),
                 null
         );
         chatRoomFacade.create(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
+                ChatRoomType.GROUP,
                 new CreateChatRoomRequest("title B", "content B", Set.of("#D", "#E", "F")),
                 null
         );
         chatRoomFacade.create(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
+                ChatRoomType.GROUP,
                 new CreateChatRoomRequest("title C", "content C", Set.of("#G", "#H", "I")),
                 null
         );
 
         // when
-        ChatRoomElements elements = groupChatRoomFacade.findByScope(
+        ChatRoomElements elements = chatRoomFacade.findByScope(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
+                ChatRoomType.GROUP,
                 Scope.all,
                 PageRequest.of(0, 40, Sort.by(Sort.Direction.ASC, "name"))
         );
@@ -132,26 +138,30 @@ class GroupChatRoomServiceTest extends ServiceTest {
         chatRoomFacade.create(
                 Accessor.user(anotherUser.getId()),
                 server.getId(),
+                ChatRoomType.GROUP,
                 new CreateChatRoomRequest("title A", "content A", Set.of("#A", "#B", "C")),
                 null
         );
         chatRoomFacade.create(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
+                ChatRoomType.GROUP,
                 new CreateChatRoomRequest("title B", "content B", Set.of("#D", "#E", "F")),
                 null
         );
         chatRoomFacade.create(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
+                ChatRoomType.GROUP,
                 new CreateChatRoomRequest("title C", "content C", Set.of("#G", "#H", "I")),
                 null
         );
 
         // when
-        ChatRoomElements elements = groupChatRoomFacade.findByScope(
+        ChatRoomElements elements = chatRoomFacade.findByScope(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
+                ChatRoomType.GROUP,
                 Scope.owner,
                 PageRequest.of(0, 40)
         );

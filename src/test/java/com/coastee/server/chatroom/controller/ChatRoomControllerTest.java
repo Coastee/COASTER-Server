@@ -9,7 +9,6 @@ import com.coastee.server.chatroom.dto.ChatRoomElement;
 import com.coastee.server.chatroom.dto.ChatRoomElements;
 import com.coastee.server.chatroom.dto.request.CreateChatRoomRequest;
 import com.coastee.server.chatroom.facade.ChatRoomFacade;
-import com.coastee.server.chatroom.facade.GroupChatRoomFacade;
 import com.coastee.server.fixture.HashTagFixture;
 import com.coastee.server.fixture.ServerFixture;
 import com.coastee.server.fixture.UserFixture;
@@ -44,12 +43,8 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 
-@DisplayName("그룹챗 Controller 테스트")
-class GroupChatRoomControllerTest extends ControllerTest {
-
-    @MockitoBean
-    private GroupChatRoomFacade groupChatRoomFacade;
-
+@DisplayName("채팅방 컨트롤러 테스트")
+class ChatRoomControllerTest extends ControllerTest {
     @MockitoBean
     private ChatRoomFacade chatRoomFacade;
 
@@ -88,7 +83,7 @@ class GroupChatRoomControllerTest extends ControllerTest {
         chatRoomTagRepository.save(new ChatRoomTag(chatRoomList.get(1), hashTagC));
         chatRoomTagRepository.save(new ChatRoomTag(chatRoomList.get(2), hashTagA));
 
-        when(groupChatRoomFacade.findByScope(any(), any(), any(), any())).thenReturn(
+        when(chatRoomFacade.findByScope(any(), any(), any(), any(), any())).thenReturn(
                 new ChatRoomElements(
                         new PageInfo(true, 0, 3, 40),
                         chatRoomList.stream().map(chatRoom -> new ChatRoomDetailElement(
@@ -166,7 +161,7 @@ class GroupChatRoomControllerTest extends ControllerTest {
                 chatRoomRepository.save(ChatRoom.groupChatRoom(server, userC, "titleC", "contentC"))
         );
 
-        when(groupChatRoomFacade.findByScope(any(), any(), any(), any()))
+        when(chatRoomFacade.findByScope(any(), any(), any(), any(), any()))
                 .thenReturn(new ChatRoomElements(
                                 new PageInfo(true, 0, 3, 40),
                                 chatRoomList.stream().map(ChatRoomElement::new).toList()
@@ -221,7 +216,7 @@ class GroupChatRoomControllerTest extends ControllerTest {
     @Test
     void create() throws Exception {
         // given
-        doNothing().when(chatRoomFacade).create(any(), any(), any(), any());
+        doNothing().when(chatRoomFacade).create(any(), any(), any(), any(), any());
         CreateChatRoomRequest requestDTO = new CreateChatRoomRequest("title", "content", Set.of("#A", "#B"));
 
         MultiPartSpecification request = new MultiPartSpecBuilder(requestDTO, ObjectMapperType.JACKSON_2)
@@ -275,7 +270,7 @@ class GroupChatRoomControllerTest extends ControllerTest {
     @Test
     void enter() throws Exception {
         // given
-        doNothing().when(groupChatRoomFacade).enter(any(), any());
+        doNothing().when(chatRoomFacade).enter(any(), any());
 
         // when & then
         RestAssured.given(spec).log().all()
@@ -304,7 +299,7 @@ class GroupChatRoomControllerTest extends ControllerTest {
     @Test
     void exit() throws Exception {
         // given
-        doNothing().when(groupChatRoomFacade).exit(any(), any());
+        doNothing().when(chatRoomFacade).exit(any(), any());
 
         // when & then
         RestAssured.given(spec).log().all()
