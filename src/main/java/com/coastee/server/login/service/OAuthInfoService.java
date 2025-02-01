@@ -13,10 +13,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
-public class RequestOAuthInfoService {
+public class OAuthInfoService {
     private Map<SocialType, OAuthApiClient> clientMap;
 
-    public RequestOAuthInfoService(final List<OAuthApiClient> clientList) {
+    public OAuthInfoService(final List<OAuthApiClient> clientList) {
         this.clientMap = clientList.stream().collect(
                 Collectors.toUnmodifiableMap(OAuthApiClient::socialType, Function.identity())
         );

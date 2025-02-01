@@ -2,7 +2,7 @@ package com.coastee.server.login.controller;
 
 import com.coastee.server.util.ControllerTest;
 import com.coastee.server.login.domain.AuthTokens;
-import com.coastee.server.login.service.LoginService;
+import com.coastee.server.login.facade.LoginFacade;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +24,7 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 @DisplayName("로그인 컨트롤러 테스트")
 class LoginControllerTest extends ControllerTest {
     @MockitoBean
-    private LoginService loginService;
+    private LoginFacade loginFacade;
 
     @BeforeEach
     void setUp() {
@@ -35,7 +35,7 @@ class LoginControllerTest extends ControllerTest {
     @Test
     void login() throws Exception {
         // given
-        when(loginService.login(any()))
+        when(loginFacade.login(any()))
                 .thenReturn(
                         AuthTokens.of()
                                 .accessToken(ACCESS_TOKEN)
@@ -72,7 +72,7 @@ class LoginControllerTest extends ControllerTest {
     @Test
     void refreshToken() throws Exception {
         // given
-        when(loginService.renewalToken(any(), any()))
+        when(loginFacade.renewalToken(any(), any()))
                 .thenReturn(ACCESS_TOKEN);
 
         // when & then
