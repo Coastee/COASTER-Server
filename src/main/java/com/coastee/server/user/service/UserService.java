@@ -31,10 +31,10 @@ public class UserService {
     @Transactional
     public User findOrCreateUser(final OAuthUserInfo userInfo) {
         return userRepository.findBySocialId(userInfo.getSocialId())
-                .orElseGet(() -> newUser(userInfo));
+                .orElseGet(() -> createAndSaveUser(userInfo));
     }
 
-    private User newUser(final OAuthUserInfo userInfo) {
+    private User createAndSaveUser(final OAuthUserInfo userInfo) {
         User user = User.of()
                 .nickname(userInfo.getName())
                 .email(userInfo.getEmail())

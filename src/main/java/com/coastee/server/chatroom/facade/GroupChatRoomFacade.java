@@ -125,4 +125,11 @@ public class GroupChatRoomFacade {
         ChatRoom chatRoom = chatRoomService.findById(groupId);
         chatRoomEntryService.enter(user, chatRoom);
     }
+
+    @Transactional
+    public void exit(final Accessor accessor, final Long groupId) {
+        User user = userService.findById(accessor.getUserId());
+        ChatRoom chatRoom = chatRoomService.findById(groupId);
+        chatRoomEntryService.exit(user, chatRoom);
+    }
 }

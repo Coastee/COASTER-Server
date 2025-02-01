@@ -112,6 +112,11 @@ public class ChatRoom extends BaseEntity {
         remainCount = maxCount - currentCount;
     }
 
+    public void exit() {
+        currentCount -= 1;
+        remainCount = maxCount - currentCount;
+    }
+
     public void updateThumbnail(final String thumbnail) {
         this.thumbnail = thumbnail;
     }

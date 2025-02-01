@@ -11,8 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-import static com.coastee.server.global.domain.BaseEntityStatus.ACTIVE;
-import static com.coastee.server.global.domain.BaseEntityStatus.DELETED;
+import static com.coastee.server.global.domain.BaseEntityStatus.*;
 import static jakarta.persistence.EnumType.STRING;
 
 @Getter
@@ -34,12 +33,8 @@ public abstract class BaseEntity {
         this.status = ACTIVE;
     }
 
-    public void toggleCurrentStatus() {
-        if (this.status.equals(ACTIVE)) {
-            this.status = DELETED;
-        } else {
-            this.status = ACTIVE;
-        }
+    public void activate() {
+        this.status = ACTIVE;
     }
 
     public void delete() {
@@ -48,5 +43,9 @@ public abstract class BaseEntity {
 
     public boolean isActive() {
         return this.status.equals(ACTIVE);
+    }
+
+    public boolean isDeleted() {
+        return this.status.equals(INACTIVE);
     }
 }

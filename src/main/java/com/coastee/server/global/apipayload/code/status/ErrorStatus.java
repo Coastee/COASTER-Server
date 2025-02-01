@@ -44,6 +44,7 @@ public enum ErrorStatus implements BaseErrorCode {
     // Chatroom
     INVALID_CHATROOM_ID(BAD_REQUEST, "CHATROOM4001", "유효하지 않은 채팅방 아이디입니다."),
     MAX_PARTICIPANT(BAD_REQUEST, "CHATROOM4002", "최대 참여자 수에 도달하여 더 이상 참여할 수 없는 채팅방입니다."),
+    NOT_PARTICIPANT(BAD_REQUEST, "CHATROOM4003", "해당 채팅방의 참여자가 아닙니다."),
     ;
 
     private final HttpStatus httpStatus;
