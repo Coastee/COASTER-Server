@@ -11,7 +11,7 @@ public class LinkedInLoginParams implements OAuthLoginParams {
     private String client_secret;
     private String code;
     private String state;
-    private String redirect_uri = "http://localhost:8080/api/v1/login/linkedin-callback";
+    private String redirect_uri = "https://api.coasterchat.com/api/v1/login/linkedin-callback";
 
     @Override
     public SocialType socialType() {

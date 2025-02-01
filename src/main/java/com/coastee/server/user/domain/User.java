@@ -46,6 +46,10 @@ public class User extends BaseEntity {
 
     private String socialId;
 
+    private String linkedInId;
+
+    private Boolean linkedInVerify;
+
     @Builder(builderMethodName = "of")
     public User(
             final String nickname,
@@ -73,5 +77,10 @@ public class User extends BaseEntity {
 
     public void updateRefreshToken(final String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public void verify(final String linkedInId) {
+        this.linkedInId = linkedInId;
+        this.linkedInVerify = true;
     }
 }
