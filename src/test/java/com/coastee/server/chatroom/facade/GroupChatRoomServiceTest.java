@@ -4,7 +4,7 @@ import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.chatroom.domain.Scope;
 import com.coastee.server.chatroom.dto.ChatRoomElement;
 import com.coastee.server.chatroom.dto.ChatRoomElements;
-import com.coastee.server.chatroom.dto.request.CreateGroupChatRequest;
+import com.coastee.server.chatroom.dto.request.CreateChatRoomRequest;
 import com.coastee.server.fixture.ServerFixture;
 import com.coastee.server.fixture.UserFixture;
 import com.coastee.server.server.domain.Server;
@@ -34,6 +34,9 @@ class GroupChatRoomServiceTest extends ServiceTest {
     private GroupChatRoomFacade groupChatRoomFacade;
 
     @Autowired
+    private ChatRoomFacade chatRoomFacade;
+
+    @Autowired
     protected ServerRepository serverRepository;
 
     private Server server;
@@ -43,22 +46,22 @@ class GroupChatRoomServiceTest extends ServiceTest {
     void findAllByServer() throws Exception {
         // given
         server = serverRepository.save(ServerFixture.get());
-        groupChatRoomFacade.create(
+        chatRoomFacade.create(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
-                new CreateGroupChatRequest("title A", "content A", Set.of("#A", "#B", "C")),
+                new CreateChatRoomRequest("title A", "content A", Set.of("#A", "#B", "C")),
                 null
         );
-        groupChatRoomFacade.create(
+        chatRoomFacade.create(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
-                new CreateGroupChatRequest("title B", "content B", Set.of("#D", "#E", "F")),
+                new CreateChatRoomRequest("title B", "content B", Set.of("#D", "#E", "F")),
                 null
         );
-        groupChatRoomFacade.create(
+        chatRoomFacade.create(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
-                new CreateGroupChatRequest("title C", "content C", Set.of("#G", "#H", "I")),
+                new CreateChatRoomRequest("title C", "content C", Set.of("#G", "#H", "I")),
                 null
         );
 
@@ -84,22 +87,22 @@ class GroupChatRoomServiceTest extends ServiceTest {
     void findAllByServer_WhenSortByName() throws Exception {
         // given
         server = serverRepository.save(ServerFixture.get());
-        groupChatRoomFacade.create(
+        chatRoomFacade.create(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
-                new CreateGroupChatRequest("title A", "content A", Set.of("#A", "#B", "C")),
+                new CreateChatRoomRequest("title A", "content A", Set.of("#A", "#B", "C")),
                 null
         );
-        groupChatRoomFacade.create(
+        chatRoomFacade.create(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
-                new CreateGroupChatRequest("title B", "content B", Set.of("#D", "#E", "F")),
+                new CreateChatRoomRequest("title B", "content B", Set.of("#D", "#E", "F")),
                 null
         );
-        groupChatRoomFacade.create(
+        chatRoomFacade.create(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
-                new CreateGroupChatRequest("title C", "content C", Set.of("#G", "#H", "I")),
+                new CreateChatRoomRequest("title C", "content C", Set.of("#G", "#H", "I")),
                 null
         );
 
@@ -126,22 +129,22 @@ class GroupChatRoomServiceTest extends ServiceTest {
         // given
         User anotherUser = userRepository.save(UserFixture.get("anotherUser"));
         server = serverRepository.save(ServerFixture.get());
-        groupChatRoomFacade.create(
+        chatRoomFacade.create(
                 Accessor.user(anotherUser.getId()),
                 server.getId(),
-                new CreateGroupChatRequest("title A", "content A", Set.of("#A", "#B", "C")),
+                new CreateChatRoomRequest("title A", "content A", Set.of("#A", "#B", "C")),
                 null
         );
-        groupChatRoomFacade.create(
+        chatRoomFacade.create(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
-                new CreateGroupChatRequest("title B", "content B", Set.of("#D", "#E", "F")),
+                new CreateChatRoomRequest("title B", "content B", Set.of("#D", "#E", "F")),
                 null
         );
-        groupChatRoomFacade.create(
+        chatRoomFacade.create(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
-                new CreateGroupChatRequest("title C", "content C", Set.of("#G", "#H", "I")),
+                new CreateChatRoomRequest("title C", "content C", Set.of("#G", "#H", "I")),
                 null
         );
 

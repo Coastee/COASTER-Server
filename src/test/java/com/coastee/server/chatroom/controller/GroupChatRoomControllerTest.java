@@ -7,18 +7,19 @@ import com.coastee.server.chatroom.domain.repository.ChatRoomTagRepository;
 import com.coastee.server.chatroom.dto.ChatRoomDetailElement;
 import com.coastee.server.chatroom.dto.ChatRoomElement;
 import com.coastee.server.chatroom.dto.ChatRoomElements;
-import com.coastee.server.chatroom.dto.request.CreateGroupChatRequest;
+import com.coastee.server.chatroom.dto.request.CreateChatRoomRequest;
+import com.coastee.server.chatroom.facade.ChatRoomFacade;
 import com.coastee.server.chatroom.facade.GroupChatRoomFacade;
 import com.coastee.server.fixture.HashTagFixture;
 import com.coastee.server.fixture.ServerFixture;
 import com.coastee.server.fixture.UserFixture;
-import com.coastee.server.util.ControllerTest;
 import com.coastee.server.global.domain.PageInfo;
 import com.coastee.server.hashtag.domain.HashTag;
 import com.coastee.server.hashtag.domain.repository.HashTagRepository;
 import com.coastee.server.server.domain.Server;
 import com.coastee.server.server.domain.repository.ServerRepository;
 import com.coastee.server.user.domain.User;
+import com.coastee.server.util.ControllerTest;
 import io.restassured.RestAssured;
 import io.restassured.builder.MultiPartSpecBuilder;
 import io.restassured.mapper.ObjectMapperType;
@@ -48,6 +49,9 @@ class GroupChatRoomControllerTest extends ControllerTest {
 
     @MockitoBean
     private GroupChatRoomFacade groupChatRoomFacade;
+
+    @MockitoBean
+    private ChatRoomFacade chatRoomFacade;
 
     @Autowired
     private ChatRoomRepository chatRoomRepository;
@@ -217,8 +221,8 @@ class GroupChatRoomControllerTest extends ControllerTest {
     @Test
     void create() throws Exception {
         // given
-        doNothing().when(groupChatRoomFacade).create(any(), any(), any(), any());
-        CreateGroupChatRequest requestDTO = new CreateGroupChatRequest("title", "content", Set.of("#A", "#B"));
+        doNothing().when(chatRoomFacade).create(any(), any(), any(), any());
+        CreateChatRoomRequest requestDTO = new CreateChatRoomRequest("title", "content", Set.of("#A", "#B"));
 
         MultiPartSpecification request = new MultiPartSpecBuilder(requestDTO, ObjectMapperType.JACKSON_2)
                 .controlName("request")
@@ -269,7 +273,7 @@ class GroupChatRoomControllerTest extends ControllerTest {
 
     @DisplayName("그룹챗에 참여한다.")
     @Test
-    void enter() throws Exception{
+    void enter() throws Exception {
         // given
         doNothing().when(groupChatRoomFacade).enter(any(), any());
 
@@ -298,7 +302,7 @@ class GroupChatRoomControllerTest extends ControllerTest {
 
     @DisplayName("그룹챗을 탈퇴한다.")
     @Test
-    void exit() throws Exception{
+    void exit() throws Exception {
         // given
         doNothing().when(groupChatRoomFacade).exit(any(), any());
 

@@ -5,15 +5,12 @@ import com.coastee.server.auth.UserOnly;
 import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.chatroom.domain.Scope;
 import com.coastee.server.chatroom.dto.ChatRoomElements;
-import com.coastee.server.chatroom.dto.request.CreateGroupChatRequest;
 import com.coastee.server.chatroom.facade.GroupChatRoomFacade;
 import com.coastee.server.global.apipayload.ApiResponse;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import static com.coastee.server.global.domain.Constant.DEFAULT_PAGING_SIZE;
 
@@ -32,18 +29,6 @@ public class GroupChatRoomController {
             @PageableDefault(DEFAULT_PAGING_SIZE) final Pageable pageable
     ) {
         return ApiResponse.onSuccess(groupChatRoomFacade.findByScope(accessor, serverId, scope, pageable));
-    }
-
-    @PostMapping("")
-    @UserOnly
-    public ApiResponse<Void> createGroupChatRoom(
-            @Auth final Accessor accessor,
-            @PathVariable("serverId") final Long serverId,
-            @RequestPart @Valid final CreateGroupChatRequest request,
-            @RequestPart final MultipartFile image
-    ) {
-        groupChatRoomFacade.create(accessor, serverId, request, image);
-        return ApiResponse.onSuccess();
     }
 
     @PostMapping("/{groupId}")

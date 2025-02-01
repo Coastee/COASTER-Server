@@ -24,6 +24,6 @@ public class ChatRoomElement {
         this.thumbnail = chatRoom.getThumbnail();
         this.title = chatRoom.getTitle();
         this.content = chatRoom.getContent();
-        this.startDate = chatRoom.getStartDate();
+        this.startDate = chatRoom.getPeriod().getStartDate();
     }
 }
