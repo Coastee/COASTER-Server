@@ -1,5 +1,9 @@
 package com.coastee.server.chatroom.controller;
 
+import com.coastee.server.chat.domain.Chat;
+import com.coastee.server.chat.domain.reposistory.ChatRepository;
+import com.coastee.server.chat.dto.ChatElement;
+import com.coastee.server.chat.dto.ChatElements;
 import com.coastee.server.chatroom.domain.ChatRoom;
 import com.coastee.server.chatroom.domain.ChatRoomTag;
 import com.coastee.server.chatroom.domain.repository.ChatRoomRepository;
@@ -8,7 +12,9 @@ import com.coastee.server.chatroom.dto.ChatRoomDetailElement;
 import com.coastee.server.chatroom.dto.ChatRoomElement;
 import com.coastee.server.chatroom.dto.ChatRoomElements;
 import com.coastee.server.chatroom.dto.request.CreateChatRoomRequest;
+import com.coastee.server.chatroom.dto.request.CreateMeetingRequest;
 import com.coastee.server.chatroom.facade.ChatRoomFacade;
+import com.coastee.server.fixture.ChatFixture;
 import com.coastee.server.fixture.HashTagFixture;
 import com.coastee.server.fixture.ServerFixture;
 import com.coastee.server.fixture.UserFixture;
@@ -29,9 +35,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
+import static com.coastee.server.fixture.ChatRoomFixture.getMeeting;
 import static com.coastee.server.util.FileUtil.getFile;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -60,7 +68,10 @@ class ChatRoomControllerTest extends ControllerTest {
     @Autowired
     private ChatRoomTagRepository chatRoomTagRepository;
 
-    @DisplayName("모든 그룹챗을 찾는다.")
+    @Autowired
+    private ChatRepository chatRepository;
+
+    @DisplayName("모든 채팅방을 찾는다.")
     @Test
     void findAll() throws Exception {
         // given
@@ -69,9 +80,9 @@ class ChatRoomControllerTest extends ControllerTest {
         User userC = userRepository.save(UserFixture.get("userC"));
         Server server = serverRepository.save(ServerFixture.get());
         List<ChatRoom> chatRoomList = List.of(
-                chatRoomRepository.save(ChatRoom.groupChatRoom(server, userA, "titleA", "contentA")),
-                chatRoomRepository.save(ChatRoom.groupChatRoom(server, userB, "titleB", "contentB")),
-                chatRoomRepository.save(ChatRoom.groupChatRoom(server, userC, "titleC", "contentC"))
+                chatRoomRepository.save(getMeeting(server, userA)),
+                chatRoomRepository.save(getMeeting(server, userB)),
+                chatRoomRepository.save(getMeeting(server, userC))
         );
         HashTag hashTagA = hashTagRepository.save(HashTagFixture.get("#A"));
         HashTag hashTagB = hashTagRepository.save(HashTagFixture.get("#B"));
@@ -83,14 +94,15 @@ class ChatRoomControllerTest extends ControllerTest {
         chatRoomTagRepository.save(new ChatRoomTag(chatRoomList.get(1), hashTagC));
         chatRoomTagRepository.save(new ChatRoomTag(chatRoomList.get(2), hashTagA));
 
-        when(chatRoomFacade.findByScope(any(), any(), any(), any(), any())).thenReturn(
-                new ChatRoomElements(
-                        new PageInfo(true, 0, 3, 40),
-                        chatRoomList.stream().map(chatRoom -> new ChatRoomDetailElement(
-                                chatRoom, false
-                        )).toList()
-                )
-        );
+        when(chatRoomFacade.findByScope(any(), any(), any(), any(), any()))
+                .thenReturn(
+                        new ChatRoomElements(
+                                new PageInfo(true, 0, 3, 40),
+                                chatRoomList.stream().map(chatRoom -> new ChatRoomDetailElement(
+                                        chatRoom, false
+                                )).toList()
+                        )
+                );
 
         // when & then
         RestAssured.given(spec).log().all()
@@ -100,19 +112,21 @@ class ChatRoomControllerTest extends ControllerTest {
                 .param("scope", "all")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .filter(
-                        document("find-all-groupchat",
+                        document("find-all-chatroom",
                                 pathParameters(
-                                        parameterWithName("serverId").description("서버 아이디")
+                                        parameterWithName("serverId").description("서버 아이디"),
+                                        parameterWithName("chatRoomType").description("채팅방 타입 - `groups` : 그룹챗, `meetings` 커피챗")
+
                                 ),
                                 queryParameters(
                                         parameterWithName("page").description("페이지 번호 (default: 0)"),
                                         parameterWithName("sort")
                                                 .description("정렬기준 - `name` : 이름순, `remain` : 마감임박순 (default: 최신순)"),
                                         parameterWithName("scope")
-                                                .description("조회 기준 - `joined` : 참여한 그룹챗 조회, `owner` : 개설한 그룹챗 조회 (default: 전체 조회)")
+                                                .description("조회 기준 - `joined` : 참여한 채팅방 조회, `owner` : 개설한 채팅방 조회 (default: 전체 조회)")
                                 ),
                                 requestHeaders(
-                                        headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰 - 그룹챗 개설자")
+                                        headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰")
                                 ),
                                 responseFields(
                                         fieldWithPath("isSuccess").type(BOOLEAN).description("성공 여부"),
@@ -129,13 +143,18 @@ class ChatRoomControllerTest extends ControllerTest {
                                         fieldWithPath("result.chatRoomList[].thumbnail").type(STRING).description("채팅방 썸네일").optional(),
                                         fieldWithPath("result.chatRoomList[].title").type(STRING).description("채팅방 제목"),
                                         fieldWithPath("result.chatRoomList[].content").type(STRING).description("채팅방 설명"),
+                                        fieldWithPath("result.chatRoomList[].period").type(OBJECT).description("기간").optional(),
+                                        fieldWithPath("result.chatRoomList[].period.startDate").type(ARRAY).description("시작 시간").optional(),
+                                        fieldWithPath("result.chatRoomList[].period.endDate").type(ARRAY).description("종료 시간").optional(),
                                         fieldWithPath("result.chatRoomList[].user").type(OBJECT).description("채팅방 개설자"),
                                         fieldWithPath("result.chatRoomList[].user.id").type(NUMBER).description("개설자 아이디"),
                                         fieldWithPath("result.chatRoomList[].user.profileImage").type(STRING).description("개설자 프로필 사진"),
                                         fieldWithPath("result.chatRoomList[].user.nickname").type(STRING).description("개설자 닉네임"),
                                         fieldWithPath("result.chatRoomList[].user.headline").type(STRING).description("개설자 한줄소개"),
+                                        fieldWithPath("result.chatRoomList[].address").type(OBJECT).description("주소").optional(),
+                                        fieldWithPath("result.chatRoomList[].address.location").type(STRING).description("장소").optional(),
+                                        fieldWithPath("result.chatRoomList[].address.details").type(STRING).description("상세 설명").optional(),
                                         fieldWithPath("result.chatRoomList[].hasEntered").type(BOOLEAN).description("현재 유저가 해당 채팅방에 이미 참여하였는지에 대한 여부"),
-                                        fieldWithPath("result.chatRoomList[].startDate").type(STRING).description("채팅방 만남 시각").optional(),
                                         fieldWithPath("result.chatRoomList[].maxCount").type(NUMBER).description("채팅방의 최대 유저 수"),
                                         fieldWithPath("result.chatRoomList[].currentCount").type(NUMBER).description("채팅방의 현재 유저 수"),
                                         fieldWithPath("result.chatRoomList[].hashTagList").type(ARRAY).description("해시태그 리스트"),
@@ -143,11 +162,11 @@ class ChatRoomControllerTest extends ControllerTest {
                                         fieldWithPath("result.chatRoomList[].hashTagList[].content").type(STRING).description("해시태그 내용").optional()
                                 )
                         ))
-                .when().get("/api/v1/servers/{serverId}/groups", 1)
+                .when().get("/api/v1/servers/{serverId}/{chatRoomType}", 1, "groups")
                 .then().log().all().statusCode(200);
     }
 
-    @DisplayName("개설한 그룹챗을 찾는다.")
+    @DisplayName("개설한 채팅방을 찾는다.")
     @Test
     void findByOwner() throws Exception {
         // given
@@ -176,19 +195,20 @@ class ChatRoomControllerTest extends ControllerTest {
                 .param("scope", "owner")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .filter(
-                        document("find-owner-groupchat",
+                        document("find-owner-chatroom",
                                 pathParameters(
-                                        parameterWithName("serverId").description("서버 아이디")
+                                        parameterWithName("serverId").description("서버 아이디"),
+                                        parameterWithName("chatRoomType").description("채팅방 타입 - `groups` : 그룹챗, `meetings` 커피챗")
                                 ),
                                 queryParameters(
                                         parameterWithName("page").description("페이지 번호 (default: 0)"),
                                         parameterWithName("sort")
                                                 .description("정렬기준 - `name` : 이름순, `remain` : 마감임박순 (default: 최신순)"),
                                         parameterWithName("scope")
-                                                .description("조회 기준 - `joined` : 참여한 그룹챗 조회, `owner` : 개설한 그룹챗 조회 (default: 전체 조회)")
+                                                .description("조회 기준 - `joined` : 참여한 채팅방 조회, `owner` : 개설한 채팅방 조회 (default: 전체 조회)")
                                 ),
                                 requestHeaders(
-                                        headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰 - 그룹챗 개설자")
+                                        headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰")
                                 ),
                                 responseFields(
                                         fieldWithPath("isSuccess").type(BOOLEAN).description("성공 여부"),
@@ -205,16 +225,83 @@ class ChatRoomControllerTest extends ControllerTest {
                                         fieldWithPath("result.chatRoomList[].thumbnail").type(STRING).description("채팅방 썸네일").optional(),
                                         fieldWithPath("result.chatRoomList[].title").type(STRING).description("채팅방 제목"),
                                         fieldWithPath("result.chatRoomList[].content").type(STRING).description("채팅방 설명"),
-                                        fieldWithPath("result.chatRoomList[].startDate").type(STRING).description("채팅방 만남 시각").optional()
+                                        fieldWithPath("result.chatRoomList[].period").type(OBJECT).description("기간").optional(),
+                                        fieldWithPath("result.chatRoomList[].period.startDate").type(STRING).description("시작 시간").optional(),
+                                        fieldWithPath("result.chatRoomList[].period.endDate").type(STRING).description("종료 시간").optional()
                                 )
                         ))
-                .when().get("/api/v1/servers/{serverId}/groups", 1)
+                .when().get("/api/v1/servers/{serverId}/{chatRoomType}", 1, "groups")
+                .then().log().all().statusCode(200);
+    }
+
+    @DisplayName("채팅 이력을 조회한다.")
+    @Test
+    void getChats() throws Exception {
+        // given
+        User user = userRepository.save(UserFixture.get());
+        Server server = serverRepository.save(ServerFixture.get());
+        ChatRoom chatRoom = chatRoomRepository.save(getMeeting(server, user));
+        List<Chat> chatList = List.of(
+                chatRepository.save(ChatFixture.get(user, chatRoom)),
+                chatRepository.save(ChatFixture.get(user, chatRoom)),
+                chatRepository.save(ChatFixture.get(user, chatRoom))
+        );
+
+        when(chatRoomFacade.getChats(any(), any(), any())).thenReturn(
+                new ChatElements(
+                        new PageInfo(true, 0, 3, 40),
+                        chatList.stream().map(ChatElement::new).toList()
+                )
+        );
+
+        // when & then
+        RestAssured.given(spec).log().all()
+                .header(ACCESS_TOKEN_HEADER, ACCESS_TOKEN)
+                .param("page", "0")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .filter(
+                        document("find-chats",
+                                pathParameters(
+                                        parameterWithName("serverId").description("서버 아이디"),
+                                        parameterWithName("chatRoomType").description("채팅방 타입 - `groups` : 그룹챗, `meetings` 커피챗"),
+                                        parameterWithName("chatRoomId").description("채팅방 아이디")
+                                ),
+                                queryParameters(
+                                        parameterWithName("page").description("페이지 번호 (default: 0)")
+                                ),
+                                requestHeaders(
+                                        headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰")
+                                ),
+                                responseFields(
+                                        fieldWithPath("isSuccess").type(BOOLEAN).description("성공 여부"),
+                                        fieldWithPath("code").type(STRING).description("결과 코드"),
+                                        fieldWithPath("message").type(STRING).description("결과 메세지"),
+                                        fieldWithPath("result").type(OBJECT).description("결과 데이터"),
+                                        fieldWithPath("result.pageInfo").type(OBJECT).description("페이징 정보"),
+                                        fieldWithPath("result.pageInfo.lastPage").type(BOOLEAN).description("마지막 페이지 여부"),
+                                        fieldWithPath("result.pageInfo.totalPages").type(NUMBER).description("총 페이지 개수"),
+                                        fieldWithPath("result.pageInfo.totalElements").type(NUMBER).description("총 요소 개수"),
+                                        fieldWithPath("result.pageInfo.size").type(NUMBER).description("페이지 사이즈"),
+                                        fieldWithPath("result.chatList").type(ARRAY).description("채팅 리스트"),
+                                        fieldWithPath("result.chatList[].id").type(NUMBER).description("채팅 아이디"),
+                                        fieldWithPath("result.chatList[].user").type(OBJECT).description("유저"),
+                                        fieldWithPath("result.chatList[].user.id").type(NUMBER).description("유저 아이디"),
+                                        fieldWithPath("result.chatList[].user.profileImage").type(STRING).description("프로필 사진"),
+                                        fieldWithPath("result.chatList[].user.nickname").type(STRING).description("닉네임"),
+                                        fieldWithPath("result.chatList[].user.headline").type(STRING).description("한줄소개"),
+                                        fieldWithPath("result.chatList[].content").type(STRING).description("채팅 내용"),
+                                        fieldWithPath("result.chatList[].createdDate").type(ARRAY).description("전송 시간"),
+                                        fieldWithPath("result.chatList[].type").type(STRING)
+                                                .description("타입 - `ENTER` : 참여, `QUIT` : 탈퇴, `TALK` : 대화, `DELETE` : 삭제")
+                                )
+                        ))
+                .when().get("/api/v1/servers/{serverId}/{chatRoomType}/{chatRoomId}", 1, "meetings", 1)
                 .then().log().all().statusCode(200);
     }
 
     @DisplayName("그룹챗을 개설한다.")
     @Test
-    void create() throws Exception {
+    void createGroup() throws Exception {
         // given
         doNothing().when(chatRoomFacade).create(any(), any(), any(), any(), any());
         CreateChatRoomRequest requestDTO = new CreateChatRoomRequest("title", "content", Set.of("#A", "#B"));
@@ -239,22 +326,22 @@ class ChatRoomControllerTest extends ControllerTest {
                 .multiPart(file)
                 .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .filter(
-                        document("create-groupchat",
+                        document("create-group",
                                 pathParameters(
                                         parameterWithName("serverId").description("서버 아이디")
                                 ),
                                 requestParts(
-                                        partWithName("image").description("(opt) 그룹챗 썸네일 이미지 파일"),
+                                        partWithName("image").description("(opt) 썸네일 이미지 파일"),
                                         partWithName("request").description("제목, 설명 등 json data")
                                 ),
                                 requestPartFields(
                                         "request",
-                                        fieldWithPath("title").type(STRING).description("``request.title`` 그룹챗 제목 : 최소 1자 ~ 최대 20자"),
-                                        fieldWithPath("content").type(STRING).description("``request.content`` 그룹챗 설명 : 최대 80자"),
+                                        fieldWithPath("title").type(STRING).description("``request.title`` 제목 : 최소 1자 ~ 최대 20자"),
+                                        fieldWithPath("content").type(STRING).description("``request.content`` 설명 : 최대 80자"),
                                         fieldWithPath("hashTags").type(ARRAY).description("``request.hashTags`` 해시태그 : 최대 10개")
                                 ),
                                 requestHeaders(
-                                        headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰 - 그룹챗 개설자")
+                                        headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰")
                                 ),
                                 responseFields(
                                         fieldWithPath("isSuccess").type(BOOLEAN).description("성공 여부"),
@@ -266,7 +353,75 @@ class ChatRoomControllerTest extends ControllerTest {
                 .then().log().all().statusCode(200);
     }
 
-    @DisplayName("그룹챗에 참여한다.")
+    @DisplayName("커피챗을 개설한다.")
+    @Test
+    void createMeeting() throws Exception {
+        // given
+        doNothing().when(chatRoomFacade).create(any(), any(), any(), any(), any());
+        CreateChatRoomRequest requestDTO = new CreateMeetingRequest(
+                "title",
+                "content",
+                Set.of("#A", "#B"),
+                5,
+                LocalDateTime.now().minusDays(1).minusHours(2),
+                LocalDateTime.now().minusDays(1),
+                "서울특별시 용산구 청파로47길 100",
+                "숙명여자대학교 1캠퍼스 정문 앞"
+        );
+
+        MultiPartSpecification request = new MultiPartSpecBuilder(requestDTO, ObjectMapperType.JACKSON_2)
+                .controlName("request")
+                .mimeType(MediaType.APPLICATION_JSON_VALUE)
+                .charset("UTF-8")
+                .build();
+
+        MultiPartSpecification file =
+                new MultiPartSpecBuilder(getFile())
+                        .controlName("image")
+                        .mimeType(MediaType.IMAGE_PNG_VALUE)
+                        .charset("UTF-8")
+                        .build();
+
+        // when & then
+        RestAssured.given(spec).log().all()
+                .header(ACCESS_TOKEN_HEADER, ACCESS_TOKEN)
+                .multiPart(request)
+                .multiPart(file)
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                .filter(
+                        document("create-meeting",
+                                pathParameters(
+                                        parameterWithName("serverId").description("서버 아이디")
+                                ),
+                                requestParts(
+                                        partWithName("image").description("(opt) 썸네일 이미지 파일"),
+                                        partWithName("request").description("제목, 설명 등 json data")
+                                ),
+                                requestPartFields(
+                                        "request",
+                                        fieldWithPath("title").type(STRING).description("``request.title`` 제목 : 최소 1자 ~ 최대 20자"),
+                                        fieldWithPath("content").type(STRING).description("``request.content`` 설명 : 최대 80자"),
+                                        fieldWithPath("hashTags").type(ARRAY).description("``request.hashTags`` 해시태그 : 최대 10개"),
+                                        fieldWithPath("maxCount").type(NUMBER).description("``request.startDate`` 참여인원"),
+                                        fieldWithPath("startDate").type(ARRAY).description("``request.startDate`` 시작시간"),
+                                        fieldWithPath("endDate").type(ARRAY).description("``request.endDate`` 종료시간"),
+                                        fieldWithPath("location").type(STRING).description("``request.location`` 장소"),
+                                        fieldWithPath("details").type(STRING).description("``request.details`` 장소 설명")
+                                ),
+                                requestHeaders(
+                                        headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰 - 커피챗 개설자")
+                                ),
+                                responseFields(
+                                        fieldWithPath("isSuccess").type(BOOLEAN).description("성공 여부"),
+                                        fieldWithPath("code").type(STRING).description("결과 코드"),
+                                        fieldWithPath("message").type(STRING).description("결과 메세지")
+                                )
+                        ))
+                .when().post("/api/v1/servers/{serverId}/meetings", 1)
+                .then().log().all().statusCode(200);
+    }
+
+    @DisplayName("채팅방에 참여한다.")
     @Test
     void enter() throws Exception {
         // given
@@ -277,10 +432,11 @@ class ChatRoomControllerTest extends ControllerTest {
                 .header(ACCESS_TOKEN_HEADER, ACCESS_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .filter(
-                        document("enter-groupchat",
+                        document("enter-chatroom",
                                 pathParameters(
                                         parameterWithName("serverId").description("서버 아이디"),
-                                        parameterWithName("groupId").description("그룹 채팅방 아이디")
+                                        parameterWithName("chatRoomType").description("채팅방 타입 - `groups` : 그룹챗, `meetings` 커피챗"),
+                                        parameterWithName("chatRoomId").description("채팅방 아이디")
                                 ),
                                 requestHeaders(
                                         headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰")
@@ -291,11 +447,11 @@ class ChatRoomControllerTest extends ControllerTest {
                                         fieldWithPath("message").type(STRING).description("결과 메세지")
                                 )
                         ))
-                .when().post("/api/v1/servers/{serverId}/groups/{groupId}", 1, 2)
+                .when().post("/api/v1/servers/{serverId}/{chatRoomType}/{chatRoomId}", 1, "meetings", 2)
                 .then().log().all().statusCode(200);
     }
 
-    @DisplayName("그룹챗을 탈퇴한다.")
+    @DisplayName("채팅방을 탈퇴한다.")
     @Test
     void exit() throws Exception {
         // given
@@ -306,10 +462,11 @@ class ChatRoomControllerTest extends ControllerTest {
                 .header(ACCESS_TOKEN_HEADER, ACCESS_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .filter(
-                        document("exit-groupchat",
+                        document("exit-chatroom",
                                 pathParameters(
                                         parameterWithName("serverId").description("서버 아이디"),
-                                        parameterWithName("groupId").description("그룹 채팅방 아이디")
+                                        parameterWithName("chatRoomType").description("채팅방 타입 - `groups` : 그룹챗, `meetings` 커피챗"),
+                                        parameterWithName("chatRoomId").description("채팅방 아이디")
                                 ),
                                 requestHeaders(
                                         headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰")
@@ -320,7 +477,7 @@ class ChatRoomControllerTest extends ControllerTest {
                                         fieldWithPath("message").type(STRING).description("결과 메세지")
                                 )
                         ))
-                .when().delete("/api/v1/servers/{serverId}/groups/{groupId}", 1, 2)
+                .when().delete("/api/v1/servers/{serverId}/{chatRoomType}/{chatRoomId}", 1, "meetings", 2)
                 .then().log().all().statusCode(200);
     }
 

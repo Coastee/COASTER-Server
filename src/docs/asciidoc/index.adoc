@@ -37,4 +37,4 @@ coaster server
 
 === Server
 * link:server.html[서버 기능]
-* link:group.html[그룹챗 기능]
+* link:chatroom.html[채팅방 기능]
