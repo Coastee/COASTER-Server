@@ -267,4 +267,62 @@ class GroupChatRoomControllerTest extends ControllerTest {
                 .then().log().all().statusCode(200);
     }
 
+    @DisplayName("그룹챗에 참여한다.")
+    @Test
+    void enter() throws Exception{
+        // given
+        doNothing().when(groupChatRoomFacade).enter(any(), any());
+
+        // when & then
+        RestAssured.given(spec).log().all()
+                .header(ACCESS_TOKEN_HEADER, ACCESS_TOKEN)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .filter(
+                        document("enter-groupchat",
+                                pathParameters(
+                                        parameterWithName("serverId").description("서버 아이디"),
+                                        parameterWithName("groupId").description("그룹 채팅방 아이디")
+                                ),
+                                requestHeaders(
+                                        headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰")
+                                ),
+                                responseFields(
+                                        fieldWithPath("isSuccess").type(BOOLEAN).description("성공 여부"),
+                                        fieldWithPath("code").type(STRING).description("결과 코드"),
+                                        fieldWithPath("message").type(STRING).description("결과 메세지")
+                                )
+                        ))
+                .when().post("/api/v1/servers/{serverId}/groups/{groupId}", 1, 2)
+                .then().log().all().statusCode(200);
+    }
+
+    @DisplayName("그룹챗을 탈퇴한다.")
+    @Test
+    void exit() throws Exception{
+        // given
+        doNothing().when(groupChatRoomFacade).exit(any(), any());
+
+        // when & then
+        RestAssured.given(spec).log().all()
+                .header(ACCESS_TOKEN_HEADER, ACCESS_TOKEN)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .filter(
+                        document("exit-groupchat",
+                                pathParameters(
+                                        parameterWithName("serverId").description("서버 아이디"),
+                                        parameterWithName("groupId").description("그룹 채팅방 아이디")
+                                ),
+                                requestHeaders(
+                                        headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰")
+                                ),
+                                responseFields(
+                                        fieldWithPath("isSuccess").type(BOOLEAN).description("성공 여부"),
+                                        fieldWithPath("code").type(STRING).description("결과 코드"),
+                                        fieldWithPath("message").type(STRING).description("결과 메세지")
+                                )
+                        ))
+                .when().delete("/api/v1/servers/{serverId}/groups/{groupId}", 1, 2)
+                .then().log().all().statusCode(200);
+    }
+
 }
