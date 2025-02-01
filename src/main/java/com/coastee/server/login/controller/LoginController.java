@@ -13,7 +13,7 @@ import com.coastee.server.login.infrastructure.loginparams.GoogleLoginParams;
 import com.coastee.server.login.infrastructure.loginparams.KakaoLoginParams;
 import com.coastee.server.login.infrastructure.loginparams.LinkedInLoginParams;
 import com.coastee.server.login.infrastructure.loginparams.NaverLoginParams;
-import com.coastee.server.login.service.LoginService;
+import com.coastee.server.login.facade.LoginFacade;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.Size;
@@ -29,23 +29,23 @@ import static com.coastee.server.global.domain.Constant.*;
 @Validated
 @RequiredArgsConstructor
 public class LoginController {
-    private final LoginService loginService;
+    private final LoginFacade loginFacade;
     private final SessionManager sessionManager;
     private final RedirectUriUtil redirectUriUtil;
 
     @GetMapping("/api/v1/login/naver-callback")
     public ApiResponse<AuthTokens> naverLogin(@ModelAttribute final NaverLoginParams naverLoginParams) {
-        return ApiResponse.onSuccess(loginService.login(naverLoginParams));
+        return ApiResponse.onSuccess(loginFacade.login(naverLoginParams));
     }
 
     @GetMapping("/api/v1/login/kakao-callback")
     public ApiResponse<AuthTokens> kakaoLogin(@ModelAttribute final KakaoLoginParams kakaoLoginParams) {
-        return ApiResponse.onSuccess(loginService.login(kakaoLoginParams));
+        return ApiResponse.onSuccess(loginFacade.login(kakaoLoginParams));
     }
 
     @GetMapping("/api/v1/login/google-callback")
     public ApiResponse<AuthTokens> googleLogin(@ModelAttribute final GoogleLoginParams googleLoginParams) {
-        return ApiResponse.onSuccess(loginService.login(googleLoginParams));
+        return ApiResponse.onSuccess(loginFacade.login(googleLoginParams));
     }
 
     @GetMapping("/api/v1/login/linkedin-callback")
@@ -54,7 +54,7 @@ public class LoginController {
             final HttpServletRequest request
     ) {
         Long userId = sessionManager.getUserId(request);
-        loginService.connect(Accessor.user(userId), linkedInLoginParams);
+        loginFacade.connect(Accessor.user(userId), linkedInLoginParams);
         sessionManager.removeSession(request);
         return ApiResponse.onSuccess();
     }
@@ -77,7 +77,7 @@ public class LoginController {
             @RequestHeader(HEADER_REFRESH_TOKEN)
             @Size(min = TOKEN_PREFIX_LENGTH, message = "접근 토큰은 필수적으로 전달되어야합니다.") final String refreshToken
     ) {
-        String renewalToken = loginService.renewalToken(
+        String renewalToken = loginFacade.renewalToken(
                 JwtHeaderUtil.extractToken(accessToken),
                 JwtHeaderUtil.extractToken(refreshToken)
         );

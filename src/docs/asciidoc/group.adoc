@@ -98,3 +98,57 @@ include::{snippets}/create-groupchat/request-part-request-fields.adoc[]
 
 include::{snippets}/create-groupchat/response-body.adoc[]
 include::{snippets}/create-groupchat/response-fields.adoc[]
+
+== `POST` Enter Groupchat
+
+그룹챗 참여
+
+=== Request
+
+```
+/api/v1/servers/{serverId}/groups/{groupId}
+```
+
+include::{snippets}/enter-groupchat/curl-request.adoc[]
+
+==== header
+
+include::{snippets}/enter-groupchat/request-headers.adoc[]
+
+==== path parameters
+
+include::{snippets}/enter-groupchat/path-parameters.adoc[]
+
+=== Response
+
+==== response body
+
+include::{snippets}/enter-groupchat/response-body.adoc[]
+include::{snippets}/enter-groupchat/response-fields.adoc[]
+
+== `DELETE` Exit Groupchat
+
+그룹챗 탈퇴
+
+=== Request
+
+```
+/api/v1/servers/{serverId}/groups/{groupId}
+```
+
+include::{snippets}/exit-groupchat/curl-request.adoc[]
+
+==== header
+
+include::{snippets}/exit-groupchat/request-headers.adoc[]
+
+==== path parameters
+
+include::{snippets}/exit-groupchat/path-parameters.adoc[]
+
+=== Response
+
+==== response body
+
+include::{snippets}/exit-groupchat/response-body.adoc[]
+include::{snippets}/exit-groupchat/response-fields.adoc[]

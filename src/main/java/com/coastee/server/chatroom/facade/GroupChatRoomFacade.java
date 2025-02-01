@@ -57,7 +57,6 @@ public class GroupChatRoomFacade {
         chatRoomEntryService.enter(user, chatRoom);
     }
 
-    // TODO: 쿼리 몇번 나가는지 확인 필요
     public ChatRoomElements findByScope(
             final Accessor accessor,
             final Long serverId,
@@ -118,5 +117,19 @@ public class GroupChatRoomFacade {
                 pageable
         );
         return ChatRoomElements.from(chatRoomPage);
+    }
+
+    @Transactional
+    public void enter(final Accessor accessor, final Long groupId) {
+        User user = userService.findById(accessor.getUserId());
+        ChatRoom chatRoom = chatRoomService.findById(groupId);
+        chatRoomEntryService.enter(user, chatRoom);
+    }
+
+    @Transactional
+    public void exit(final Accessor accessor, final Long groupId) {
+        User user = userService.findById(accessor.getUserId());
+        ChatRoom chatRoom = chatRoomService.findById(groupId);
+        chatRoomEntryService.exit(user, chatRoom);
     }
 }
