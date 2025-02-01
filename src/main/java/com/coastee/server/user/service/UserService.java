@@ -28,6 +28,7 @@ public class UserService {
                 .orElseThrow(() -> new InvalidJwtException(INVALID_REFRESH_TOKEN));
     }
 
+    @Transactional
     public User findOrCreateUser(final OAuthUserInfo userInfo) {
         return userRepository.findBySocialId(userInfo.getSocialId())
                 .orElseGet(() -> newUser(userInfo));

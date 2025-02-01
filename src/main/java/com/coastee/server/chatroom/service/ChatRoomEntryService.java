@@ -21,8 +21,8 @@ public class ChatRoomEntryService {
 
     @Transactional
     public ChatRoomEntry enter(final User user, final ChatRoom chatRoom) {
-        ChatRoomEntry chatRoomEntry = new ChatRoomEntry(user, chatRoom);
         chatRoom.enter();
+        ChatRoomEntry chatRoomEntry = new ChatRoomEntry(user, chatRoom);
         return chatRoomEntryCustomRepository.save(chatRoomEntry);
     }
 

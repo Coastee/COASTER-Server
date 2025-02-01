@@ -45,4 +45,15 @@ public class GroupChatRoomController {
         groupChatRoomFacade.create(accessor, serverId, request, image);
         return ApiResponse.onSuccess();
     }
+
+    @PostMapping("/{groupId}")
+    @UserOnly
+    public ApiResponse<Void> enterGroupChatRoom(
+            @Auth final Accessor accessor,
+            @PathVariable("serverId") final Long serverId,
+            @PathVariable("groupId") final Long groupId
+    ) {
+        groupChatRoomFacade.enter(accessor, groupId);
+        return ApiResponse.onSuccess();
+    }
 }

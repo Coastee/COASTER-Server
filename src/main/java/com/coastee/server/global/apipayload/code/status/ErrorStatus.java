@@ -39,7 +39,11 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // Server
     INVALID_SERVER_ID(BAD_REQUEST, "SERVER4001", "유효하지 않은 서버 아이디입니다."),
-    NOT_IN_SERVER(BAD_REQUEST, "SERVER4002", "해당 유저는 이 서버에 참여하고 있지 않습니다.")
+    NOT_IN_SERVER(BAD_REQUEST, "SERVER4002", "해당 유저는 이 서버에 참여하고 있지 않습니다."),
+
+    // Chatroom
+    INVALID_CHATROOM_ID(BAD_REQUEST, "CHATROOM4001", "유효하지 않은 채팅방 아이디입니다."),
+    MAX_PARTICIPANT(BAD_REQUEST, "CHATROOM4002", "최대 참여자 수에 도달하여 더 이상 참여할 수 없는 채팅방입니다."),
     ;
 
     private final HttpStatus httpStatus;

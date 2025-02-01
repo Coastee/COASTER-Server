@@ -3,6 +3,7 @@ package com.coastee.server.chatroom.service;
 import com.coastee.server.chatroom.domain.ChatRoom;
 import com.coastee.server.chatroom.domain.ChatRoomType;
 import com.coastee.server.chatroom.domain.repository.ChatRoomRepository;
+import com.coastee.server.global.apipayload.exception.GeneralException;
 import com.coastee.server.server.domain.Server;
 import com.coastee.server.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.coastee.server.global.apipayload.code.status.ErrorStatus.INVALID_CHATROOM_ID;
 
 
 @Service
@@ -21,6 +24,10 @@ public class ChatRoomService {
     @Transactional
     public ChatRoom save(final ChatRoom chatRoom) {
         return chatRoomRepository.save(chatRoom);
+    }
+
+    public ChatRoom findById(final Long id) {
+        return chatRoomRepository.findById(id).orElseThrow(() -> new GeneralException(INVALID_CHATROOM_ID));
     }
 
     public Page<ChatRoom> findAllByServerAndType(

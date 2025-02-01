@@ -17,13 +17,14 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.coastee.server.global.apipayload.code.status.ErrorStatus.FAIL_VALIDATE_TOKEN;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class LoginFacade {
     private final OAuthInfoService oAuthInfoService;
     private final UserService userService;
     private final JwtProvider jwtProvider;
 
+    @Transactional
     public AuthTokens login(final OAuthLoginParams params) {
         OAuthUserInfo userInfo = oAuthInfoService.request(params);
         User user = userService.findOrCreateUser(userInfo);
@@ -32,6 +33,7 @@ public class LoginFacade {
         return tokens;
     }
 
+    @Transactional
     public void connect(
             final Accessor accessor,
             final LinkedInLoginParams params
