@@ -27,6 +27,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
+import static com.coastee.server.global.util.PageableUtil.setChatRoomOrder;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -68,14 +70,14 @@ public class ChatRoomFacade {
         User user = userService.findById(accessor.getUserId());
         Server server = serverService.findById(serverId);
         if (scope.equals(Scope.owner)) {
-            return findAllByServerAndOwner(server, user, type, pageable);
+            return findAllByServerAndOwner(server, user, type, setChatRoomOrder(pageable));
         } else if (scope.equals(Scope.joined)) {
-            return findAllByServerAndParticipant(server, user, type, pageable);
+            return findAllByServerAndParticipant(server, user, type, setChatRoomOrder(pageable));
         } else {
-            return findAllByServer(server, user, type, pageable);
+            return findAllByServer(server, user, type, setChatRoomOrder(pageable));
         }
     }
-    
+
     public ChatElements getChats(
             final Accessor accessor,
             final Long chatRoomId,
