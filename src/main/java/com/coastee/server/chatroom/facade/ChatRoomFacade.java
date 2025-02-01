@@ -1,6 +1,9 @@
 package com.coastee.server.chatroom.facade;
 
 import com.coastee.server.auth.domain.Accessor;
+import com.coastee.server.chat.domain.Chat;
+import com.coastee.server.chat.dto.ChatElements;
+import com.coastee.server.chat.service.ChatService;
 import com.coastee.server.chatroom.domain.ChatRoom;
 import com.coastee.server.chatroom.domain.ChatRoomType;
 import com.coastee.server.chatroom.domain.Scope;
@@ -32,6 +35,7 @@ public class ChatRoomFacade {
     private final ServerService serverService;
     private final ChatRoomService chatRoomService;
     private final ChatRoomEntryService chatRoomEntryService;
+    private final ChatService chatService;
     private final BlobStorageService blobStorageService;
     private final HashTagService hashTagService;
 
@@ -70,6 +74,18 @@ public class ChatRoomFacade {
         } else {
             return findAllByServer(server, user, type, pageable);
         }
+    }
+    
+    public ChatElements getChats(
+            final Accessor accessor,
+            final Long chatRoomId,
+            final Pageable pageable
+    ) {
+        User user = userService.findById(accessor.getUserId());
+        ChatRoom chatRoom = chatRoomService.findById(chatRoomId);
+        chatRoomEntryService.validateJoin(user, chatRoom);
+        Page<Chat> chatPage = chatService.findAllByChatRoom(chatRoom, pageable);
+        return new ChatElements(chatPage);
     }
 
     @Transactional

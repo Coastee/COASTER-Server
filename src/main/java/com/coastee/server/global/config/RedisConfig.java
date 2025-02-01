@@ -1,6 +1,6 @@
 package com.coastee.server.global.config;
 
-import com.coastee.server.global.redis.RedisSubscriber;
+import com.coastee.server.chat.infrastructure.RedisSubscriber;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;

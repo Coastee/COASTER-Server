@@ -3,6 +3,7 @@ package com.coastee.server.chatroom.controller;
 import com.coastee.server.auth.Auth;
 import com.coastee.server.auth.UserOnly;
 import com.coastee.server.auth.domain.Accessor;
+import com.coastee.server.chat.dto.ChatElements;
 import com.coastee.server.chatroom.domain.ChatRoomType;
 import com.coastee.server.chatroom.domain.Scope;
 import com.coastee.server.chatroom.dto.ChatRoomElements;
@@ -17,7 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import static com.coastee.server.global.domain.Constant.DEFAULT_PAGING_SIZE;
-import static com.coastee.server.global.util.PageableUtil.setSortOrder;
+import static com.coastee.server.global.util.PageableUtil.setChatOrder;
+import static com.coastee.server.global.util.PageableUtil.setChatRoomOrder;
 
 @RequiredArgsConstructor
 @RestController
@@ -39,7 +41,7 @@ public class ChatRoomController {
                 serverId,
                 chatRoomType,
                 scope,
-                setSortOrder(pageable)
+                setChatRoomOrder(pageable)
         ));
     }
 
@@ -54,6 +56,18 @@ public class ChatRoomController {
     ) {
         chatRoomFacade.create(accessor, serverId, chatRoomType, request, image);
         return ApiResponse.onSuccess();
+    }
+
+    @GetMapping("/{chatRoomId}")
+    @UserOnly
+    public ApiResponse<ChatElements> getChats(
+            @Auth final Accessor accessor,
+            @PathVariable("serverId") final Long serverId,
+            @PathVariable("chatRoomType") final ChatRoomType chatRoomType,
+            @PathVariable("chatRoomId") final Long chatRoomId,
+            @PageableDefault(DEFAULT_PAGING_SIZE) final Pageable pageable
+    ) {
+        return ApiResponse.onSuccess(chatRoomFacade.getChats(accessor, chatRoomId, setChatOrder(pageable)));
     }
 
     @PostMapping("/{chatRoomId}")
