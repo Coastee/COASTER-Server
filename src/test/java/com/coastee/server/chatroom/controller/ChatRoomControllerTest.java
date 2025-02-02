@@ -11,8 +11,8 @@ import com.coastee.server.chatroom.domain.repository.ChatRoomTagRepository;
 import com.coastee.server.chatroom.dto.ChatRoomDetailElement;
 import com.coastee.server.chatroom.dto.ChatRoomElement;
 import com.coastee.server.chatroom.dto.ChatRoomElements;
-import com.coastee.server.chatroom.dto.request.CreateChatRoomRequest;
-import com.coastee.server.chatroom.dto.request.CreateMeetingRequest;
+import com.coastee.server.chatroom.dto.request.ChatRoomCreateRequest;
+import com.coastee.server.chatroom.dto.request.MeetingCreateRequest;
 import com.coastee.server.chatroom.facade.ChatRoomFacade;
 import com.coastee.server.fixture.ChatFixture;
 import com.coastee.server.fixture.HashTagFixture;
@@ -304,7 +304,7 @@ class ChatRoomControllerTest extends ControllerTest {
     void createGroup() throws Exception {
         // given
         doNothing().when(chatRoomFacade).create(any(), any(), any(), any(), any());
-        CreateChatRoomRequest requestDTO = new CreateChatRoomRequest("title", "content", Set.of("#A", "#B"));
+        ChatRoomCreateRequest requestDTO = new ChatRoomCreateRequest("title", "content", Set.of("#A", "#B"));
 
         MultiPartSpecification request = new MultiPartSpecBuilder(requestDTO, ObjectMapperType.JACKSON_2)
                 .controlName("request")
@@ -358,7 +358,7 @@ class ChatRoomControllerTest extends ControllerTest {
     void createMeeting() throws Exception {
         // given
         doNothing().when(chatRoomFacade).create(any(), any(), any(), any(), any());
-        CreateChatRoomRequest requestDTO = new CreateMeetingRequest(
+        ChatRoomCreateRequest requestDTO = new MeetingCreateRequest(
                 "title",
                 "content",
                 Set.of("#A", "#B"),

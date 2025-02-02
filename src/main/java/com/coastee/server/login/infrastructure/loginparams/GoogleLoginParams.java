@@ -2,7 +2,6 @@ package com.coastee.server.login.infrastructure.loginparams;
 
 import com.coastee.server.login.domain.OAuthLoginParams;
 import com.coastee.server.user.domain.SocialType;
-import lombok.Builder;
 import lombok.Data;
 
 @Data
@@ -18,7 +17,6 @@ public class GoogleLoginParams implements OAuthLoginParams {
         return SocialType.GOOGLE;
     }
 
-    @Builder(builderMethodName = "of")
     public GoogleLoginParams(
             final String code
     ) {

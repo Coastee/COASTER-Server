@@ -7,8 +7,8 @@ import com.coastee.server.chat.dto.ChatElements;
 import com.coastee.server.chatroom.domain.ChatRoomType;
 import com.coastee.server.chatroom.domain.Scope;
 import com.coastee.server.chatroom.dto.ChatRoomElements;
-import com.coastee.server.chatroom.dto.request.CreateChatRoomRequest;
-import com.coastee.server.chatroom.dto.request.CreateMeetingRequest;
+import com.coastee.server.chatroom.dto.request.ChatRoomCreateRequest;
+import com.coastee.server.chatroom.dto.request.MeetingCreateRequest;
 import com.coastee.server.chatroom.facade.ChatRoomFacade;
 import com.coastee.server.global.apipayload.ApiResponse;
 import jakarta.validation.Valid;
@@ -49,7 +49,7 @@ public class ChatRoomController {
     public ApiResponse<Void> createGroup(
             @Auth final Accessor accessor,
             @PathVariable("serverId") final Long serverId,
-            @RequestPart @Valid final CreateChatRoomRequest request,
+            @RequestPart @Valid final ChatRoomCreateRequest request,
             @RequestPart final MultipartFile image
     ) {
         chatRoomFacade.create(accessor, serverId, ChatRoomType.GROUP, request, image);
@@ -61,7 +61,7 @@ public class ChatRoomController {
     public ApiResponse<Void> createMeeting(
             @Auth final Accessor accessor,
             @PathVariable("serverId") final Long serverId,
-            @RequestPart @Valid final CreateMeetingRequest request,
+            @RequestPart @Valid final MeetingCreateRequest request,
             @RequestPart final MultipartFile image
     ) {
         chatRoomFacade.create(accessor, serverId, ChatRoomType.MEETING, request, image);

@@ -8,7 +8,7 @@ import com.coastee.server.chatroom.domain.ChatRoom;
 import com.coastee.server.chatroom.domain.ChatRoomType;
 import com.coastee.server.chatroom.domain.Scope;
 import com.coastee.server.chatroom.dto.ChatRoomElements;
-import com.coastee.server.chatroom.dto.request.CreateChatRoomRequest;
+import com.coastee.server.chatroom.dto.request.ChatRoomCreateRequest;
 import com.coastee.server.chatroom.service.ChatRoomEntryService;
 import com.coastee.server.chatroom.service.ChatRoomService;
 import com.coastee.server.hashtag.service.HashTagService;
@@ -46,7 +46,7 @@ public class ChatRoomFacade {
             final Accessor accessor,
             final Long serverId,
             final ChatRoomType type,
-            final CreateChatRoomRequest request,
+            final ChatRoomCreateRequest request,
             final MultipartFile image
     ) {
         User user = userService.findById(accessor.getUserId());

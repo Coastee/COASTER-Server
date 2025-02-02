@@ -5,6 +5,7 @@ import com.coastee.server.global.apipayload.exception.handler.InvalidJwtExceptio
 import com.coastee.server.login.domain.OAuthUserInfo;
 import com.coastee.server.user.domain.User;
 import com.coastee.server.user.domain.repository.UserRepository;
+import com.coastee.server.user.dto.request.UserUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,12 +36,20 @@ public class UserService {
     }
 
     private User createAndSaveUser(final OAuthUserInfo userInfo) {
-        User user = User.of()
-                .nickname(userInfo.getName())
-                .email(userInfo.getEmail())
-                .socialType(userInfo.getSocialType())
-                .socialId(userInfo.getSocialId())
-                .build();
+        User user = new User(
+                userInfo.getName(),
+                userInfo.getEmail(),
+                userInfo.getSocialType(),
+                userInfo.getSocialId()
+        );
         return userRepository.save(user);
+    }
+
+    public void update(final User user, final UserUpdateRequest request) {
+        request.validateNullValue(user);
+        user.updateNickname(request.getNickname());
+        user.updateUrlList(request.getUrlList());
+        user.updateUserIntro(request.getHeadline(), request.getJob(), request.getExpYears());
+        user.updateBio(request.getBio());
     }
 }

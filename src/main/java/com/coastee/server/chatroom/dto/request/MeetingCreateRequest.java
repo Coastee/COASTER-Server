@@ -20,7 +20,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
-public class CreateMeetingRequest extends CreateChatRoomRequest {
+public class MeetingCreateRequest extends ChatRoomCreateRequest {
     @Min(value = 2, message = "최소 참여 인원은 2명입니다.")
     private int maxCount;
 
@@ -34,7 +34,7 @@ public class CreateMeetingRequest extends CreateChatRoomRequest {
     private String location;
     private String details;
 
-    public CreateMeetingRequest(
+    public MeetingCreateRequest(
             final String title,
             final String content,
             final Set<String> hashTags,
