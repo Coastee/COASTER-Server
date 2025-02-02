@@ -22,7 +22,6 @@ public class ChatRoomElement {
         this.thumbnail = chatRoom.getThumbnail();
         this.title = chatRoom.getTitle();
         this.content = chatRoom.getContent();
-        if (chatRoom.getPeriod() != null)
-            this.period = new PeriodElement(chatRoom.getPeriod());
+        this.period = new PeriodElement(chatRoom.getPeriod());
     }
 }

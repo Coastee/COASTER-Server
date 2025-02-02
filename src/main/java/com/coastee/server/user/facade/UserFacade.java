@@ -36,6 +36,7 @@ public class UserFacade {
                 .build();
     }
 
+    @Transactional
     public void update(
             final Long userId,
             final UserUpdateRequest request,

@@ -15,6 +15,7 @@ import java.util.List;
 
 import static com.coastee.server.global.apipayload.code.status.ErrorStatus.MAX_PARTICIPANT;
 import static com.coastee.server.global.domain.Constant.MAX_COUNT;
+import static com.coastee.server.global.domain.Constant.UNLIMITED;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -47,10 +48,10 @@ public class ChatRoom extends BaseEntity {
     private ChatRoomType chatRoomType;
 
     @Embedded
-    private Period period;
+    private Period period = new Period();
 
     @Embedded
-    private Address address;
+    private Address address = new Address();
 
     private int maxCount;
 
@@ -83,6 +84,21 @@ public class ChatRoom extends BaseEntity {
         this.remainCount = maxCount;
     }
 
+    public static ChatRoom entireChatRoom(
+            final Server server
+    ) {
+        return new ChatRoom(
+                server,
+                null,
+                null,
+                null,
+                ChatRoomType.ENTIRE,
+                new Period(),
+                new Address(),
+                UNLIMITED
+        );
+    }
+
     public static ChatRoom groupChatRoom(
             final Server server,
             final User user,
@@ -95,8 +111,8 @@ public class ChatRoom extends BaseEntity {
                 title,
                 content,
                 ChatRoomType.GROUP,
-                null,
-                null,
+                new Period(),
+                new Address(),
                 MAX_COUNT
         );
     }

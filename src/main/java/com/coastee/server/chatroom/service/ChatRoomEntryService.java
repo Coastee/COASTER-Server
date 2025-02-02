@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.coastee.server.global.apipayload.code.status.ErrorStatus.NOT_PARTICIPANT;
+import static com.coastee.server.global.apipayload.code.status.ErrorStatus.NOT_IN_CHATROOM;
 
 @Service
 @Transactional(readOnly = true)
@@ -41,17 +41,16 @@ public class ChatRoomEntryService {
     @Transactional
     public void exit(final User user, final ChatRoom chatRoom) {
         chatRoom.exit();
-        ChatRoomEntry chatRoomEntry = chatRoomEntryRepository
-                .findByUserAndChatRoom(user, chatRoom)
-                .orElseThrow(() -> new GeneralException(NOT_PARTICIPANT));
+        ChatRoomEntry chatRoomEntry = validateJoin(user, chatRoom);
         chatRoomEntry.delete();
     }
 
-    public void validateJoin(final User user, final ChatRoom chatRoom) {
+    public ChatRoomEntry validateJoin(final User user, final ChatRoom chatRoom) {
         ChatRoomEntry chatRoomEntry = chatRoomEntryRepository
                 .findByUserAndChatRoom(user, chatRoom)
-                .orElseThrow(() -> new GeneralException(NOT_PARTICIPANT));
-        if (chatRoomEntry.isDeleted()) throw new GeneralException(NOT_PARTICIPANT);
+                .orElseThrow(() -> new GeneralException(NOT_IN_CHATROOM));
+        if (chatRoomEntry.isDeleted()) throw new GeneralException(NOT_IN_CHATROOM);
+        return chatRoomEntry;
     }
 
     public Map<Long, Boolean> findHasEnteredByChatRoomList(

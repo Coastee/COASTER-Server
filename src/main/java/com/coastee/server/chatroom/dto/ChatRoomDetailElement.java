@@ -17,10 +17,22 @@ import static lombok.AccessLevel.PROTECTED;
 public class ChatRoomDetailElement extends ChatRoomElement {
     private UserElement user;
     private AddressElement address;
-    private boolean hasEntered;
+    private Boolean hasEntered;
     private int maxCount;
     private int currentCount;
     private List<HashTagElement> hashTagList;
+
+    public ChatRoomDetailElement(final ChatRoom chatRoom) {
+        super(chatRoom);
+        this.user = new UserElement(chatRoom.getUser());
+        if (chatRoom.getAddress() != null)
+            this.address = new AddressElement(chatRoom.getAddress());
+        this.maxCount = chatRoom.getMaxCount();
+        this.currentCount = chatRoom.getCurrentCount();
+        this.hashTagList = chatRoom.getTagList().stream().map(
+                chatRoomTag -> new HashTagElement(chatRoomTag.getHashTag())
+        ).toList();
+    }
 
     public ChatRoomDetailElement(
             final ChatRoom chatRoom,
