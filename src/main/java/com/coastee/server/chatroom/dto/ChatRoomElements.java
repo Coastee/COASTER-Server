@@ -32,6 +32,15 @@ public class ChatRoomElements {
     }
 
     public static ChatRoomElements detail(
+            final Page<ChatRoom> chatRoomPage
+    ) {
+        return new ChatRoomElements(
+                new PageInfo(chatRoomPage),
+                chatRoomPage.getContent().stream().map(ChatRoomDetailElement::new).toList()
+        );
+    }
+
+    public static ChatRoomElements detail(
             final Page<ChatRoom> chatRoomPage,
             final Map<Long, Boolean> hasEnteredMap
     ) {

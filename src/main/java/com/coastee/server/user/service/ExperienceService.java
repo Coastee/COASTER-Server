@@ -33,10 +33,12 @@ public class ExperienceService {
         );
     }
 
+    @Transactional
     public Experience save(final Experience experience) {
         return experienceRepository.save(experience);
     }
 
+    @Transactional
     public void update(
             final Experience experience,
             final ExperienceUpdateRequest request

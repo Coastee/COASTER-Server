@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.coastee.server.global.domain.BaseEntityStatus.ACTIVE;
 import static com.coastee.server.global.apipayload.code.status.ErrorStatus.NOT_IN_SERVER;
 
 @Service
@@ -29,8 +28,15 @@ public class ServerEntryService {
 
     @Transactional
     public void exit(final User user, final Server server) {
-        ServerEntry serverEntry = serverEntryRepository.findByUserAndServerAndStatus(user, server, ACTIVE)
-                .orElseThrow(() -> new GeneralException(NOT_IN_SERVER));
+        ServerEntry serverEntry = validateJoin(user, server);
         serverEntry.delete();
+    }
+
+    public ServerEntry validateJoin(final User user, final Server server) {
+        ServerEntry serverEntry = serverEntryRepository
+                .findByUserAndServer(user, server)
+                .orElseThrow(() -> new GeneralException(NOT_IN_SERVER));
+        if (serverEntry.isDeleted()) throw new GeneralException(NOT_IN_SERVER);
+        return serverEntry;
     }
 }

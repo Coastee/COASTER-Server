@@ -17,11 +17,13 @@ public class ExperienceFacade {
     private final UserService userService;
     private final ExperienceService experienceService;
 
+    @Transactional
     public void create(final Long userId, final ExperienceCreateRequest request) {
         User user = userService.findById(userId);
         experienceService.save(request.toEntity(user));
     }
 
+    @Transactional
     public void update(
             final Long userId,
             final Long experienceId,
@@ -34,6 +36,7 @@ public class ExperienceFacade {
         experienceService.update(experience, request);
     }
 
+    @Transactional
     public void delete(final Long userId, final Long experienceId) {
         User user = userService.findById(userId);
         Experience experience = experienceService.findById(experienceId);

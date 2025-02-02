@@ -5,7 +5,9 @@ import com.coastee.server.chatroom.domain.ChatRoomTag;
 import com.coastee.server.chatroom.domain.repository.ChatRoomTagRepository;
 import com.coastee.server.hashtag.domain.HashTag;
 import com.coastee.server.hashtag.domain.repository.HashTagRepository;
+import com.coastee.server.server.domain.Server;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,10 @@ public class HashTagService {
     public void tag(final ChatRoom chatRoom, final Set<String> tagNameSet) {
         List<HashTag> hashTagList = findOrCreateTag(tagNameSet);
         connectTag(chatRoom, hashTagList);
+    }
+
+    public List<HashTag> findPopularTagByServer(final Server server, final Pageable pageable) {
+        return hashTagRepository.findPopularTagByServer(server, pageable).getContent();
     }
 
     private void connectTag(final ChatRoom chatRoom, final List<HashTag> hashTagList) {

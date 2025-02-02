@@ -42,12 +42,12 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // Server
     INVALID_SERVER_ID(BAD_REQUEST, "SERVER4001", "유효하지 않은 서버 아이디입니다."),
-    NOT_IN_SERVER(BAD_REQUEST, "SERVER4002", "해당 유저는 이 서버에 참여하고 있지 않습니다."),
+    NOT_IN_SERVER(BAD_REQUEST, "SERVER4002", "현재 유저는 이 서버에 참여하고 있지 않습니다."),
 
     // Chatroom
     INVALID_CHATROOM_ID(BAD_REQUEST, "CHATROOM4001", "유효하지 않은 채팅방 아이디입니다."),
     MAX_PARTICIPANT(BAD_REQUEST, "CHATROOM4002", "최대 참여자 수에 도달하여 더 이상 참여할 수 없는 채팅방입니다."),
-    NOT_PARTICIPANT(BAD_REQUEST, "CHATROOM4003", "해당 채팅방의 참여자가 아닙니다."),
+    NOT_IN_CHATROOM(BAD_REQUEST, "CHATROOM4003", "현재 유저는 이 채팅방에 참여하고 있지 않습니다."),
     FAIL_CREATE_CHATROOM(BAD_REQUEST, "CHATROOM4004", "채팅방 생성 과정에 실패하였습니다. 요청 엔드포인트가 잘못되었습니다.");
 
     private final HttpStatus httpStatus;

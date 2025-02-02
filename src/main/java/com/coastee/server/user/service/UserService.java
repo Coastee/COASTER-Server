@@ -45,6 +45,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public void update(final User user, final UserUpdateRequest request) {
         request.validateNullValue(user);
         user.updateNickname(request.getNickname());

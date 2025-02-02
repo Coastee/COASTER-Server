@@ -1,5 +1,6 @@
 package com.coastee.server.server.domain;
 
+import com.coastee.server.global.domain.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -12,7 +13,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class Server {
+public class Server extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
