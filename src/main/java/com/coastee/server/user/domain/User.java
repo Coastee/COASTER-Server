@@ -30,7 +30,8 @@ public class User extends BaseEntity {
 
     private String email;
 
-    private String headline;
+    @Embedded
+    private UserIntro userIntro;
 
     private String bio;
 
@@ -55,7 +56,7 @@ public class User extends BaseEntity {
             final String nickname,
             final LocalDateTime birthDate,
             final String email,
-            final String headline,
+            final UserIntro userIntro,
             final String bio,
             final String profileImage,
             final String refreshToken,
@@ -66,7 +67,7 @@ public class User extends BaseEntity {
         this.nickname = nickname;
         this.birthDate = birthDate;
         this.email = email;
-        this.headline = headline;
+        this.userIntro = userIntro;
         this.bio = bio;
         this.profileImage = profileImage;
         this.refreshToken = refreshToken;

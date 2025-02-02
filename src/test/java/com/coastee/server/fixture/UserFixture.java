@@ -1,5 +1,6 @@
 package com.coastee.server.fixture;
 
+import com.coastee.server.user.domain.UserIntro;
 import com.coastee.server.user.domain.SocialType;
 import com.coastee.server.user.domain.User;
 
@@ -13,7 +14,7 @@ public class UserFixture {
                 .nickname("user")
                 .birthDate(LocalDateTime.now())
                 .email("user@naver.com")
-                .headline("headline")
+                .userIntro(new UserIntro("headline", "developer", 5))
                 .bio("bio")
                 .profileImage("https://avatars.githubusercontent.com/u/193146868?s=200&v=4")
                 .urlList(
@@ -33,7 +34,7 @@ public class UserFixture {
                 .nickname(nickname)
                 .birthDate(LocalDateTime.now())
                 .email(nickname + "@naver.com")
-                .headline("headline")
+                .userIntro(new UserIntro("headline", "developer", 5))
                 .bio("bio")
                 .profileImage("https://avatars.githubusercontent.com/u/193146868?s=200&v=4")
                 .urlList(
