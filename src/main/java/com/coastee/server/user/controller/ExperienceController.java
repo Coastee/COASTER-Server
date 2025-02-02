@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/users/{userId}/experiences")
+@RequestMapping("/api/v1/users/{userId}/experiences")
 public class ExperienceController {
     private final ExperienceFacade experienceFacade;
     private final UserFacade userFacade;

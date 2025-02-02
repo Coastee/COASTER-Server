@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import static com.coastee.server.global.domain.Constant.CURRENT_DATE;
 import static lombok.AccessLevel.PROTECTED;
 
 @Getter
@@ -33,7 +34,12 @@ public class ExperienceCreateRequest {
                 user,
                 title,
                 content,
-                new Period(startDate, endDate)
+                new Period(startDate, getEndDate())
         );
+    }
+
+    private LocalDateTime getEndDate() {
+        if (endDate != null) return endDate;
+        return CURRENT_DATE;
     }
 }
