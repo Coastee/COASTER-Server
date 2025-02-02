@@ -4,7 +4,6 @@ import com.coastee.server.chatroom.domain.ChatRoom;
 import com.coastee.server.global.domain.BaseEntity;
 import com.coastee.server.user.domain.User;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -32,7 +31,6 @@ public class Chat extends BaseEntity {
 
     private ChatType type;
 
-    @Builder
     public Chat(
             final User user,
             final ChatRoom chatRoom,

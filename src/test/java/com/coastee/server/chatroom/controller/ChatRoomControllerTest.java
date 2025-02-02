@@ -11,8 +11,8 @@ import com.coastee.server.chatroom.domain.repository.ChatRoomTagRepository;
 import com.coastee.server.chatroom.dto.ChatRoomDetailElement;
 import com.coastee.server.chatroom.dto.ChatRoomElement;
 import com.coastee.server.chatroom.dto.ChatRoomElements;
-import com.coastee.server.chatroom.dto.request.CreateChatRoomRequest;
-import com.coastee.server.chatroom.dto.request.CreateMeetingRequest;
+import com.coastee.server.chatroom.dto.request.ChatRoomCreateRequest;
+import com.coastee.server.chatroom.dto.request.MeetingCreateRequest;
 import com.coastee.server.chatroom.facade.ChatRoomFacade;
 import com.coastee.server.fixture.ChatFixture;
 import com.coastee.server.fixture.HashTagFixture;
@@ -150,7 +150,10 @@ class ChatRoomControllerTest extends ControllerTest {
                                         fieldWithPath("result.chatRoomList[].user.id").type(NUMBER).description("개설자 아이디"),
                                         fieldWithPath("result.chatRoomList[].user.profileImage").type(STRING).description("개설자 프로필 사진"),
                                         fieldWithPath("result.chatRoomList[].user.nickname").type(STRING).description("개설자 닉네임"),
-                                        fieldWithPath("result.chatRoomList[].user.headline").type(STRING).description("개설자 한줄소개"),
+                                        fieldWithPath("result.chatRoomList[].user.userIntro").type(OBJECT).description("개설자 소개"),
+                                        fieldWithPath("result.chatRoomList[].user.userIntro.headline").type(STRING).description("한줄소개"),
+                                        fieldWithPath("result.chatRoomList[].user.userIntro.job").type(STRING).description("직업"),
+                                        fieldWithPath("result.chatRoomList[].user.userIntro.expYears").type(NUMBER).description("경력 년차"),
                                         fieldWithPath("result.chatRoomList[].address").type(OBJECT).description("주소").optional(),
                                         fieldWithPath("result.chatRoomList[].address.location").type(STRING).description("장소").optional(),
                                         fieldWithPath("result.chatRoomList[].address.details").type(STRING).description("상세 설명").optional(),
@@ -288,7 +291,10 @@ class ChatRoomControllerTest extends ControllerTest {
                                         fieldWithPath("result.chatList[].user.id").type(NUMBER).description("유저 아이디"),
                                         fieldWithPath("result.chatList[].user.profileImage").type(STRING).description("프로필 사진"),
                                         fieldWithPath("result.chatList[].user.nickname").type(STRING).description("닉네임"),
-                                        fieldWithPath("result.chatList[].user.headline").type(STRING).description("한줄소개"),
+                                        fieldWithPath("result.chatList[].user.userIntro").type(OBJECT).description("소개"),
+                                        fieldWithPath("result.chatList[].user.userIntro.headline").type(STRING).description("한줄소개"),
+                                        fieldWithPath("result.chatList[].user.userIntro.job").type(STRING).description("직업"),
+                                        fieldWithPath("result.chatList[].user.userIntro.expYears").type(NUMBER).description("경력 년차"),
                                         fieldWithPath("result.chatList[].content").type(STRING).description("채팅 내용"),
                                         fieldWithPath("result.chatList[].createdDate").type(ARRAY).description("전송 시간"),
                                         fieldWithPath("result.chatList[].type").type(STRING)
@@ -296,128 +302,6 @@ class ChatRoomControllerTest extends ControllerTest {
                                 )
                         ))
                 .when().get("/api/v1/servers/{serverId}/{chatRoomType}/{chatRoomId}", 1, "meetings", 1)
-                .then().log().all().statusCode(200);
-    }
-
-    @DisplayName("그룹챗을 개설한다.")
-    @Test
-    void createGroup() throws Exception {
-        // given
-        doNothing().when(chatRoomFacade).create(any(), any(), any(), any(), any());
-        CreateChatRoomRequest requestDTO = new CreateChatRoomRequest("title", "content", Set.of("#A", "#B"));
-
-        MultiPartSpecification request = new MultiPartSpecBuilder(requestDTO, ObjectMapperType.JACKSON_2)
-                .controlName("request")
-                .mimeType(MediaType.APPLICATION_JSON_VALUE)
-                .charset("UTF-8")
-                .build();
-
-        MultiPartSpecification file =
-                new MultiPartSpecBuilder(getFile())
-                        .controlName("image")
-                        .mimeType(MediaType.IMAGE_PNG_VALUE)
-                        .charset("UTF-8")
-                        .build();
-
-        // when & then
-        RestAssured.given(spec).log().all()
-                .header(ACCESS_TOKEN_HEADER, ACCESS_TOKEN)
-                .multiPart(request)
-                .multiPart(file)
-                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                .filter(
-                        document("create-group",
-                                pathParameters(
-                                        parameterWithName("serverId").description("서버 아이디")
-                                ),
-                                requestParts(
-                                        partWithName("image").description("(opt) 썸네일 이미지 파일"),
-                                        partWithName("request").description("제목, 설명 등 json data")
-                                ),
-                                requestPartFields(
-                                        "request",
-                                        fieldWithPath("title").type(STRING).description("``request.title`` 제목 : 최소 1자 ~ 최대 20자"),
-                                        fieldWithPath("content").type(STRING).description("``request.content`` 설명 : 최대 80자"),
-                                        fieldWithPath("hashTags").type(ARRAY).description("``request.hashTags`` 해시태그 : 최대 10개")
-                                ),
-                                requestHeaders(
-                                        headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰")
-                                ),
-                                responseFields(
-                                        fieldWithPath("isSuccess").type(BOOLEAN).description("성공 여부"),
-                                        fieldWithPath("code").type(STRING).description("결과 코드"),
-                                        fieldWithPath("message").type(STRING).description("결과 메세지")
-                                )
-                        ))
-                .when().post("/api/v1/servers/{serverId}/groups", 1)
-                .then().log().all().statusCode(200);
-    }
-
-    @DisplayName("커피챗을 개설한다.")
-    @Test
-    void createMeeting() throws Exception {
-        // given
-        doNothing().when(chatRoomFacade).create(any(), any(), any(), any(), any());
-        CreateChatRoomRequest requestDTO = new CreateMeetingRequest(
-                "title",
-                "content",
-                Set.of("#A", "#B"),
-                5,
-                LocalDateTime.now().minusDays(1).minusHours(2),
-                LocalDateTime.now().minusDays(1),
-                "서울특별시 용산구 청파로47길 100",
-                "숙명여자대학교 1캠퍼스 정문 앞"
-        );
-
-        MultiPartSpecification request = new MultiPartSpecBuilder(requestDTO, ObjectMapperType.JACKSON_2)
-                .controlName("request")
-                .mimeType(MediaType.APPLICATION_JSON_VALUE)
-                .charset("UTF-8")
-                .build();
-
-        MultiPartSpecification file =
-                new MultiPartSpecBuilder(getFile())
-                        .controlName("image")
-                        .mimeType(MediaType.IMAGE_PNG_VALUE)
-                        .charset("UTF-8")
-                        .build();
-
-        // when & then
-        RestAssured.given(spec).log().all()
-                .header(ACCESS_TOKEN_HEADER, ACCESS_TOKEN)
-                .multiPart(request)
-                .multiPart(file)
-                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                .filter(
-                        document("create-meeting",
-                                pathParameters(
-                                        parameterWithName("serverId").description("서버 아이디")
-                                ),
-                                requestParts(
-                                        partWithName("image").description("(opt) 썸네일 이미지 파일"),
-                                        partWithName("request").description("제목, 설명 등 json data")
-                                ),
-                                requestPartFields(
-                                        "request",
-                                        fieldWithPath("title").type(STRING).description("``request.title`` 제목 : 최소 1자 ~ 최대 20자"),
-                                        fieldWithPath("content").type(STRING).description("``request.content`` 설명 : 최대 80자"),
-                                        fieldWithPath("hashTags").type(ARRAY).description("``request.hashTags`` 해시태그 : 최대 10개"),
-                                        fieldWithPath("maxCount").type(NUMBER).description("``request.startDate`` 참여인원"),
-                                        fieldWithPath("startDate").type(ARRAY).description("``request.startDate`` 시작시간"),
-                                        fieldWithPath("endDate").type(ARRAY).description("``request.endDate`` 종료시간"),
-                                        fieldWithPath("location").type(STRING).description("``request.location`` 장소"),
-                                        fieldWithPath("details").type(STRING).description("``request.details`` 장소 설명")
-                                ),
-                                requestHeaders(
-                                        headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰 - 커피챗 개설자")
-                                ),
-                                responseFields(
-                                        fieldWithPath("isSuccess").type(BOOLEAN).description("성공 여부"),
-                                        fieldWithPath("code").type(STRING).description("결과 코드"),
-                                        fieldWithPath("message").type(STRING).description("결과 메세지")
-                                )
-                        ))
-                .when().post("/api/v1/servers/{serverId}/meetings", 1)
                 .then().log().all().statusCode(200);
     }
 

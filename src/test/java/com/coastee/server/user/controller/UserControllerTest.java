@@ -4,25 +4,34 @@ import com.coastee.server.fixture.ExperienceFixture;
 import com.coastee.server.user.domain.Experience;
 import com.coastee.server.user.domain.repository.ExperienceRepository;
 import com.coastee.server.user.dto.UserDetailElement;
+import com.coastee.server.user.dto.request.UserUpdateRequest;
 import com.coastee.server.user.facade.UserFacade;
 import com.coastee.server.util.ControllerTest;
 import io.restassured.RestAssured;
+import io.restassured.builder.MultiPartSpecBuilder;
 import io.restassured.http.ContentType;
+import io.restassured.mapper.ObjectMapperType;
+import io.restassured.specification.MultiPartSpecification;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.List;
 
 import static com.coastee.server.global.domain.Constant.DEFAULT_PAGING_SIZE;
 import static com.coastee.server.global.util.ListToPageConverter.toPage;
+import static com.coastee.server.util.FileUtil.getFile;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 
@@ -35,7 +44,7 @@ class UserControllerTest extends ControllerTest {
     @MockitoBean
     private UserFacade userFacade;
 
-    @DisplayName("유저 프로필 조회")
+    @DisplayName("유저의 프로필을 조회한다.")
     @Test
     void getProfile() throws Exception {
         // given
@@ -67,7 +76,10 @@ class UserControllerTest extends ControllerTest {
                                         fieldWithPath("result.id").type(NUMBER).description("유저 아이디"),
                                         fieldWithPath("result.profileImage").type(STRING).description("프로필 사진"),
                                         fieldWithPath("result.nickname").type(STRING).description("닉네임"),
-                                        fieldWithPath("result.headline").type(STRING).description("헤드라인"),
+                                        fieldWithPath("result.userIntro").type(OBJECT).description("개설자 소개"),
+                                        fieldWithPath("result.userIntro.headline").type(STRING).description("한줄소개"),
+                                        fieldWithPath("result.userIntro.job").type(STRING).description("직업"),
+                                        fieldWithPath("result.userIntro.expYears").type(NUMBER).description("경력 년차"),
                                         fieldWithPath("result.bio").type(STRING).description("헤드라인"),
                                         fieldWithPath("result.urlList").type(ARRAY).description("URL 리스트"),
                                         fieldWithPath("result.experience").type(OBJECT).description("경력"),
@@ -85,6 +97,70 @@ class UserControllerTest extends ControllerTest {
                                 )
                         ))
                 .when().get("/api/v1/users/{userId}", currentUser.getId())
+                .then().log().all().statusCode(200);
+    }
+
+    @DisplayName("유저의 정보를 수정한다.")
+    @Test
+    void update() throws Exception {
+        // given
+        doNothing().when(userFacade).update(anyLong(), any(), any());
+        UserUpdateRequest requestDTO = new UserUpdateRequest(
+                "newnick",
+                List.of("https://newUrl1", "https://newUrl2"),
+                "newheadline",
+                "newJob",
+                5,
+                "newbio"
+        );
+
+        MultiPartSpecification request = new MultiPartSpecBuilder(requestDTO, ObjectMapperType.JACKSON_2)
+                .controlName("request")
+                .mimeType(MediaType.APPLICATION_JSON_VALUE)
+                .charset("UTF-8")
+                .build();
+
+        MultiPartSpecification file =
+                new MultiPartSpecBuilder(getFile())
+                        .controlName("image")
+                        .mimeType(MediaType.IMAGE_PNG_VALUE)
+                        .charset("UTF-8")
+                        .build();
+
+        // when & then
+        RestAssured.given(spec).log().all()
+                .header(ACCESS_TOKEN_HEADER, ACCESS_TOKEN)
+                .multiPart(request)
+                .multiPart(file)
+                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                .filter(
+                        document("update-profile",
+                                pathParameters(
+                                        parameterWithName("userId").description("유저 아이디")
+                                ),
+                                requestParts(
+                                        partWithName("image").description("(opt) 썸네일 이미지 파일"),
+                                        partWithName("request").description("제목, 설명 등 json data")
+                                ),
+                                requestPartFields(
+                                        "request",
+                                        fieldWithPath("nickname").type(STRING).description("``request.nickname`` 닉네임"),
+                                        fieldWithPath("urlList").type(ARRAY).description("``request.urlList`` url 리스트"),
+                                        fieldWithPath("headline").type(STRING).description("``request.headline`` 헤드라인"),
+                                        fieldWithPath("job").type(STRING).description("``request.job`` 직업"),
+                                        fieldWithPath("expYears").type(NUMBER).description("``request.expYears`` 년차"),
+                                        fieldWithPath("bio").type(STRING).description("``request.bio`` 한줄소개")
+                                ),
+                                requestHeaders(
+                                        headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰")
+                                ),
+                                responseFields(
+                                        fieldWithPath("isSuccess").type(BOOLEAN).description("성공 여부"),
+                                        fieldWithPath("code").type(STRING).description("결과 코드"),
+                                        fieldWithPath("message").type(STRING).description("결과 메세지")
+                                )
+                        ))
+                .when().post("/api/v1/users/{userId}", currentUser.getId())
                 .then().log().all().statusCode(200);
     }
 }

@@ -23,7 +23,9 @@ public class ExperienceElement {
         this.id = experience.getId();
         this.title = experience.getTitle();
         this.content = experience.getContent();
-        this.startDate = experience.getStartDate();
-        this.endDate = experience.getEndDate();
+        if (experience.getPeriod() != null) {
+            this.startDate = experience.getPeriod().getStartDate();
+            this.endDate = experience.getPeriod().getEndDate();
+        }
     }
 }

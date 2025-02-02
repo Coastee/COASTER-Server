@@ -5,7 +5,7 @@ import com.coastee.server.chatroom.domain.ChatRoomType;
 import com.coastee.server.chatroom.domain.Scope;
 import com.coastee.server.chatroom.dto.ChatRoomElement;
 import com.coastee.server.chatroom.dto.ChatRoomElements;
-import com.coastee.server.chatroom.dto.request.CreateChatRoomRequest;
+import com.coastee.server.chatroom.dto.request.ChatRoomCreateRequest;
 import com.coastee.server.fixture.ServerFixture;
 import com.coastee.server.fixture.UserFixture;
 import com.coastee.server.server.domain.Server;
@@ -48,21 +48,21 @@ class ChatRoomFacadeTest extends ServiceTest {
                 Accessor.user(currentUser.getId()),
                 server.getId(),
                 ChatRoomType.GROUP,
-                new CreateChatRoomRequest("title A", "content A", Set.of("#A", "#B", "C")),
+                new ChatRoomCreateRequest("title A", "content A", Set.of("#A", "#B", "C")),
                 null
         );
         chatRoomFacade.create(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
                 ChatRoomType.GROUP,
-                new CreateChatRoomRequest("title B", "content B", Set.of("#D", "#E", "F")),
+                new ChatRoomCreateRequest("title B", "content B", Set.of("#D", "#E", "F")),
                 null
         );
         chatRoomFacade.create(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
                 ChatRoomType.GROUP,
-                new CreateChatRoomRequest("title C", "content C", Set.of("#G", "#H", "I")),
+                new ChatRoomCreateRequest("title C", "content C", Set.of("#G", "#H", "I")),
                 null
         );
 
@@ -93,21 +93,21 @@ class ChatRoomFacadeTest extends ServiceTest {
                 Accessor.user(currentUser.getId()),
                 server.getId(),
                 ChatRoomType.GROUP,
-                new CreateChatRoomRequest("title A", "content A", Set.of("#A", "#B", "C")),
+                new ChatRoomCreateRequest("title A", "content A", Set.of("#A", "#B", "C")),
                 null
         );
         chatRoomFacade.create(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
                 ChatRoomType.GROUP,
-                new CreateChatRoomRequest("title B", "content B", Set.of("#D", "#E", "F")),
+                new ChatRoomCreateRequest("title B", "content B", Set.of("#D", "#E", "F")),
                 null
         );
         chatRoomFacade.create(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
                 ChatRoomType.GROUP,
-                new CreateChatRoomRequest("title C", "content C", Set.of("#G", "#H", "I")),
+                new ChatRoomCreateRequest("title C", "content C", Set.of("#G", "#H", "I")),
                 null
         );
 
@@ -139,21 +139,21 @@ class ChatRoomFacadeTest extends ServiceTest {
                 Accessor.user(anotherUser.getId()),
                 server.getId(),
                 ChatRoomType.GROUP,
-                new CreateChatRoomRequest("title A", "content A", Set.of("#A", "#B", "C")),
+                new ChatRoomCreateRequest("title A", "content A", Set.of("#A", "#B", "C")),
                 null
         );
         chatRoomFacade.create(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
                 ChatRoomType.GROUP,
-                new CreateChatRoomRequest("title B", "content B", Set.of("#D", "#E", "F")),
+                new ChatRoomCreateRequest("title B", "content B", Set.of("#D", "#E", "F")),
                 null
         );
         chatRoomFacade.create(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
                 ChatRoomType.GROUP,
-                new CreateChatRoomRequest("title C", "content C", Set.of("#G", "#H", "I")),
+                new ChatRoomCreateRequest("title C", "content C", Set.of("#G", "#H", "I")),
                 null
         );
 

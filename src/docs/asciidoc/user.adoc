@@ -37,3 +37,51 @@ include::{snippets}/get-profile/query-parameters.adoc[]
 
 include::{snippets}/get-profile/response-body.adoc[]
 include::{snippets}/get-profile/response-fields.adoc[]
+
+
+== `POST` Update User
+
+유저 프로필 수정
+
+```
+/api/v1/users/{userId}
+```
+
+include::{snippets}/update-profile/curl-request.adoc[]
+
+=== Request
+
+==== request header
+
+include::{snippets}/update-profile/request-headers.adoc[]
+
+==== path params
+
+include::{snippets}/update-profile/path-parameters.adoc[]
+
+==== request parts
+
+include::{snippets}/update-profile/request-parts.adoc[]
+
+- request json data fields는 다음과 같습니다.
+```json
+{
+    "nickname": "newnick",
+    "urlList": [
+        "https://newUrl1",
+        "https://newUrl2"
+    ],
+    "headline": "newheadline",
+    "job": "newJob",
+    "expYears": 5,
+    "bio": "newbio"
+}
+```
+include::{snippets}/update-profile/request-part-request-fields.adoc[]
+
+=== Response
+
+==== response body
+
+include::{snippets}/update-profile/response-body.adoc[]
+include::{snippets}/update-profile/response-fields.adoc[]

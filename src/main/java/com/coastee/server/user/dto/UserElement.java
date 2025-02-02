@@ -14,12 +14,12 @@ public class UserElement {
     private Long id;
     private String profileImage;
     private String nickname;
-    private String headline;
+    private UserIntroElement userIntro;
 
     public UserElement(final User user) {
         this.id = user.getId();
         this.profileImage = user.getProfileImage();
         this.nickname = user.getNickname();
-        this.headline = user.getHeadline();
+        this.userIntro = new UserIntroElement(user.getUserIntro());
     }
 }

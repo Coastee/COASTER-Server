@@ -2,7 +2,6 @@ package com.coastee.server.user.domain;
 
 import com.coastee.server.global.domain.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -30,7 +29,8 @@ public class User extends BaseEntity {
 
     private String email;
 
-    private String headline;
+    @Embedded
+    private UserIntro userIntro = new UserIntro();
 
     private String bio;
 
@@ -50,12 +50,11 @@ public class User extends BaseEntity {
 
     private Boolean linkedInVerify;
 
-    @Builder(builderMethodName = "of")
     public User(
             final String nickname,
             final LocalDateTime birthDate,
             final String email,
-            final String headline,
+            final UserIntro userIntro,
             final String bio,
             final String profileImage,
             final String refreshToken,
@@ -66,7 +65,7 @@ public class User extends BaseEntity {
         this.nickname = nickname;
         this.birthDate = birthDate;
         this.email = email;
-        this.headline = headline;
+        this.userIntro = userIntro;
         this.bio = bio;
         this.profileImage = profileImage;
         this.refreshToken = refreshToken;
@@ -75,8 +74,44 @@ public class User extends BaseEntity {
         this.socialId = socialId;
     }
 
+    public User(
+            final String nickname,
+            final String email,
+            final SocialType socialType,
+            final String socialId
+    ) {
+        this.nickname = nickname;
+        this.email = email;
+        this.socialType = socialType;
+        this.socialId = socialId;
+    }
+
     public void updateRefreshToken(final String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public void updateNickname(final String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updateUrlList(final List<String> urlList) {
+        this.urlList = urlList;
+    }
+
+    public void updateUserIntro(
+            final String headline,
+            final String job,
+            final int expYears
+    ) {
+        this.userIntro = new UserIntro(headline, job, expYears);
+    }
+
+    public void updateBio(final String bio) {
+        this.bio = bio;
+    }
+
+    public void updateProfileImage(final String profileImage) {
+        this.profileImage = profileImage;
     }
 
     public void verify(final String linkedInId) {

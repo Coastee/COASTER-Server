@@ -1,13 +1,11 @@
 package com.coastee.server.user.domain;
 
+import com.coastee.server.chatroom.domain.Period;
 import com.coastee.server.global.domain.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
-
-import java.time.LocalDateTime;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
@@ -29,22 +27,18 @@ public class Experience extends BaseEntity {
 
     private String content;
 
-    private LocalDateTime startDate;
+    @Embedded
+    private Period period = new Period();
 
-    private LocalDateTime endDate;
-
-    @Builder(builderMethodName = "of")
     public Experience(
             final User user,
             final String title,
-            final LocalDateTime startDate,
-            final LocalDateTime endDate,
-            final String content
+            final String content,
+            final Period period
     ) {
         this.user = user;
         this.title = title;
         this.content = content;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.period = period;
     }
 }

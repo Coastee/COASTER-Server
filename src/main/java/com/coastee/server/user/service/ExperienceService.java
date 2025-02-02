@@ -21,7 +21,7 @@ public class ExperienceService {
         return experienceRepository.findAllByUser(user, PageRequest.of(
                 pageable.getPageNumber(),
                 pageable.getPageSize(),
-                Sort.by(Sort.Direction.ASC, "endDate"))
+                Sort.by(Sort.Direction.DESC, "endDate"))
         );
     }
 }
