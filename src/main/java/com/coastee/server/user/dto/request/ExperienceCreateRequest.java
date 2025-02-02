@@ -38,8 +38,8 @@ public class ExperienceCreateRequest {
         );
     }
 
-    private LocalDateTime getEndDate() {
-        if (endDate != null) return endDate;
+    public LocalDateTime getEndDate() {
+        if (this.endDate != null) return this.endDate;
         return CURRENT_DATE;
     }
 }

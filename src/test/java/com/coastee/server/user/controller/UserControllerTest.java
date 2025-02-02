@@ -38,11 +38,11 @@ import static org.springframework.restdocs.restassured.RestAssuredRestDocumentat
 @DisplayName("유저 컨트롤러 테스트")
 class UserControllerTest extends ControllerTest {
 
-    @Autowired
-    private ExperienceRepository experienceRepository;
-
     @MockitoBean
     private UserFacade userFacade;
+
+    @Autowired
+    private ExperienceRepository experienceRepository;
 
     @DisplayName("유저의 프로필을 조회한다.")
     @Test
@@ -93,7 +93,7 @@ class UserControllerTest extends ControllerTest {
                                         fieldWithPath("result.experience.experienceList[].title").type(STRING).description("제목"),
                                         fieldWithPath("result.experience.experienceList[].content").type(STRING).description("상세 내용"),
                                         fieldWithPath("result.experience.experienceList[].startDate").type(ARRAY).description("시작날짜"),
-                                        fieldWithPath("result.experience.experienceList[].endDate").type(ARRAY).description("종료날짜")
+                                        fieldWithPath("result.experience.experienceList[].endDate").type(ARRAY).description("종료날짜 : 현재까지 진행되는 경력일 경우 null로 전달됨.")
                                 )
                         ))
                 .when().get("/api/v1/users/{userId}", currentUser.getId())
