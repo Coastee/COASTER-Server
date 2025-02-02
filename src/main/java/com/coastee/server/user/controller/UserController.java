@@ -18,7 +18,7 @@ import static com.coastee.server.global.domain.Constant.DEFAULT_PAGING_SIZE;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/users")
+@RequestMapping("/api/v1/users")
 public class UserController {
     private final UserFacade userFacade;
 

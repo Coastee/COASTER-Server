@@ -4,12 +4,14 @@ import com.coastee.server.global.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static jakarta.persistence.EnumType.STRING;
 import static lombok.AccessLevel.PROTECTED;
@@ -84,6 +86,18 @@ public class User extends BaseEntity {
         this.email = email;
         this.socialType = socialType;
         this.socialId = socialId;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+            return false;
+        }
+        User that = (User) o;
+        return id != null && Objects.equals(id, that.id);
     }
 
     public void updateRefreshToken(final String refreshToken) {

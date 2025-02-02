@@ -1,5 +1,6 @@
 package com.coastee.server.user.dto;
 
+import com.coastee.server.chatroom.domain.Period;
 import com.coastee.server.user.domain.Experience;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import static com.coastee.server.global.domain.Constant.CURRENT_DATE;
 import static lombok.AccessLevel.PROTECTED;
 
 @Getter
@@ -23,9 +25,10 @@ public class ExperienceElement {
         this.id = experience.getId();
         this.title = experience.getTitle();
         this.content = experience.getContent();
-        if (experience.getPeriod() != null) {
-            this.startDate = experience.getPeriod().getStartDate();
-            this.endDate = experience.getPeriod().getEndDate();
-        }
+        Period period = experience.getPeriod();
+        this.startDate = period.getStartDate();
+        this.endDate = period.getEndDate();
+        if (period.getEndDate().equals(CURRENT_DATE))
+            this.endDate = null;
     }
 }

@@ -1,0 +1,104 @@
+= Experience API
+coaster server
+:doctype: book
+:icons: font
+:source-highlighter: highlishtjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+== `POST` Create Experience
+
+경력 생성
+
+=== Request
+
+```
+/api/v1/users/{userId}/experiences
+```
+
+include::{snippets}/create-experience/curl-request.adoc[]
+
+==== header
+
+include::{snippets}/create-experience/request-headers.adoc[]
+
+==== path parameters
+
+include::{snippets}/create-experience/path-parameters.adoc[]
+
+==== request body
+
+include::{snippets}/create-experience/request-body.adoc[]
+include::{snippets}/create-experience/request-fields.adoc[]
+
+=== Response
+
+==== response body
+
+include::{snippets}/create-experience/response-body.adoc[]
+include::{snippets}/create-experience/response-fields.adoc[]
+
+== `POST` Update Experience
+
+경력 수정
+
+=== Request
+
+```
+/api/v1/users/{userId}/experiences/{experienceId}
+```
+
+include::{snippets}/update-experience/curl-request.adoc[]
+
+==== header
+
+include::{snippets}/update-experience/request-headers.adoc[]
+
+==== path parameters
+
+include::{snippets}/update-experience/path-parameters.adoc[]
+
+==== request body
+
+include::{snippets}/update-experience/request-body.adoc[]
+include::{snippets}/update-experience/request-fields.adoc[]
+
+=== Response
+
+==== response body
+
+include::{snippets}/update-experience/response-body.adoc[]
+include::{snippets}/update-experience/response-fields.adoc[]
+
+== `DELETE` Delete Experience
+
+경력 삭제
+
+=== Request
+
+```
+/api/v1/users/{userId}/experiences/{experienceId}
+```
+
+include::{snippets}/delete-experience/curl-request.adoc[]
+
+==== header
+
+include::{snippets}/delete-experience/request-headers.adoc[]
+
+==== path parameters
+
+include::{snippets}/delete-experience/path-parameters.adoc[]
+
+=== Response
+
+==== response body
+
+include::{snippets}/delete-experience/response-body.adoc[]
+include::{snippets}/delete-experience/response-fields.adoc[]
+

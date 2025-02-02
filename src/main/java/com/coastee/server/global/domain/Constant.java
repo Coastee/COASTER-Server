@@ -1,5 +1,7 @@
 package com.coastee.server.global.domain;
 
+import java.time.LocalDateTime;
+
 public class Constant {
     // auth
     public static final String TOKEN_PREFIX = "Bearer ";
@@ -13,4 +15,6 @@ public class Constant {
     public static final String CHANNEL_NAME = "chatroom";
     // chatroom
     public static final int MAX_COUNT = 1000;
+    // experience
+    public static final LocalDateTime CURRENT_DATE = LocalDateTime.of(999999999, 12, 31, 23, 59, 59);
 }
