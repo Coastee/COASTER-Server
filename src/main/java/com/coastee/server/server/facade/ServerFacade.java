@@ -12,7 +12,7 @@ import com.coastee.server.server.domain.Notice;
 import com.coastee.server.server.domain.Server;
 import com.coastee.server.server.dto.ServerElements;
 import com.coastee.server.server.dto.request.ServerEntryRequest;
-import com.coastee.server.server.dto.response.ServerDetailResponse;
+import com.coastee.server.server.dto.response.ServerHomeResponse;
 import com.coastee.server.server.service.NoticeService;
 import com.coastee.server.server.service.ServerEntryService;
 import com.coastee.server.server.service.ServerService;
@@ -44,7 +44,7 @@ public class ServerFacade {
         return new ServerElements(serverList);
     }
 
-    public ServerDetailResponse getHome(
+    public ServerHomeResponse getHome(
             final Accessor accessor,
             final Long serverId
     ) {
@@ -77,7 +77,7 @@ public class ServerFacade {
                 serverChatRoom,
                 PageRequest.of(0, 10)
         );
-        return new ServerDetailResponse(
+        return new ServerHomeResponse(
                 hashTagList,
                 groupPage,
                 meetingPage,

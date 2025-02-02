@@ -22,9 +22,7 @@ public class ChatRoomDetailElement extends ChatRoomElement {
     private int currentCount;
     private List<HashTagElement> hashTagList;
 
-    public ChatRoomDetailElement(
-            final ChatRoom chatRoom
-    ) {
+    public ChatRoomDetailElement(final ChatRoom chatRoom) {
         super(chatRoom);
         this.user = new UserElement(chatRoom.getUser());
         if (chatRoom.getAddress() != null)

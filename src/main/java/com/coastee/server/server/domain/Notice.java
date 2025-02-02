@@ -31,4 +31,16 @@ public class Notice extends BaseEntity {
     private String title;
 
     private String content;
+
+    public Notice(
+            final Server server,
+            final User user,
+            final String title,
+            final String content
+    ) {
+        this.server = server;
+        this.user = user;
+        this.title = title;
+        this.content = content;
+    }
 }

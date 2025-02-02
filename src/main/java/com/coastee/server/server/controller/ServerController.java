@@ -6,7 +6,7 @@ import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.global.apipayload.ApiResponse;
 import com.coastee.server.server.dto.request.ServerEntryRequest;
 import com.coastee.server.server.dto.ServerElements;
-import com.coastee.server.server.dto.response.ServerDetailResponse;
+import com.coastee.server.server.dto.response.ServerHomeResponse;
 import com.coastee.server.server.facade.ServerFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +24,7 @@ public class ServerController {
 
     @GetMapping("/{serverId}")
     @UserOnly
-    public ApiResponse<ServerDetailResponse> getHome(
+    public ApiResponse<ServerHomeResponse> getHome(
             @Auth final Accessor accessor,
             @PathVariable final Long serverId
     ) {
