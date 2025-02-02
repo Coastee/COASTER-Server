@@ -24,4 +24,8 @@ public class ExperienceService {
                 Sort.by(Sort.Direction.DESC, "endDate"))
         );
     }
+
+    public Experience save(final Experience experience) {
+        return experienceRepository.save(experience);
+    }
 }

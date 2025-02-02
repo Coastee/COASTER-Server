@@ -5,6 +5,7 @@ import com.coastee.server.chatroom.domain.ChatRoomType;
 import com.coastee.server.global.apipayload.exception.GeneralException;
 import com.coastee.server.server.domain.Server;
 import com.coastee.server.user.domain.User;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +20,8 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
 public class ChatRoomCreateRequest {
-    @Size(min = 1, max = 20, message = "제목은 최대 1자 이상, 20자 이하로 설정할 수 있습니다.")
+    @NotNull(message = "제목은 필수로 입력해야 합니다.")
+    @Size(max = 20, message = "제목은 최대 20자 이하로 설정할 수 있습니다.")
     private String title;
 
     @Size(max = 80, message = "상세 설명은 최대 80자 이하로 설정할 수 있습니다.")

@@ -21,6 +21,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
 public class MeetingCreateRequest extends ChatRoomCreateRequest {
+    @NotNull(message = "참여 인원은 필수로 입력해야합니다.")
     @Min(value = 2, message = "최소 참여 인원은 2명입니다.")
     private int maxCount;
 
@@ -32,6 +33,8 @@ public class MeetingCreateRequest extends ChatRoomCreateRequest {
 
     @NotNull(message = "진행 장소는 필수로 입력해야합니다.")
     private String location;
+
+    @NotNull(message = "장소 설명은 필수로 입력해야합니다.")
     private String details;
 
     public MeetingCreateRequest(
