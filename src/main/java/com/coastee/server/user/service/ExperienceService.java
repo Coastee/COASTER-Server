@@ -4,6 +4,7 @@ import com.coastee.server.global.apipayload.exception.GeneralException;
 import com.coastee.server.user.domain.Experience;
 import com.coastee.server.user.domain.User;
 import com.coastee.server.user.domain.repository.ExperienceRepository;
+import com.coastee.server.user.dto.request.ExperienceUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,5 +35,14 @@ public class ExperienceService {
 
     public Experience save(final Experience experience) {
         return experienceRepository.save(experience);
+    }
+
+    public void update(
+            final Experience experience,
+            final ExperienceUpdateRequest request
+    ) {
+        experience.updateTitle(request.getTitle());
+        experience.updateContent(request.getContent());
+        experience.updatePeriod(request.getStartDate(), request.getEndDate());
     }
 }

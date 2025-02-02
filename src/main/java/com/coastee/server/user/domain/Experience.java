@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.SQLRestriction;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import static com.coastee.server.global.apipayload.code.status.ErrorStatus._INVALID_AUTHORITY;
@@ -57,6 +58,21 @@ public class Experience extends BaseEntity {
         }
         Experience that = (Experience) o;
         return id != null && Objects.equals(id, that.id);
+    }
+
+    public void updateTitle(final String title) {
+        this.title = title;
+    }
+
+    public void updateContent(final String content) {
+        this.content = content;
+    }
+
+    public void updatePeriod(
+            final LocalDateTime startDate,
+            final LocalDateTime endDate
+    ) {
+        this.period = new Period(startDate, endDate);
     }
 
     public void validateUser(final User user) {
