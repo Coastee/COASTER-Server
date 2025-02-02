@@ -20,14 +20,14 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
-public class ServerDetailResponse {
+public class ServerHomeResponse {
     private List<HashTagElement> hashTagList;
     private ChatRoomElements groupChatRoom;
     private ChatRoomElements meetingChatRoom;
     private NoticeElements notice;
     private ChatElements chat;
 
-    public ServerDetailResponse(
+    public ServerHomeResponse(
             final List<HashTag> hashTagList,
             final Page<ChatRoom> groupChatRoomPage,
             final Page<ChatRoom> meetingChatRoomPage,
