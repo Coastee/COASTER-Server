@@ -1,5 +1,6 @@
 package com.coastee.server.user.facade;
 
+import com.coastee.server.user.domain.Experience;
 import com.coastee.server.user.domain.User;
 import com.coastee.server.user.dto.request.ExperienceCreateRequest;
 import com.coastee.server.user.service.ExperienceService;
@@ -18,5 +19,12 @@ public class ExperienceFacade {
     public void create(final Long userId, final ExperienceCreateRequest request) {
         User user = userService.findById(userId);
         experienceService.save(request.toEntity(user));
+    }
+
+    public void delete(final Long userId, final Long experienceId) {
+        User user = userService.findById(userId);
+        Experience experience = experienceService.findById(experienceId);
+        experience.validateUser(user);
+        experience.delete();
     }
 }

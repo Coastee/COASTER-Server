@@ -28,4 +28,16 @@ public class ExperienceController {
         experienceFacade.create(userId, request);
         return ApiResponse.onSuccess();
     }
+
+    @DeleteMapping("/{experienceId}")
+    @UserOnly
+    public ApiResponse<Void> delete(
+            @Auth final Accessor accessor,
+            @PathVariable("userId") final Long userId,
+            @PathVariable("experienceId") final Long experienceId
+    ) {
+        userFacade.validateAccess(accessor, userId);
+        experienceFacade.delete(userId, experienceId);
+        return ApiResponse.onSuccess();
+    }
 }
