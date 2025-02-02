@@ -1,5 +1,8 @@
 package com.coastee.server.user.controller;
 
+import com.coastee.server.auth.Auth;
+import com.coastee.server.auth.UserOnly;
+import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.global.apipayload.ApiResponse;
 import com.coastee.server.user.dto.UserDetailElement;
 import com.coastee.server.user.dto.request.UserUpdateRequest;
@@ -27,12 +30,15 @@ public class UserController {
         return ApiResponse.onSuccess(userFacade.getProfile(userId, pageable));
     }
 
-    @PatchMapping("/{id}")
+    @PostMapping("/{id}")
+    @UserOnly
     public ApiResponse<Void> updateProfile(
+            @Auth final Accessor accessor,
             @PathVariable("id") final Long userId,
             @RequestPart @Valid final UserUpdateRequest request,
             @RequestPart final MultipartFile image
     ) {
+        userFacade.validateAccess(accessor, userId);
         userFacade.update(userId, request, image);
         return ApiResponse.onSuccess();
     }

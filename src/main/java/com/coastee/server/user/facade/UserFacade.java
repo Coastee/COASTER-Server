@@ -1,5 +1,7 @@
 package com.coastee.server.user.facade;
 
+import com.coastee.server.auth.domain.Accessor;
+import com.coastee.server.global.apipayload.exception.GeneralException;
 import com.coastee.server.image.domain.DirName;
 import com.coastee.server.image.service.BlobStorageService;
 import com.coastee.server.user.domain.Experience;
@@ -14,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import static com.coastee.server.global.apipayload.code.status.ErrorStatus._INVALID_AUTHORITY;
 
 @Service
 @Transactional(readOnly = true)
@@ -43,5 +47,10 @@ public class UserFacade {
             String imageUrl = blobStorageService.upload(image, DirName.USER, user.getId());
             user.updateProfileImage(imageUrl);
         }
+    }
+
+    public void validateAccess(final Accessor accessor, final Long userId) {
+        if (accessor.getUserId().equals(userId)) return;
+        throw new GeneralException(_INVALID_AUTHORITY);
     }
 }
