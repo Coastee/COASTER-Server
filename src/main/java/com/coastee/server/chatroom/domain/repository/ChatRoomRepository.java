@@ -11,11 +11,20 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 
     @EntityGraph(attributePaths = {"user"})
     Page<ChatRoom> findByServerAndChatRoomType(
             final Server server,
+            final ChatRoomType type,
+            final Pageable pageable
+    );
+
+    @EntityGraph(attributePaths = {"user"})
+    Page<ChatRoom> findByServerInAndChatRoomType(
+            final List<Server> serverList,
             final ChatRoomType type,
             final Pageable pageable
     );

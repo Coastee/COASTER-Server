@@ -20,7 +20,7 @@ public class ServerEntryService {
     private final ServerEntryRepository serverEntryRepository;
 
     @Transactional
-    public void save(final User user, final List<Server> serverList) {
+    public void enter(final User user, final List<Server> serverList) {
         List<ServerEntry> serverEntryList = serverList.stream()
                 .map(server -> new ServerEntry(user, server)).toList();
         serverEntryRepository.saveAll(serverEntryList);

@@ -1,7 +1,9 @@
-package com.coastee.server.user.dto;
+package com.coastee.server.user.dto.response;
 
 import com.coastee.server.user.domain.Experience;
 import com.coastee.server.user.domain.User;
+import com.coastee.server.user.dto.ExperienceElements;
+import com.coastee.server.user.dto.UserElement;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

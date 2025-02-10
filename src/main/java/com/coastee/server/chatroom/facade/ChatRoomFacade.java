@@ -5,6 +5,7 @@ import com.coastee.server.chat.domain.Chat;
 import com.coastee.server.chat.dto.ChatElements;
 import com.coastee.server.chat.service.ChatService;
 import com.coastee.server.chatroom.domain.ChatRoom;
+import com.coastee.server.chatroom.domain.ChatRoomEntry;
 import com.coastee.server.chatroom.domain.ChatRoomType;
 import com.coastee.server.chatroom.domain.Scope;
 import com.coastee.server.chatroom.dto.ChatRoomElements;
@@ -17,6 +18,7 @@ import com.coastee.server.image.service.BlobStorageService;
 import com.coastee.server.server.domain.Server;
 import com.coastee.server.server.service.ServerService;
 import com.coastee.server.user.domain.User;
+import com.coastee.server.user.dto.UserElements;
 import com.coastee.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -88,6 +90,18 @@ public class ChatRoomFacade {
         chatRoomEntryService.validateJoin(user, chatRoom);
         Page<Chat> chatPage = chatService.findAllByChatRoom(chatRoom, pageable);
         return new ChatElements(chatPage);
+    }
+
+    public UserElements getParticipants(
+            final Accessor accessor,
+            final Long chatRoomId,
+            final Pageable pageable
+    ) {
+        User user = userService.findById(accessor.getUserId());
+        ChatRoom chatRoom = chatRoomService.findById(chatRoomId);
+        chatRoomEntryService.validateJoin(user, chatRoom);
+        Page<ChatRoomEntry> entryPage = chatRoomEntryService.findAllByChatRoom(chatRoom, pageable);
+        return UserElements.from(entryPage);
     }
 
     @Transactional

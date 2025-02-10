@@ -3,7 +3,7 @@ package com.coastee.server.user.controller;
 import com.coastee.server.fixture.ExperienceFixture;
 import com.coastee.server.user.domain.Experience;
 import com.coastee.server.user.domain.repository.ExperienceRepository;
-import com.coastee.server.user.dto.UserDetailElement;
+import com.coastee.server.user.dto.response.UserDetailElement;
 import com.coastee.server.user.dto.request.UserUpdateRequest;
 import com.coastee.server.user.facade.UserFacade;
 import com.coastee.server.util.ControllerTest;
