@@ -11,8 +11,6 @@ import com.coastee.server.chatroom.domain.repository.ChatRoomTagRepository;
 import com.coastee.server.chatroom.dto.ChatRoomDetailElement;
 import com.coastee.server.chatroom.dto.ChatRoomElement;
 import com.coastee.server.chatroom.dto.ChatRoomElements;
-import com.coastee.server.chatroom.dto.request.ChatRoomCreateRequest;
-import com.coastee.server.chatroom.dto.request.MeetingCreateRequest;
 import com.coastee.server.chatroom.facade.ChatRoomFacade;
 import com.coastee.server.fixture.ChatFixture;
 import com.coastee.server.fixture.HashTagFixture;
@@ -24,30 +22,28 @@ import com.coastee.server.hashtag.domain.repository.HashTagRepository;
 import com.coastee.server.server.domain.Server;
 import com.coastee.server.server.domain.repository.ServerRepository;
 import com.coastee.server.user.domain.User;
+import com.coastee.server.user.dto.UserElement;
+import com.coastee.server.user.dto.UserElements;
 import com.coastee.server.util.ControllerTest;
 import io.restassured.RestAssured;
-import io.restassured.builder.MultiPartSpecBuilder;
-import io.restassured.mapper.ObjectMapperType;
-import io.restassured.specification.MultiPartSpecification;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Stream;
 
 import static com.coastee.server.fixture.ChatRoomFixture.getMeeting;
-import static com.coastee.server.util.FileUtil.getFile;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 
@@ -150,6 +146,7 @@ class ChatRoomControllerTest extends ControllerTest {
                                         fieldWithPath("result.chatRoomList[].user.id").type(NUMBER).description("개설자 아이디"),
                                         fieldWithPath("result.chatRoomList[].user.profileImage").type(STRING).description("개설자 프로필 사진"),
                                         fieldWithPath("result.chatRoomList[].user.nickname").type(STRING).description("개설자 닉네임"),
+                                        fieldWithPath("result.chatRoomList[].user.linkedInVerify").type(BOOLEAN).description("개설자 링크드인 인증 여부"),
                                         fieldWithPath("result.chatRoomList[].user.userIntro").type(OBJECT).description("개설자 소개"),
                                         fieldWithPath("result.chatRoomList[].user.userIntro.headline").type(STRING).description("한줄소개"),
                                         fieldWithPath("result.chatRoomList[].user.userIntro.job").type(STRING).description("직업"),
@@ -237,6 +234,66 @@ class ChatRoomControllerTest extends ControllerTest {
                 .then().log().all().statusCode(200);
     }
 
+    @DisplayName("채팅방 참여자를 조회한다.")
+    @Test
+    void getParticipants() throws Exception {
+        // given
+        User userA = userRepository.save(UserFixture.get("userA"));
+        User userB = userRepository.save(UserFixture.get("userB"));
+        User userC = userRepository.save(UserFixture.get("userC"));
+        Server server = serverRepository.save(ServerFixture.get());
+        ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.groupChatRoom(server, userA, "titleA", "contentA"));
+
+        when(chatRoomFacade.getParticipants(any(), any(), any()))
+                .thenReturn(new UserElements(
+                                new PageInfo(true, 0, 3, 40),
+                                Stream.of(userA, userB, userC).map(UserElement::new).toList()
+                        )
+                );
+
+        // when & then
+        RestAssured.given(spec).log().all()
+                .header(ACCESS_TOKEN_HEADER, ACCESS_TOKEN)
+                .param("page", "0")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .filter(
+                        document("get-participants",
+                                pathParameters(
+                                        parameterWithName("serverId").description("서버 아이디"),
+                                        parameterWithName("chatRoomType").description("채팅방 타입 - `groups` : 그룹챗, `meetings` 커피챗"),
+                                        parameterWithName("chatRoomId").description("채팅방 아이디")
+                                ),
+                                queryParameters(
+                                        parameterWithName("page").description("페이지 번호 (default: 0)")
+                                ),
+                                requestHeaders(
+                                        headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰")
+                                ),
+                                responseFields(
+                                        fieldWithPath("isSuccess").type(BOOLEAN).description("성공 여부"),
+                                        fieldWithPath("code").type(STRING).description("결과 코드"),
+                                        fieldWithPath("message").type(STRING).description("결과 메세지"),
+                                        fieldWithPath("result").type(OBJECT).description("결과 데이터"),
+                                        fieldWithPath("result.pageInfo").type(OBJECT).description("페이징 정보"),
+                                        fieldWithPath("result.pageInfo.lastPage").type(BOOLEAN).description("마지막 페이지 여부"),
+                                        fieldWithPath("result.pageInfo.totalPages").type(NUMBER).description("총 페이지 개수"),
+                                        fieldWithPath("result.pageInfo.totalElements").type(NUMBER).description("총 요소 개수"),
+                                        fieldWithPath("result.pageInfo.size").type(NUMBER).description("페이지 사이즈"),
+                                        fieldWithPath("result.userList").type(ARRAY).description("유저 리스트"),
+                                        fieldWithPath("result.userList[].id").type(NUMBER).description("유저 아이디"),
+                                        fieldWithPath("result.userList[].profileImage").type(STRING).description("유저 프로필이미지").optional(),
+                                        fieldWithPath("result.userList[].nickname").type(STRING).description("닉네임"),
+                                        fieldWithPath("result.userList[].linkedInVerify").type(BOOLEAN).description("링크드인 인증 여부"),
+                                        fieldWithPath("result.userList[].userIntro").type(OBJECT).description("소개").optional(),
+                                        fieldWithPath("result.userList[].userIntro.headline").type(STRING).description("한줄소개").optional(),
+                                        fieldWithPath("result.userList[].userIntro.job").type(STRING).description("직업").optional(),
+                                        fieldWithPath("result.userList[].userIntro.expYears").type(NUMBER).description("년차").optional()
+                                )
+                        ))
+                .when().get("/api/v1/servers/{serverId}/{chatRoomType}/{chatRoomId}/users", 1, "groups", chatRoom.getId())
+                .then().log().all().statusCode(200);
+    }
+
     @DisplayName("채팅 이력을 조회한다.")
     @Test
     void getChats() throws Exception {
@@ -291,6 +348,7 @@ class ChatRoomControllerTest extends ControllerTest {
                                         fieldWithPath("result.chatList[].user.id").type(NUMBER).description("유저 아이디"),
                                         fieldWithPath("result.chatList[].user.profileImage").type(STRING).description("프로필 사진"),
                                         fieldWithPath("result.chatList[].user.nickname").type(STRING).description("닉네임"),
+                                        fieldWithPath("result.chatList[].user.linkedInVerify").type(BOOLEAN).description("링크드인 인증 여부"),
                                         fieldWithPath("result.chatList[].user.userIntro").type(OBJECT).description("소개"),
                                         fieldWithPath("result.chatList[].user.userIntro.headline").type(STRING).description("한줄소개"),
                                         fieldWithPath("result.chatList[].user.userIntro.job").type(STRING).description("직업"),
