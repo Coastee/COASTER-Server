@@ -40,8 +40,7 @@ public class DMFacade {
             dmRoomEntryService.validateJoin(sender, dmRoom);
         } else {
             User receiver = userService.findById(dmRequest.getUserId());
-            // TODO: 이미 room이 있는지 확인 필요
-            dmRoom = dmRoomService.save(new DirectMessageRoom(sender));
+            dmRoom = dmRoomService.findOrCreateByUserAndUser(sender, receiver);
             dmRoomEntryService.enter(sender, dmRoom);
             dmRoomEntryService.enter(receiver, dmRoom);
         }
