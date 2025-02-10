@@ -92,7 +92,7 @@ class UserControllerTest extends ControllerTest {
                                         fieldWithPath("result.experience.experienceList").type(ARRAY).description("경력 리스트"),
                                         fieldWithPath("result.experience.experienceList[].id").type(NUMBER).description("경력 아이디"),
                                         fieldWithPath("result.experience.experienceList[].title").type(STRING).description("제목"),
-                                        fieldWithPath("result.experience.experienceList[].content").type(STRING).description("상세 내용"),
+                                        fieldWithPath("result.experience.experienceList[].contentList").type(ARRAY).description("상세 내용"),
                                         fieldWithPath("result.experience.experienceList[].startDate").type(ARRAY).description("시작날짜"),
                                         fieldWithPath("result.experience.experienceList[].endDate").type(ARRAY).description("종료날짜 : 현재까지 진행되는 경력일 경우 null로 전달됨.")
                                 )

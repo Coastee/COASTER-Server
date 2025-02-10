@@ -44,7 +44,7 @@ public class ExperienceService {
             final ExperienceUpdateRequest request
     ) {
         experience.updateTitle(request.getTitle());
-        experience.updateContent(request.getContent());
+        experience.updateContentList(request.getContentList());
         experience.updatePeriod(request.getStartDate(), request.getEndDate());
     }
 }

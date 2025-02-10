@@ -13,7 +13,7 @@ public class ExperienceFixture {
         return new Experience(
                 user,
                 "숙명 기업 인턴",
-                "인턴십 과정을을 진행하여 000 결과에 기여하였습니다.",
+                List.of("인턴십 과정을을 진행하여 000 결과에 기여하였습니다."),
                 new Period(LocalDateTime.now().minusYears(1L), LocalDateTime.now())
         );
     }
@@ -23,20 +23,20 @@ public class ExperienceFixture {
                 new Experience(
                         user,
                         "B 기업 개발팀장",
-                        "000 결과에 기여하였습니다.",
+                        List.of("000 개발팀장", "000 결과에 기여하였습니다."),
                         new Period(LocalDateTime.now().minusYears(1L), LocalDateTime.now())
                 ),
                 new Experience(
                         user,
                         "A 기업 개발팀",
-                        "000 결과에 기여하였습니다.",
-                        new Period(LocalDateTime.now().minusYears(1L), LocalDateTime.now())
+                        List.of("000 개발팀", "000 결과에 기여하였습니다."),
+                        new Period(LocalDateTime.now().minusYears(2L), LocalDateTime.now().minusYears(1L))
                 ),
                 new Experience(
                         user,
                         "숙명 기업 인턴",
-                        "인턴십 과정을 진행하여 000 결과에 기여하였습니다.",
-                        new Period(LocalDateTime.now().minusYears(1L), LocalDateTime.now())
+                        List.of("000 개발팀 인턴", "인턴십 과정을 진행하여 000 결과에 기여하였습니다."),
+                        new Period(LocalDateTime.now().minusYears(3L), LocalDateTime.now().minusYears(2L))
                 )
         );
     }
