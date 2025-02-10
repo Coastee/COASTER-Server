@@ -3,7 +3,7 @@ package com.coastee.server.user.controller;
 import com.coastee.server.fixture.ExperienceFixture;
 import com.coastee.server.user.domain.Experience;
 import com.coastee.server.user.domain.repository.ExperienceRepository;
-import com.coastee.server.user.dto.UserDetailElement;
+import com.coastee.server.user.dto.response.UserDetailElement;
 import com.coastee.server.user.dto.request.UserUpdateRequest;
 import com.coastee.server.user.facade.UserFacade;
 import com.coastee.server.util.ControllerTest;
@@ -76,6 +76,7 @@ class UserControllerTest extends ControllerTest {
                                         fieldWithPath("result.id").type(NUMBER).description("유저 아이디"),
                                         fieldWithPath("result.profileImage").type(STRING).description("프로필 사진"),
                                         fieldWithPath("result.nickname").type(STRING).description("닉네임"),
+                                        fieldWithPath("result.linkedInVerify").type(BOOLEAN).description("링크드인 인증 여부"),
                                         fieldWithPath("result.userIntro").type(OBJECT).description("개설자 소개"),
                                         fieldWithPath("result.userIntro.headline").type(STRING).description("한줄소개"),
                                         fieldWithPath("result.userIntro.job").type(STRING).description("직업"),

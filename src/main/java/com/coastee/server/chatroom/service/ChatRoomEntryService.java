@@ -8,6 +8,8 @@ import com.coastee.server.chatroom.domain.repository.dto.FindHasEntered;
 import com.coastee.server.global.apipayload.exception.GeneralException;
 import com.coastee.server.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,19 @@ public class ChatRoomEntryService {
     private final ChatRoomEntryRepository chatRoomEntryRepository;
     private final ChatRoomEntryCustomRepository chatRoomEntryCustomRepository;
 
+    public Page<ChatRoomEntry> findAllByChatRoom(final ChatRoom chatRoom, final Pageable pageable) {
+        return chatRoomEntryRepository.findAllByChatRoom(chatRoom, pageable);
+    }
+
+    public Map<Long, Boolean> findHasEnteredByChatRoomList(
+            final User user,
+            final List<ChatRoom> chatRoomList
+    ) {
+        return chatRoomEntryCustomRepository.findHasEnteredByChatRoomList(user, chatRoomList)
+                .stream()
+                .collect(Collectors.toMap(FindHasEntered::getChatRoomId, FindHasEntered::getHasJoined));
+    }
+
     @Transactional
     public ChatRoomEntry enter(final User user, final ChatRoom chatRoom) {
         chatRoom.enter();
@@ -39,6 +54,17 @@ public class ChatRoomEntryService {
     }
 
     @Transactional
+    public List<ChatRoomEntry> enter(final User user, final List<ChatRoom> chatRoomList) {
+        List<ChatRoomEntry> entryList = chatRoomList.stream().map(
+                chatRoom -> {
+                    chatRoom.enter();
+                    return new ChatRoomEntry(user, chatRoom);
+                }
+        ).toList();
+        return chatRoomEntryRepository.saveAll(entryList);
+    }
+
+    @Transactional
     public void exit(final User user, final ChatRoom chatRoom) {
         chatRoom.exit();
         ChatRoomEntry chatRoomEntry = validateJoin(user, chatRoom);
@@ -51,14 +77,5 @@ public class ChatRoomEntryService {
                 .orElseThrow(() -> new GeneralException(NOT_IN_CHATROOM));
         if (chatRoomEntry.isDeleted()) throw new GeneralException(NOT_IN_CHATROOM);
         return chatRoomEntry;
-    }
-
-    public Map<Long, Boolean> findHasEnteredByChatRoomList(
-            final User user,
-            final List<ChatRoom> chatRoomList
-    ) {
-        return chatRoomEntryCustomRepository.findHasEnteredByChatRoomList(user, chatRoomList)
-                .stream()
-                .collect(Collectors.toMap(FindHasEntered::getChatRoomId, FindHasEntered::getHasJoined));
     }
 }

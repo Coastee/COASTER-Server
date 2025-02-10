@@ -6,7 +6,7 @@ import com.coastee.server.image.domain.DirName;
 import com.coastee.server.image.service.BlobStorageService;
 import com.coastee.server.user.domain.Experience;
 import com.coastee.server.user.domain.User;
-import com.coastee.server.user.dto.UserDetailElement;
+import com.coastee.server.user.dto.response.UserDetailElement;
 import com.coastee.server.user.dto.request.UserUpdateRequest;
 import com.coastee.server.user.service.ExperienceService;
 import com.coastee.server.user.service.UserService;

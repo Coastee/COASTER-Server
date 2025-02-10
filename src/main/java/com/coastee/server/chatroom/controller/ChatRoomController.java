@@ -11,6 +11,7 @@ import com.coastee.server.chatroom.dto.request.ChatRoomCreateRequest;
 import com.coastee.server.chatroom.dto.request.MeetingCreateRequest;
 import com.coastee.server.chatroom.facade.ChatRoomFacade;
 import com.coastee.server.global.apipayload.ApiResponse;
+import com.coastee.server.user.dto.UserElements;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -78,6 +79,18 @@ public class ChatRoomController {
             @PageableDefault(DEFAULT_PAGING_SIZE) final Pageable pageable
     ) {
         return ApiResponse.onSuccess(chatRoomFacade.getChats(accessor, chatRoomId, pageable));
+    }
+
+    @GetMapping("/{chatRoomType}/{chatRoomId}/users")
+    @UserOnly
+    public ApiResponse<UserElements> getParticipants(
+            @Auth final Accessor accessor,
+            @PathVariable("serverId") final Long serverId,
+            @PathVariable("chatRoomType") final ChatRoomType chatRoomType,
+            @PathVariable("chatRoomId") final Long chatRoomId,
+            @PageableDefault(DEFAULT_PAGING_SIZE) final Pageable pageable
+    ) {
+        return ApiResponse.onSuccess(chatRoomFacade.getParticipants(accessor, chatRoomId, pageable));
     }
 
     @PostMapping("/{chatRoomType}/{chatRoomId}")

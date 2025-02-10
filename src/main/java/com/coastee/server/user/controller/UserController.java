@@ -4,7 +4,7 @@ import com.coastee.server.auth.Auth;
 import com.coastee.server.auth.UserOnly;
 import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.global.apipayload.ApiResponse;
-import com.coastee.server.user.dto.UserDetailElement;
+import com.coastee.server.user.dto.response.UserDetailElement;
 import com.coastee.server.user.dto.request.UserUpdateRequest;
 import com.coastee.server.user.facade.UserFacade;
 import jakarta.validation.Valid;

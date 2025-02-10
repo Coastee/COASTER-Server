@@ -23,6 +23,7 @@ import com.coastee.server.server.dto.response.ServerHomeResponse;
 import com.coastee.server.server.facade.ServerFacade;
 import com.coastee.server.user.domain.User;
 import com.coastee.server.util.ControllerTest;
+import com.sun.jna.platform.win32.WinDef;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -146,6 +147,7 @@ public class ServerHomeControllerTest extends ControllerTest {
                                         fieldWithPath("result.groupChatRoom.chatRoomList[].user.id").type(NUMBER).description("아이디"),
                                         fieldWithPath("result.groupChatRoom.chatRoomList[].user.profileImage").type(STRING).description("프로필사진"),
                                         fieldWithPath("result.groupChatRoom.chatRoomList[].user.nickname").type(STRING).description("닉네임"),
+                                        fieldWithPath("result.groupChatRoom.chatRoomList[].user.linkedInVerify").type(BOOLEAN).description("링크드인 인증 여부"),
                                         fieldWithPath("result.groupChatRoom.chatRoomList[].user.userIntro").type(OBJECT).description("개설자 소개"),
                                         fieldWithPath("result.groupChatRoom.chatRoomList[].user.userIntro.headline").type(STRING).description("한줄소개"),
                                         fieldWithPath("result.groupChatRoom.chatRoomList[].user.userIntro.job").type(STRING).description("직업"),
@@ -177,6 +179,7 @@ public class ServerHomeControllerTest extends ControllerTest {
                                         fieldWithPath("result.meetingChatRoom.chatRoomList[].user.id").type(NUMBER).description("아이디"),
                                         fieldWithPath("result.meetingChatRoom.chatRoomList[].user.profileImage").type(STRING).description("프로필사진"),
                                         fieldWithPath("result.meetingChatRoom.chatRoomList[].user.nickname").type(STRING).description("닉네임"),
+                                        fieldWithPath("result.meetingChatRoom.chatRoomList[].user.linkedInVerify").type(BOOLEAN).description("링크드인 인증 여부"),
                                         fieldWithPath("result.meetingChatRoom.chatRoomList[].user.userIntro").type(OBJECT).description("개설자 소개"),
                                         fieldWithPath("result.meetingChatRoom.chatRoomList[].user.userIntro.headline").type(STRING).description("한줄소개"),
                                         fieldWithPath("result.meetingChatRoom.chatRoomList[].user.userIntro.job").type(STRING).description("직업"),
@@ -212,6 +215,7 @@ public class ServerHomeControllerTest extends ControllerTest {
                                         fieldWithPath("result.chat.chatList[].user.id").type(NUMBER).description("작성자 아이디"),
                                         fieldWithPath("result.chat.chatList[].user.profileImage").type(STRING).description("프로필사진"),
                                         fieldWithPath("result.chat.chatList[].user.nickname").type(STRING).description("닉네임"),
+                                        fieldWithPath("result.chat.chatList[].user.linkedInVerify").type(BOOLEAN).description("링크드인 인증 여부"),
                                         fieldWithPath("result.chat.chatList[].user.userIntro").type(OBJECT).description("작성자 소개"),
                                         fieldWithPath("result.chat.chatList[].user.userIntro.headline").type(STRING).description("한줄소개"),
                                         fieldWithPath("result.chat.chatList[].user.userIntro.job").type(STRING).description("직업"),

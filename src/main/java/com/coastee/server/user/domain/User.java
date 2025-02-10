@@ -74,6 +74,7 @@ public class User extends BaseEntity {
         this.urlList = urlList;
         this.socialType = socialType;
         this.socialId = socialId;
+        this.linkedInVerify = false;
     }
 
     public User(
@@ -86,6 +87,7 @@ public class User extends BaseEntity {
         this.email = email;
         this.socialType = socialType;
         this.socialId = socialId;
+        this.linkedInVerify = false;
     }
 
     @Override

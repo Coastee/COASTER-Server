@@ -5,6 +5,7 @@ import com.coastee.server.chat.domain.Chat;
 import com.coastee.server.chat.service.ChatService;
 import com.coastee.server.chatroom.domain.ChatRoom;
 import com.coastee.server.chatroom.domain.ChatRoomType;
+import com.coastee.server.chatroom.service.ChatRoomEntryService;
 import com.coastee.server.chatroom.service.ChatRoomService;
 import com.coastee.server.hashtag.domain.HashTag;
 import com.coastee.server.hashtag.service.HashTagService;
@@ -34,6 +35,7 @@ public class ServerFacade {
     private final UserService userService;
     private final ServerService serverService;
     private final ServerEntryService serverEntryService;
+    private final ChatRoomEntryService chatRoomEntryService;
     private final ChatRoomService chatRoomService;
     private final HashTagService hashTagService;
     private final ChatService chatService;
@@ -69,10 +71,7 @@ public class ServerFacade {
                 server,
                 PageRequest.of(0, 10)
         );
-        ChatRoom serverChatRoom = chatRoomService
-                .findAllByServerAndType(server, ChatRoomType.ENTIRE, PageRequest.of(0, 1))
-                .getContent()
-                .get(0);
+        ChatRoom serverChatRoom = chatRoomService.findEntireChatRoomByServer(server);
         Page<Chat> chatPage = chatService.findAllByChatRoom(
                 serverChatRoom,
                 PageRequest.of(0, 10)
@@ -90,7 +89,9 @@ public class ServerFacade {
     public void enter(final Accessor accessor, final ServerEntryRequest request) {
         User user = userService.findById(accessor.getUserId());
         List<Server> serverList = serverService.findAllById(request.getIdList());
-        serverEntryService.save(user, serverList);
+        serverEntryService.enter(user, serverList);
+        List<ChatRoom> serverChatRoomList = chatRoomService.findEntireChatRoomsByServers(serverList);
+        chatRoomEntryService.enter(user, serverChatRoomList);
     }
 
     @Transactional
@@ -98,5 +99,7 @@ public class ServerFacade {
         User user = userService.findById(accessor.getUserId());
         Server server = serverService.findById(serverId);
         serverEntryService.exit(user, server);
+        ChatRoom serverChatRoom = chatRoomService.findEntireChatRoomByServer(server);
+        chatRoomEntryService.exit(user, serverChatRoom);
     }
 }
