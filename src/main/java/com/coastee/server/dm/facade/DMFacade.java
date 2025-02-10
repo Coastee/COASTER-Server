@@ -1,5 +1,6 @@
 package com.coastee.server.dm.facade;
 
+import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.dm.dto.request.DMRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -18,7 +19,7 @@ public class DMFacade {
     private final Map<String, ChannelTopic> channelTopicMap;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public void message(final DMRequest dmRequest) {
+    public void message(final Accessor accessor, final DMRequest dmRequest) {
         redisTemplate.convertAndSend(channelTopicMap.get(DM_CHANNEL_NAME).getTopic(), dmRequest);
     }
 }

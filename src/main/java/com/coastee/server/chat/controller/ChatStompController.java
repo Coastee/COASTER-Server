@@ -1,5 +1,7 @@
 package com.coastee.server.chat.controller;
 
+import com.coastee.server.auth.Auth;
+import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.chat.dto.request.ChatRequest;
 import com.coastee.server.chat.facade.ChatFacade;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +17,10 @@ public class ChatStompController {
 
     @MessageMapping("/chat")
     public void message(
-//            @Auth final Accessor accessor,
+            @Auth final Accessor accessor,
             final ChatRequest chatRequest
     ) {
         log.info("==pub== " + chatRequest.getContent());
-        chatFacade.chat(chatRequest);
+        chatFacade.chat(accessor, chatRequest);
     }
 }

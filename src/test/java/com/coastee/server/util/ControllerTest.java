@@ -4,7 +4,7 @@ import com.coastee.server.auth.UserOnlyChecker;
 import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.auth.domain.Authority;
 import com.coastee.server.fixture.UserFixture;
-import com.coastee.server.login.LoginArgumentResolver;
+import com.coastee.server.auth.infrastructurre.AuthArgumentResolver;
 import com.coastee.server.login.infrastructure.JwtProvider;
 import com.coastee.server.user.domain.User;
 import com.coastee.server.user.domain.repository.UserRepository;
@@ -50,7 +50,7 @@ public abstract class ControllerTest {
     protected JwtProvider jwtProvider;
 
     @MockitoBean
-    protected LoginArgumentResolver loginArgumentResolver;
+    protected AuthArgumentResolver authArgumentResolver;
 
     @MockitoBean
     private UserOnlyChecker userOnlyChecker;
@@ -76,7 +76,7 @@ public abstract class ControllerTest {
         given(jwtProvider.validateAccessToken(any())).willReturn(true);
         doNothing().when(jwtProvider).validateRefreshToken(any());
         given(jwtProvider.getSubject(any())).willReturn(user.getId().toString());
-        given(loginArgumentResolver.resolveArgument(any(), any(), any(), any()))
+        given(authArgumentResolver.resolveArgument(any(), any(), any(), any()))
                 .willReturn(Accessor.user(user.getId()));
 
         // role

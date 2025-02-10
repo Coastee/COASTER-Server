@@ -1,5 +1,7 @@
 package com.coastee.server.dm.controller;
 
+import com.coastee.server.auth.Auth;
+import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.dm.dto.request.DMRequest;
 import com.coastee.server.dm.facade.DMFacade;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +17,10 @@ public class DMStompController {
 
     @MessageMapping("/dm")
     public void message(
-//            @Auth final Accessor accessor,
+            @Auth final Accessor accessor,
             final DMRequest dmRequest
     ) {
         log.info("==pub== " + dmRequest.getContent());
-        dmFacade.message(dmRequest);
+        dmFacade.message(accessor, dmRequest);
     }
 }

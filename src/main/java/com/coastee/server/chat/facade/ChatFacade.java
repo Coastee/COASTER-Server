@@ -1,5 +1,6 @@
 package com.coastee.server.chat.facade;
 
+import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.chat.dto.request.ChatRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -18,7 +19,7 @@ public class ChatFacade {
     private final Map<String, ChannelTopic> channelTopicMap;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public void chat(final ChatRequest chatRequest) {
+    public void chat(final Accessor accessor, final ChatRequest chatRequest) {
         redisTemplate.convertAndSend(channelTopicMap.get(CHATROOM_CHANNEL_NAME).getTopic(), chatRequest);
     }
 }

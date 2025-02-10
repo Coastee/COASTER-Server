@@ -1,11 +1,10 @@
-package com.coastee.server.auth.config;
+package com.coastee.server.auth.infrastructurre;
 
 import com.coastee.server.global.apipayload.code.ErrorReasonDTO;
 import com.coastee.server.global.apipayload.exception.GeneralException;
 import com.coastee.server.login.infrastructure.JwtHeaderUtil;
 import com.coastee.server.login.infrastructure.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,24 +12,21 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.stream.Collectors;
 
 import static com.coastee.server.global.domain.Constant.*;
 
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class AuthorizationFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
+    private final AuthProvider authProvider;
 
     @Override
     protected void doFilterInternal(
@@ -49,7 +45,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
                 if (headerValue != null && headerValue.startsWith(TOKEN_PREFIX)) {
                     String accessToken = headerValue.substring(TOKEN_PREFIX.length());
                     if (jwtProvider.validateAccessToken(accessToken)) {
-                        Authentication authentication = getAuthentication(accessToken);
+                        Authentication authentication = authProvider.getAuthentication(accessToken);
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     }
                 }
@@ -58,20 +54,6 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         } catch (GeneralException e) {
             exceptionHandler(response, e);
         }
-    }
-
-    private Authentication getAuthentication(final String accessToken) {
-        Claims claims = jwtProvider.getTokenClaims(accessToken);
-        Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(new String[]{claims.get(AUTHORITIES_KEY).toString()})
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
-
-        return new UsernamePasswordAuthenticationToken(
-                jwtProvider.getSubject(accessToken),
-                accessToken,
-                authorities
-        );
     }
 
     private void exceptionHandler(

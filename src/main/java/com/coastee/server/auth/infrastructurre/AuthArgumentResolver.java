@@ -1,5 +1,4 @@
-package com.coastee.server.login;
-
+package com.coastee.server.auth.infrastructurre;
 
 import com.coastee.server.auth.Auth;
 import com.coastee.server.auth.domain.Accessor;
@@ -19,7 +18,7 @@ import static com.coastee.server.global.apipayload.code.status.ErrorStatus._INVA
 
 @Component
 @RequiredArgsConstructor
-public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
+public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {

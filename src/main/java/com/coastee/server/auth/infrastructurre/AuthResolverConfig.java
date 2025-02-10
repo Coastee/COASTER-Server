@@ -1,4 +1,4 @@
-package com.coastee.server.login;
+package com.coastee.server.auth.infrastructurre;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -9,12 +9,12 @@ import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
-public class LoginResolverConfig implements WebMvcConfigurer {
+public class AuthResolverConfig implements WebMvcConfigurer {
 
-    private final LoginArgumentResolver loginArgumentResolver;
+    private final AuthArgumentResolver authArgumentResolver;
 
     @Override
     public void addArgumentResolvers(final List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(loginArgumentResolver);
+        resolvers.add(authArgumentResolver);
     }
 }
