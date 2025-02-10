@@ -25,4 +25,9 @@ public class DirectMessageRoomEntry extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "direct_message_room_id")
     private DirectMessageRoom directMessageRoom;
+
+    public DirectMessageRoomEntry(final User user, final DirectMessageRoom directMessageRoom) {
+        this.user = user;
+        this.directMessageRoom = directMessageRoom;
+    }
 }

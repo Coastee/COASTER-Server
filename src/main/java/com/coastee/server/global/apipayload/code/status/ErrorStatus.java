@@ -44,6 +44,8 @@ public enum ErrorStatus implements BaseErrorCode {
     INVALID_SERVER_ID(BAD_REQUEST, "SERVER4001", "유효하지 않은 서버 아이디입니다."),
     NOT_IN_SERVER(BAD_REQUEST, "SERVER4002", "현재 유저는 이 서버에 참여하고 있지 않습니다."),
 
+    // Chat
+
     // Chatroom
     INVALID_CHATROOM_ID(BAD_REQUEST, "CHATROOM4001", "유효하지 않은 채팅방 아이디입니다."),
     MAX_PARTICIPANT(BAD_REQUEST, "CHATROOM4002", "최대 참여자 수에 도달하여 더 이상 참여할 수 없는 채팅방입니다."),
@@ -51,6 +53,14 @@ public enum ErrorStatus implements BaseErrorCode {
     FAIL_CREATE_CHATROOM(BAD_REQUEST, "CHATROOM4004", "채팅방 생성 과정에 실패하였습니다. 요청 엔드포인트가 잘못되었습니다."),
 
     FAIL_FIND_SERVER_CHATROOM(INTERNAL_SERVER_ERROR, "CHATROOM5001", "서버 전체 채팅방 부재, 관리자에게 문의 바랍니다."),
+
+    // DM
+
+    // DM room
+    INVALID_DMROOM_ID(BAD_REQUEST, "DMROOM4001", "유효하지 않은 DM 채팅방 아이디입니다."),
+    NOT_IN_DMROOM(BAD_REQUEST, "DMROOM4002", "현재 유저는 이 DM 채팅방에 참여하고 있지 않습니다."),
+
+
     ;
 
     private final HttpStatus httpStatus;

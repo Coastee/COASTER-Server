@@ -1,6 +1,7 @@
 package com.coastee.server.global.stomp.infrastructure;
 
-import com.coastee.server.chat.dto.request.ChatRequest;
+import com.coastee.server.chat.dto.ChatElement;
+import com.coastee.server.dm.dto.DMElement;
 import com.coastee.server.global.apipayload.exception.handler.JsonException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,13 +22,13 @@ public class RedisSubscriber {
     public void sendChat(final String publishMessage) {
         try {
             log.info("==sub== " + publishMessage);
-            ChatRequest chatRequest = objectMapper.readValue(
+            ChatElement chatElement = objectMapper.readValue(
                     publishMessage,
-                    ChatRequest.class
+                    ChatElement.class
             );
             operations.convertAndSend(
-                    "/sub/chat/room/" + chatRequest.getRoomId(),
-                    chatRequest
+                    "/sub/chats/" + chatElement.getChatRoomId(),
+                    chatElement
             );
         } catch (JsonProcessingException e) {
             throw new JsonException(JSON_EXCEPTION);
@@ -37,13 +38,13 @@ public class RedisSubscriber {
     public void sendDM(final String publishMessage) {
         try {
             log.info("==sub== " + publishMessage);
-            ChatRequest chatRequest = objectMapper.readValue(
+            DMElement dmElement = objectMapper.readValue(
                     publishMessage,
-                    ChatRequest.class
+                    DMElement.class
             );
             operations.convertAndSend(
-                    "/sub/chat/room/" + chatRequest.getRoomId(),
-                    chatRequest
+                    "/sub/dms/" + dmElement.getDmRoomId(),
+                    dmElement
             );
         } catch (JsonProcessingException e) {
             throw new JsonException(JSON_EXCEPTION);

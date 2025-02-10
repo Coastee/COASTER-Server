@@ -31,5 +31,17 @@ public class DirectMessage extends BaseEntity {
     private String content;
 
     @Enumerated(EnumType.STRING)
-    private ChatType type;
+    private DMType type;
+
+    public DirectMessage(
+            final User user,
+            final DirectMessageRoom directMessageRoom,
+            final String content,
+            final DMType type
+    ) {
+        this.user = user;
+        this.directMessageRoom = directMessageRoom;
+        this.content = content;
+        this.type = type;
+    }
 }

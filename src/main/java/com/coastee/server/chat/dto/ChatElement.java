@@ -20,6 +20,7 @@ public class ChatElement {
     private String content;
     private LocalDateTime createdDate;
     private ChatType type;
+    private Long chatRoomId;
 
     public ChatElement(final Chat chat) {
         this.id = chat.getId();
@@ -27,5 +28,6 @@ public class ChatElement {
         this.content = chat.getContent();
         this.createdDate = chat.getCreatedDate();
         this.type = chat.getType();
+        this.chatRoomId = chat.getChatRoom().getId();
     }
 }
