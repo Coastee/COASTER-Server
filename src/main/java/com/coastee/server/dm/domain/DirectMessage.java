@@ -1,6 +1,7 @@
-package com.coastee.server.chat.domain;
+package com.coastee.server.dm.domain;
 
-import com.coastee.server.chatroom.domain.ChatRoom;
+import com.coastee.server.chat.domain.ChatType;
+import com.coastee.server.dmroom.domain.DirectMessageRoom;
 import com.coastee.server.global.domain.BaseEntity;
 import com.coastee.server.user.domain.User;
 import jakarta.persistence.*;
@@ -14,7 +15,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @Entity
 @NoArgsConstructor(access = PROTECTED)
-public class Chat extends BaseEntity {
+public class DirectMessage extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -24,23 +25,11 @@ public class Chat extends BaseEntity {
     private User user;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "chatroom_id")
-    private ChatRoom chatRoom;
+    @JoinColumn(name = "direct_message_room_id")
+    private DirectMessageRoom directMessageRoom;
 
     private String content;
 
     @Enumerated(EnumType.STRING)
     private ChatType type;
-
-    public Chat(
-            final User user,
-            final ChatRoom chatRoom,
-            final String content,
-            final ChatType chatType
-    ) {
-        this.user = user;
-        this.chatRoom = chatRoom;
-        this.content = content;
-        this.type = chatType;
-    }
 }

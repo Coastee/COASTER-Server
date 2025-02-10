@@ -11,31 +11,60 @@ import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-import static com.coastee.server.global.domain.Constant.CHANNEL_NAME;
+import java.util.Map;
+
+import static com.coastee.server.global.domain.Constant.*;
 
 @Configuration
 public class RedisConfig {
 
     @Bean
-    public ChannelTopic channelTopic() {
-        return new ChannelTopic(CHANNEL_NAME);
+    public ChannelTopic chatRoomTopic() {
+        return new ChannelTopic(CHATROOM_CHANNEL_NAME);
+    }
+
+    @Bean
+    public ChannelTopic dmTopic() {
+        return new ChannelTopic(DM_CHANNEL_NAME);
+    }
+
+    @Bean
+    public Map<String, ChannelTopic> topics() {
+        return Map.of(
+                CHATROOM_CHANNEL_NAME, chatRoomTopic(),
+                DM_CHANNEL_NAME, dmTopic()
+        );
+    }
+
+    @Bean
+    public MessageListenerAdapter chatRoomListenerAdapter(final RedisSubscriber redisSubscriber) {
+        return new MessageListenerAdapter(redisSubscriber, CHATROOM_LISTENER_METHOD);
+    }
+
+    @Bean
+    public MessageListenerAdapter dmListenerAdapter(final RedisSubscriber redisSubscriber) {
+        return new MessageListenerAdapter(redisSubscriber, DM_LISTENER_METHOD);
+    }
+
+    @Bean
+    public Map<String, MessageListenerAdapter> listenerAdapters(final RedisSubscriber redisSubscriber) {
+        return Map.of(
+                CHATROOM_LISTENER_METHOD, chatRoomListenerAdapter(redisSubscriber),
+                DM_LISTENER_METHOD, dmListenerAdapter(redisSubscriber)
+        );
     }
 
     @Bean
     public RedisMessageListenerContainer redisMessageListener(
             final RedisConnectionFactory connectionFactory,
-            final MessageListenerAdapter listenerAdapter,
-            final ChannelTopic channelTopic
+            final Map<String, MessageListenerAdapter> listenerAdapterMap,
+            final Map<String, ChannelTopic> channelTopicMap
     ) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        container.addMessageListener(listenerAdapter, channelTopic);
+        container.addMessageListener(listenerAdapterMap.get(CHATROOM_CHANNEL_NAME), channelTopicMap.get(CHATROOM_LISTENER_METHOD));
+        container.addMessageListener(listenerAdapterMap.get(DM_CHANNEL_NAME), channelTopicMap.get(DM_LISTENER_METHOD));
         return container;
-    }
-
-    @Bean
-    public MessageListenerAdapter messageListenerAdapter(final RedisSubscriber redisSubscriber) {
-        return new MessageListenerAdapter(redisSubscriber, "sendMessage");
     }
 
     @Bean

@@ -18,7 +18,23 @@ public class RedisSubscriber {
     private final ObjectMapper objectMapper;
     private final SimpMessageSendingOperations operations;
 
-    public void sendMessage(final String publishMessage) {
+    public void sendChat(final String publishMessage) {
+        try {
+            log.info("==sub== " + publishMessage);
+            ChatRequest chatRequest = objectMapper.readValue(
+                    publishMessage,
+                    ChatRequest.class
+            );
+            operations.convertAndSend(
+                    "/sub/chat/room/" + chatRequest.getRoomId(),
+                    chatRequest
+            );
+        } catch (JsonProcessingException e) {
+            throw new JsonException(JSON_EXCEPTION);
+        }
+    }
+
+    public void sendDM(final String publishMessage) {
         try {
             log.info("==sub== " + publishMessage);
             ChatRequest chatRequest = objectMapper.readValue(

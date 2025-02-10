@@ -12,7 +12,10 @@ public class Constant {
     // api
     public static final int DEFAULT_PAGING_SIZE = 40;
     // redis
-    public static final String CHANNEL_NAME = "chatroom";
+    public static final String CHATROOM_CHANNEL_NAME = "chatroom";
+    public static final String DM_CHANNEL_NAME = "dm";
+    public static final String CHATROOM_LISTENER_METHOD = "sendChat";
+    public static final String DM_LISTENER_METHOD = "sendDM";
     // chatroom
     public static final int MAX_COUNT = 1000;
     public static final int UNLIMITED = Integer.MAX_VALUE;

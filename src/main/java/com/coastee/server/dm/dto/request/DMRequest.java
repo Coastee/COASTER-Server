@@ -1,4 +1,4 @@
-package com.coastee.server.chat.dto.request;
+package com.coastee.server.dm.dto.request;
 
 import com.coastee.server.chat.domain.ChatType;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
-public class ChatRequest {
+public class DMRequest {
     private Long roomId;
     private String content;
     private ChatType type;
