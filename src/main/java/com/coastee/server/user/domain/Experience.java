@@ -7,9 +7,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import static com.coastee.server.global.apipayload.code.status.ErrorStatus._INVALID_AUTHORITY;
@@ -31,7 +35,8 @@ public class Experience extends BaseEntity {
 
     private String title;
 
-    private String content;
+    @JdbcTypeCode(SqlTypes.ARRAY)
+    private List<String> contentList = new ArrayList<>();
 
     @Embedded
     private Period period = new Period();
@@ -39,12 +44,12 @@ public class Experience extends BaseEntity {
     public Experience(
             final User user,
             final String title,
-            final String content,
+            final List<String> contentList,
             final Period period
     ) {
         this.user = user;
         this.title = title;
-        this.content = content;
+        this.contentList = contentList;
         this.period = period;
     }
 
@@ -64,8 +69,8 @@ public class Experience extends BaseEntity {
         this.title = title;
     }
 
-    public void updateContent(final String content) {
-        this.content = content;
+    public void updateContentList(final List<String> contentList) {
+        this.contentList = contentList;
     }
 
     public void updatePeriod(

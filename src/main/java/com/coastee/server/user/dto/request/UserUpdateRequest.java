@@ -1,5 +1,6 @@
 package com.coastee.server.user.dto.request;
 
+import com.coastee.server.global.dto.UpdateRequest;
 import com.coastee.server.user.domain.User;
 import com.coastee.server.user.domain.UserIntro;
 import jakarta.validation.constraints.Size;
@@ -14,7 +15,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
-public class UserUpdateRequest {
+public class UserUpdateRequest extends UpdateRequest {
     @Size(min = 2, max = 10, message = "닉네임은 최소 2자 이상, 10자 이하로 설정할 수 있습니다.")
     private String nickname;
 
@@ -40,14 +41,5 @@ public class UserUpdateRequest {
         this.job = getOrDefault(this.job, userIntro.getJob());
         this.expYears = getOrDefault(this.expYears, userIntro.getExpYears());
         this.bio = getOrDefault(this.bio, user.getBio());
-    }
-
-    private <T> T getOrDefault(
-            final T newValue,
-            final T defaultValue
-    ) {
-        if (newValue != null)
-            return newValue;
-        return defaultValue;
     }
 }
