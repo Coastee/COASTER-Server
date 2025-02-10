@@ -1,5 +1,6 @@
-package com.coastee.server.chat.infrastructure;
+package com.coastee.server.global.stomp.config;
 
+import com.coastee.server.global.stomp.infrastructure.StompHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;

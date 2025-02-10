@@ -1,4 +1,4 @@
-package com.coastee.server.chat.infrastructure;
+package com.coastee.server.global.stomp.infrastructure;
 
 import com.coastee.server.login.infrastructure.JwtHeaderUtil;
 import com.coastee.server.login.infrastructure.JwtProvider;

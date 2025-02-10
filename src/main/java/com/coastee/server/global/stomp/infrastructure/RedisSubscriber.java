@@ -1,4 +1,4 @@
-package com.coastee.server.chat.infrastructure;
+package com.coastee.server.global.stomp.infrastructure;
 
 import com.coastee.server.chat.dto.request.ChatRequest;
 import com.coastee.server.global.apipayload.exception.handler.JsonException;
