@@ -43,7 +43,7 @@ class ExperienceControllerTest extends ControllerTest {
 
         ExperienceCreateRequest request = new ExperienceCreateRequest(
                 "title",
-                "content",
+                List.of("000 개발에 참여하였습니다.", "000 결과에 기여하였습니다."),
                 LocalDateTime.now().minusMonths(5),
                 LocalDateTime.now()
         );
@@ -63,7 +63,7 @@ class ExperienceControllerTest extends ControllerTest {
                                 ),
                                 requestFields(
                                         fieldWithPath("title").type(STRING).description("제목"),
-                                        fieldWithPath("content").type(STRING).description("내용"),
+                                        fieldWithPath("contentList").type(ARRAY).description("내용 리스트"),
                                         fieldWithPath("startDate").type(ARRAY).description("시작기간"),
                                         fieldWithPath("endDate").type(ARRAY).description("끝나는기간 : null로 전달시 현재까지 진행되는 경력으로 간주됨.")
                                 ),
@@ -107,7 +107,7 @@ class ExperienceControllerTest extends ControllerTest {
                                 ),
                                 requestFields(
                                         fieldWithPath("title").type(STRING).description("제목"),
-                                        fieldWithPath("content").type(ARRAY).description("내용"),
+                                        fieldWithPath("contentList").type(ARRAY).description("내용"),
                                         fieldWithPath("startDate").type(ARRAY).description("시작기간"),
                                         fieldWithPath("endDate").type(ARRAY).description("끝나는기간 : null로 전달시 현재까지 진행되는 경력으로 간주됨.")
                                 ),

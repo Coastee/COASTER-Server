@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static com.coastee.server.global.domain.Constant.CURRENT_DATE;
 import static lombok.AccessLevel.PROTECTED;
@@ -18,11 +19,12 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor
 public class ExperienceCreateRequest {
-    @Size(min = 1)
+    @Size(min = 1, max = 30, message = "경력 제목은 최소 1자 이상, 최대 30자 이하까지 설정할 수 있습니다.")
     @NotNull(message = "제목은 필수로 입력해야 합니다.")
     private String title;
 
-    private String content;
+    @Size(max = 5, message = "세부사항은 최대 5개까지 설정할 수 있습니다.")
+    private List<@Size(max = 30, message = "세부사항은 최대 30자까지 설정할 수 있습니다.") String> contentList;
 
     @NotNull(message = "시작 날짜는 필수로 입력해야 합니다.")
     private LocalDateTime startDate;
@@ -33,7 +35,7 @@ public class ExperienceCreateRequest {
         return new Experience(
                 user,
                 title,
-                content,
+                contentList,
                 new Period(startDate, getEndDate())
         );
     }
