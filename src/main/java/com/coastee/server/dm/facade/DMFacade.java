@@ -33,16 +33,19 @@ public class DMFacade {
 
     @Transactional
     public void message(final Accessor accessor, final DMRequest dmRequest) {
-        User user = userService.findById(accessor.getUserId());
+        User sender = userService.findById(accessor.getUserId());
         DirectMessageRoom dmRoom;
         if (dmRequest.getRoomId() != null) {
             dmRoom = dmRoomService.findById(dmRequest.getRoomId());
-            dmRoomEntryService.validateJoin(user, dmRoom);
+            dmRoomEntryService.validateJoin(sender, dmRoom);
         } else {
-            dmRoom = dmRoomService.save(new DirectMessageRoom(user));
-            dmRoomEntryService.enter(user, dmRoom);
+            User receiver = userService.findById(dmRequest.getUserId());
+            // TODO: 이미 room이 있는지 확인 필요
+            dmRoom = dmRoomService.save(new DirectMessageRoom(sender));
+            dmRoomEntryService.enter(sender, dmRoom);
+            dmRoomEntryService.enter(receiver, dmRoom);
         }
-        DirectMessage dm = dmService.save(dmRequest.toEntity(user, dmRoom));
+        DirectMessage dm = dmService.save(dmRequest.toEntity(sender, dmRoom));
         redisTemplate.convertAndSend(
                 channelTopicMap.get(DM_CHANNEL_NAME).getTopic(),
                 new DMElement(dm)

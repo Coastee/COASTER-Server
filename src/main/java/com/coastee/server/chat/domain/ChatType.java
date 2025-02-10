@@ -8,7 +8,7 @@ import java.util.Arrays;
 @Getter
 @AllArgsConstructor
 public enum ChatType {
-    CREATE("CREATE"),
+    ENTER("ENTER"),
     QUIT("QUIT"),
     TALK("TALK"),
     DELETE("DELETE"),
