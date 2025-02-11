@@ -6,7 +6,10 @@ import com.coastee.server.dm.dto.request.DMRequest;
 import com.coastee.server.dm.facade.DMFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -17,10 +20,12 @@ public class DMStompController {
 
     @MessageMapping("/dm")
     public void message(
-            @Auth final Accessor accessor,
-            final DMRequest dmRequest
+            final DMRequest dmRequest,
+            @Header("Authorization") String authorization
     ) {
         log.info("==pub== " + dmRequest.getContent());
-        dmFacade.message(accessor, dmRequest);
+        // TODO: 여기서 가져오질 못함
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        dmFacade.message(null, dmRequest);
     }
 }

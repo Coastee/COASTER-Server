@@ -28,7 +28,7 @@ public class StompAuthorizationHandler implements ChannelInterceptor {
             final MessageChannel channel
     ) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-        if (StompCommand.CONNECT == accessor.getCommand()) {
+        if (StompCommand.CONNECT == accessor.getCommand() || StompCommand.SEND == accessor.getCommand()) {
             String accessToken = JwtHeaderUtil.getToken(HEADER_AUTHORIZATION, accessor);
             jwtProvider.validateAccessToken(accessToken);
             Authentication authentication = authProvider.getAuthentication(accessToken);

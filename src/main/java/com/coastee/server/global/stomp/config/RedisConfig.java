@@ -17,6 +17,10 @@ import static com.coastee.server.global.domain.Constant.*;
 
 @Configuration
 public class RedisConfig {
+    private static final String CHATROOM_ADAPTER = "chatRoomListenerAdapter";
+    private static final String DMROOM_ADAPTER = "dmListenerAdapter";
+    private static final String CHATROOM_TOPIC = "chatRoomTopic";
+    private static final String DMROOM_TOPIC = "dmTopic";
 
     @Bean
     public ChannelTopic chatRoomTopic() {
@@ -26,14 +30,6 @@ public class RedisConfig {
     @Bean
     public ChannelTopic dmTopic() {
         return new ChannelTopic(DM_CHANNEL_NAME);
-    }
-
-    @Bean
-    public Map<String, ChannelTopic> topics() {
-        return Map.of(
-                CHATROOM_CHANNEL_NAME, chatRoomTopic(),
-                DM_CHANNEL_NAME, dmTopic()
-        );
     }
 
     @Bean
@@ -47,14 +43,6 @@ public class RedisConfig {
     }
 
     @Bean
-    public Map<String, MessageListenerAdapter> listenerAdapters(final RedisSubscriber redisSubscriber) {
-        return Map.of(
-                CHATROOM_LISTENER_METHOD, chatRoomListenerAdapter(redisSubscriber),
-                DM_LISTENER_METHOD, dmListenerAdapter(redisSubscriber)
-        );
-    }
-
-    @Bean
     public RedisMessageListenerContainer redisMessageListener(
             final RedisConnectionFactory connectionFactory,
             final Map<String, MessageListenerAdapter> listenerAdapterMap,
@@ -62,8 +50,8 @@ public class RedisConfig {
     ) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        container.addMessageListener(listenerAdapterMap.get(CHATROOM_CHANNEL_NAME), channelTopicMap.get(CHATROOM_LISTENER_METHOD));
-        container.addMessageListener(listenerAdapterMap.get(DM_CHANNEL_NAME), channelTopicMap.get(DM_LISTENER_METHOD));
+        container.addMessageListener(listenerAdapterMap.get(CHATROOM_ADAPTER), channelTopicMap.get(CHATROOM_TOPIC));
+        container.addMessageListener(listenerAdapterMap.get(DMROOM_ADAPTER), channelTopicMap.get(DMROOM_TOPIC));
         return container;
     }
 
