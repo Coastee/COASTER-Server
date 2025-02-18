@@ -1,6 +1,7 @@
-package com.coastee.server.chat.domain;
+package com.coastee.server.dm.domain;
 
-import com.coastee.server.chatroom.domain.ChatRoom;
+import com.coastee.server.chat.domain.ChatType;
+import com.coastee.server.dmroom.domain.DirectMessageRoom;
 import com.coastee.server.global.domain.BaseEntity;
 import com.coastee.server.user.domain.User;
 import jakarta.persistence.*;
@@ -16,7 +17,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @NoArgsConstructor(access = PROTECTED)
 @SQLRestriction("status = 'ACTIVE'")
-public class Chat extends BaseEntity {
+public class DirectMessage extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -26,23 +27,29 @@ public class Chat extends BaseEntity {
     private User user;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "chatroom_id")
-    private ChatRoom chatRoom;
+    @JoinColumn(name = "direct_message_room_id")
+    private DirectMessageRoom directMessageRoom;
 
     private String content;
 
     @Enumerated(EnumType.STRING)
-    private ChatType type;
+    private DMType type;
 
-    public Chat(
+    public DirectMessage(
             final User user,
-            final ChatRoom chatRoom,
+            final DirectMessageRoom directMessageRoom,
             final String content,
-            final ChatType chatType
+            final DMType type
     ) {
         this.user = user;
-        this.chatRoom = chatRoom;
+        this.directMessageRoom = directMessageRoom;
         this.content = content;
-        this.type = chatType;
+        this.type = type;
+    }
+
+    @Override
+    public void delete() {
+        super.delete();
+        this.type = DMType.DELETE;
     }
 }

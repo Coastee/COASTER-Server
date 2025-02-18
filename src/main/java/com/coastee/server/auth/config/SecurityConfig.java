@@ -1,6 +1,6 @@
 package com.coastee.server.auth.config;
 
-import com.coastee.server.login.infrastructure.JwtProvider;
+import com.coastee.server.auth.infrastructurre.AuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,13 +17,14 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-
     private final CorsFilter corsFilter;
-    private final JwtProvider jwtProvider;
+    private final AuthorizationFilter authorizationFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
@@ -33,13 +34,7 @@ public class SecurityConfig {
                                 .anyRequest()
                                 .permitAll()
                 )
-                .addFilter(corsFilter)
-                .addFilterBefore(authorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
-    }
-
-    @Bean
-    public AuthorizationFilter authorizationFilter() {
-        return new AuthorizationFilter(jwtProvider);
     }
 }

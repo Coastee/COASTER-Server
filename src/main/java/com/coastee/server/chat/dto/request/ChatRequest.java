@@ -12,9 +12,6 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor
 public class ChatRequest {
     private Long roomId;
-    private String message;
+    private String content;
     private ChatType type;
-
-    // test
-    private String sender;
 }

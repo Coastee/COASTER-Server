@@ -1,5 +1,6 @@
-package com.coastee.server.chat.infrastructure;
+package com.coastee.server.global.stomp.config;
 
+import com.coastee.server.auth.infrastructurre.StompAuthorizationHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
@@ -12,7 +13,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @RequiredArgsConstructor
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-    private final StompHandler stompHandler;
+    private final StompAuthorizationHandler stompHandler;
 
     @Override
     public void configureMessageBroker(final MessageBrokerRegistry registry) {
@@ -25,6 +26,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/ws-stomp")
                 .setAllowedOriginPatterns("*")
                 .withSockJS();
+        registry.addEndpoint("/ws-stomp")
+                .setAllowedOrigins("*");
     }
 
     @Override
