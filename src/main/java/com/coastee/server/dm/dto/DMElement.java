@@ -28,7 +28,6 @@ public class DMElement {
     private LocalDateTime createdDate;
 
     private DMType type;
-
     private Long dmRoomId;
 
     public DMElement(final DirectMessage directMessage) {

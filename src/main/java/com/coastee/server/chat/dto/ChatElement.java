@@ -3,6 +3,10 @@ package com.coastee.server.chat.dto;
 import com.coastee.server.chat.domain.Chat;
 import com.coastee.server.chat.domain.ChatType;
 import com.coastee.server.user.dto.UserElement;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +22,11 @@ public class ChatElement {
     private Long id;
     private UserElement user;
     private String content;
+
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime createdDate;
+
     private ChatType type;
     private Long chatRoomId;
 

@@ -1,12 +1,13 @@
 package com.coastee.server.chat.controller;
 
-import com.coastee.server.auth.Auth;
 import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.chat.dto.request.ChatRequest;
 import com.coastee.server.chat.facade.ChatFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -15,12 +16,13 @@ import org.springframework.stereotype.Controller;
 public class ChatStompController {
     private final ChatFacade chatFacade;
 
-    @MessageMapping("/chat")
+    @MessageMapping("/chats/{roomId}")
     public void message(
-            @Auth final Accessor accessor,
+            final Authentication authentication,
+            @DestinationVariable("roomId") final Long roomId,
             final ChatRequest chatRequest
     ) {
-        log.info("==pub== " + chatRequest.getContent());
-        chatFacade.chat(accessor, chatRequest);
+        Accessor accessor = Accessor.user(Long.parseLong(authentication.getPrincipal().toString()));
+        chatFacade.chat(accessor, roomId, chatRequest);
     }
 }

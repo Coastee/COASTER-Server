@@ -18,4 +18,9 @@ public class ChatService {
     public Page<Chat> findAllByChatRoom(final ChatRoom chatRoom, final Pageable pageable) {
         return chatRepository.findAllByChatRoom(chatRoom, pageable);
     }
+
+    @Transactional
+    public Chat save(final Chat chat) {
+        return chatRepository.save(chat);
+    }
 }
