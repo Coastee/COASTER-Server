@@ -1,7 +1,7 @@
 package com.coastee.server.dm.domain;
 
-import com.coastee.server.chat.domain.ChatType;
 import com.coastee.server.dmroom.domain.DirectMessageRoom;
+import com.coastee.server.global.apipayload.exception.GeneralException;
 import com.coastee.server.global.domain.BaseEntity;
 import com.coastee.server.user.domain.User;
 import jakarta.persistence.*;
@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
 
+import static com.coastee.server.global.apipayload.code.status.ErrorStatus._INVALID_AUTHORITY;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
@@ -51,5 +52,10 @@ public class DirectMessage extends BaseEntity {
     public void delete() {
         super.delete();
         this.type = DMType.DELETE;
+    }
+
+    public void validateUser(final User user) {
+        if (this.user.equals(user)) return;
+        throw new GeneralException(_INVALID_AUTHORITY);
     }
 }

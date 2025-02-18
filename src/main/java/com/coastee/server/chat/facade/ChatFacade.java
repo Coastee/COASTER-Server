@@ -48,4 +48,24 @@ public class ChatFacade {
                 new ChatElement(chat)
         );
     }
+
+    @Transactional
+    public void deleteChat(
+            final Accessor accessor,
+            final Long roomId,
+            final Long chatId
+    ) {
+        User user = userService.findById(accessor.getUserId());
+        ChatRoom chatRoom = chatRoomService.findById(roomId);
+        chatRoomEntryService.validateJoin(user, chatRoom);
+
+        Chat chat = chatService.findById(chatId);
+        chat.validateUser(user);
+        chat.delete();
+
+        redisTemplate.convertAndSend(
+                channelTopicMap.get(CHATROOM_TOPIC_KEY).getTopic(),
+                new ChatElement(chat)
+        );
+    }
 }

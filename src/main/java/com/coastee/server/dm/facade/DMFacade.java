@@ -80,6 +80,7 @@ public class DMFacade {
         dmRoomEntryService.validateJoin(user, dmRoom);
 
         DirectMessage dm = dmService.findById(dmId);
+        dm.validateUser(user);
         dm.delete();
 
         redisTemplate.convertAndSend(
