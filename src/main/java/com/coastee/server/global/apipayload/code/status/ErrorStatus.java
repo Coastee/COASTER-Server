@@ -55,6 +55,7 @@ public enum ErrorStatus implements BaseErrorCode {
     FAIL_FIND_SERVER_CHATROOM(INTERNAL_SERVER_ERROR, "CHATROOM5001", "서버 전체 채팅방 부재, 관리자에게 문의 바랍니다."),
 
     // DM
+    BAD_DM_REQUEST(BAD_REQUEST, "DM4001", "필수 전달 요소가 부족합니다."),
 
     // DM room
     INVALID_DMROOM_ID(BAD_REQUEST, "DMROOM4001", "유효하지 않은 DM 채팅방 아이디입니다."),

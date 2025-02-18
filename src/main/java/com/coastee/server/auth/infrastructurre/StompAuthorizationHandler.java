@@ -33,7 +33,6 @@ public class StompAuthorizationHandler implements ChannelInterceptor {
             jwtProvider.validateAccessToken(accessToken);
             Authentication authentication = authProvider.getAuthentication(accessToken);
             accessor.setUser(authentication);
-            System.out.println("authentication = " + authentication);
         }
         return message;
     }

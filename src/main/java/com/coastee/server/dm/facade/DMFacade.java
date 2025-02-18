@@ -32,18 +32,35 @@ public class DMFacade {
     private final DMRoomEntryService dmRoomEntryService;
 
     @Transactional
-    public void message(final Accessor accessor, final DMRequest dmRequest) {
+    public void message(
+            final Accessor accessor,
+            final DMRequest dmRequest
+    ) {
+        dmRequest.validateUserId();
         User sender = userService.findById(accessor.getUserId());
-        DirectMessageRoom dmRoom;
-        if (dmRequest.getRoomId() != null) {
-            dmRoom = dmRoomService.findById(dmRequest.getRoomId());
-            dmRoomEntryService.validateJoin(sender, dmRoom);
-        } else {
-            User receiver = userService.findById(dmRequest.getUserId());
-            dmRoom = dmRoomService.findOrCreateByUserAndUser(sender, receiver);
-            dmRoomEntryService.enter(sender, dmRoom);
-            dmRoomEntryService.enter(receiver, dmRoom);
-        }
+        User receiver = userService.findById(dmRequest.getUserId());
+
+        DirectMessageRoom dmRoom = dmRoomService.findOrCreateByUserAndUser(sender, receiver);
+        dmRoomEntryService.enter(sender, dmRoom);
+        dmRoomEntryService.enter(receiver, dmRoom);
+
+        DirectMessage dm = dmService.save(dmRequest.toEntity(sender, dmRoom));
+        redisTemplate.convertAndSend(
+                channelTopicMap.get(DMROOM_TOPIC_KEY).getTopic(),
+                new DMElement(dm)
+        );
+    }
+
+    @Transactional
+    public void message(
+            final Accessor accessor,
+            final Long roomId,
+            final DMRequest dmRequest
+    ) {
+        User sender = userService.findById(accessor.getUserId());
+        DirectMessageRoom dmRoom = dmRoomService.findById(roomId);
+        dmRoomEntryService.validateJoin(sender, dmRoom);
+
         DirectMessage dm = dmService.save(dmRequest.toEntity(sender, dmRoom));
         redisTemplate.convertAndSend(
                 channelTopicMap.get(DMROOM_TOPIC_KEY).getTopic(),

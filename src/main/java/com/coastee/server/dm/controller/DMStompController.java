@@ -6,6 +6,7 @@ import com.coastee.server.dm.facade.DMFacade;
 import com.coastee.server.global.apipayload.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,17 @@ public class DMStompController {
     ) {
         Accessor accessor = Accessor.user(Long.parseLong(authentication.getPrincipal().toString()));
         dmFacade.message(accessor, dmRequest);
+        return ApiResponse.onSuccess();
+    }
+
+    @MessageMapping("/dm/{room-id}")
+    public ApiResponse<Void> message(
+            @DestinationVariable("room-id") final Long roomId,
+            final DMRequest dmRequest,
+            final Authentication authentication
+    ) {
+        Accessor accessor = Accessor.user(Long.parseLong(authentication.getPrincipal().toString()));
+        dmFacade.message(accessor, roomId, dmRequest);
         return ApiResponse.onSuccess();
     }
 }
