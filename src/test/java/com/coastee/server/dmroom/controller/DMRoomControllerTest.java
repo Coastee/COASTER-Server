@@ -2,6 +2,8 @@ package com.coastee.server.dmroom.controller;
 
 import com.coastee.server.dm.domain.DirectMessage;
 import com.coastee.server.dm.domain.repository.DMRepository;
+import com.coastee.server.dm.dto.DMElement;
+import com.coastee.server.dm.dto.DMElements;
 import com.coastee.server.dmroom.domain.DirectMessageRoom;
 import com.coastee.server.dmroom.domain.repository.DMRoomRepository;
 import com.coastee.server.dmroom.domain.repository.dto.FindAnotherUserAndRecentDM;
@@ -45,7 +47,7 @@ class DMRoomControllerTest extends ControllerTest {
     @Autowired
     private DMRepository dmRepository;
 
-    @DisplayName("내가 참여한 DMroom을 조회한다.")
+    @DisplayName("내가 참여한 DM 채팅방을 조회한다.")
     @Test
     void getRooms() throws Exception {
         // given
@@ -134,6 +136,76 @@ class DMRoomControllerTest extends ControllerTest {
                                 )
                         ))
                 .when().get("/api/v1/users/{userId}/dms", 1)
+                .then().log().all().statusCode(200);
+    }
+
+    @DisplayName("DM 채팅방의 DM을 조회한다.")
+    @Test
+    void getChats() throws Exception {
+        // given
+        User userA = userRepository.save(UserFixture.get("userA"));
+        User userB = userRepository.save(UserFixture.get("userB"));
+        User userC = userRepository.save(UserFixture.get("userC"));
+        DirectMessageRoom dmRoom = dmRoomRepository.save(DMRoomFixture.get(currentUser));
+        List<DirectMessage> dmList = List.of(
+                dmRepository.save(DMFixture.get(userA, dmRoom)),
+                dmRepository.save(DMFixture.get(userB, dmRoom)),
+                dmRepository.save(DMFixture.get(userC, dmRoom))
+        );
+
+        when(dmRoomFacade.getChats(any(), any(), any()))
+                .thenReturn(
+                        new DMElements(
+                                new PageInfo(true, 0, 3, 40),
+                                dmList.stream().map(DMElement::new).toList()
+                        )
+                );
+
+        // when & then
+        RestAssured.given(spec).log().all()
+                .header(ACCESS_TOKEN_HEADER, ACCESS_TOKEN)
+                .param("page", "0")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .filter(
+                        document("find-all-dms",
+                                pathParameters(
+                                        parameterWithName("userId").description("유저 아이디"),
+                                        parameterWithName("roomId").description("DM 채팅방 아이디")
+                                ),
+                                queryParameters(
+                                        parameterWithName("page").description("페이지 번호 (default: 0)")
+                                ),
+                                requestHeaders(
+                                        headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰")
+                                ),
+                                responseFields(
+                                        fieldWithPath("isSuccess").type(BOOLEAN).description("성공 여부"),
+                                        fieldWithPath("code").type(STRING).description("결과 코드"),
+                                        fieldWithPath("message").type(STRING).description("결과 메세지"),
+                                        fieldWithPath("result").type(OBJECT).description("결과 데이터"),
+                                        fieldWithPath("result.pageInfo").type(OBJECT).description("페이징 정보"),
+                                        fieldWithPath("result.pageInfo.lastPage").type(BOOLEAN).description("마지막 페이지 여부"),
+                                        fieldWithPath("result.pageInfo.totalPages").type(NUMBER).description("총 페이지 개수"),
+                                        fieldWithPath("result.pageInfo.totalElements").type(NUMBER).description("총 요소 개수"),
+                                        fieldWithPath("result.pageInfo.size").type(NUMBER).description("페이지 사이즈"),
+                                        fieldWithPath("result.dmList").type(ARRAY).description("DM 리스트"),
+                                        fieldWithPath("result.dmList[].id").type(NUMBER).description("아이디"),
+                                        fieldWithPath("result.dmList[].user").type(OBJECT).description("전송자"),
+                                        fieldWithPath("result.dmList[].user.id").type(NUMBER).description("아이디"),
+                                        fieldWithPath("result.dmList[].user.profileImage").type(STRING).description("프로필 사진"),
+                                        fieldWithPath("result.dmList[].user.nickname").type(STRING).description("닉네임"),
+                                        fieldWithPath("result.dmList[].user.linkedInVerify").type(BOOLEAN).description("링크드인 인증 여부"),
+                                        fieldWithPath("result.dmList[].user.userIntro").type(OBJECT).description("소개"),
+                                        fieldWithPath("result.dmList[].user.userIntro.headline").type(STRING).description("한줄소개"),
+                                        fieldWithPath("result.dmList[].user.userIntro.job").type(STRING).description("직업"),
+                                        fieldWithPath("result.dmList[].user.userIntro.expYears").type(NUMBER).description("경력 년차"),
+                                        fieldWithPath("result.dmList[].content").type(STRING).description("내용"),
+                                        fieldWithPath("result.dmList[].createdDate").type(ARRAY).description("전송시간"),
+                                        fieldWithPath("result.dmList[].type").type(STRING).description("타입"),
+                                        fieldWithPath("result.dmList[].dmRoomId").type(NUMBER).description("DM의 채팅방 아이디")
+                                )
+                        ))
+                .when().get("/api/v1/users/{userId}/dms/{roomId}", currentUser.getId(), dmRoom.getId())
                 .then().log().all().statusCode(200);
     }
 }

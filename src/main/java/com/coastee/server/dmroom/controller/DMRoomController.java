@@ -3,6 +3,7 @@ package com.coastee.server.dmroom.controller;
 import com.coastee.server.auth.Auth;
 import com.coastee.server.auth.UserOnly;
 import com.coastee.server.auth.domain.Accessor;
+import com.coastee.server.dm.dto.DMElements;
 import com.coastee.server.dmroom.dto.DMRoomElements;
 import com.coastee.server.dmroom.facade.DMRoomFacade;
 import com.coastee.server.global.apipayload.ApiResponse;
@@ -35,5 +36,15 @@ public class DMRoomController {
         return ApiResponse.onSuccess(dmRoomFacade.getRooms(accessor, pageable));
     }
 
-    // TODO: getChats
+    @GetMapping("/{roomId}")
+    @UserOnly
+    public ApiResponse<DMElements> getChats(
+            @Auth final Accessor accessor,
+            @PathVariable("userId") final Long userId,
+            @PathVariable("roomId") final Long roomId,
+            @PageableDefault(DEFAULT_PAGING_SIZE) final Pageable pageable
+    ) {
+        userFacade.validateAccess(accessor, userId);
+        return ApiResponse.onSuccess(dmRoomFacade.getChats(accessor, roomId, pageable));
+    }
 }
