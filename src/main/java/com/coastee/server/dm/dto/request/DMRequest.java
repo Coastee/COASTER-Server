@@ -22,12 +22,10 @@ public class DMRequest {
     @NotNull(message = "dm 내용은 필수로 전달해야 합니다.")
     private String content;
 
-    @NotNull(message = "dm 타입은 필수로 전달해야 합니다.")
-    private DMType type;
-
     public DirectMessage toEntity(
             final User user,
-            final DirectMessageRoom directMessageRoom
+            final DirectMessageRoom directMessageRoom,
+            final DMType type
     ) {
         return new DirectMessage(user, directMessageRoom, content, type);
     }

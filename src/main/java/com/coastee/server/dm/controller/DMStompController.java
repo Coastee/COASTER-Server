@@ -17,7 +17,7 @@ import org.springframework.stereotype.Controller;
 public class DMStompController {
     private final DMFacade dmFacade;
 
-    @MessageMapping("/dm")
+    @MessageMapping("/dms/create")
     public ApiResponse<Void> message(
             final DMRequest dmRequest,
             final Authentication authentication
@@ -27,7 +27,7 @@ public class DMStompController {
         return ApiResponse.onSuccess();
     }
 
-    @MessageMapping("/dm/{room-id}")
+    @MessageMapping("/dms/{room-id}")
     public ApiResponse<Void> message(
             @DestinationVariable("room-id") final Long roomId,
             final DMRequest dmRequest,
