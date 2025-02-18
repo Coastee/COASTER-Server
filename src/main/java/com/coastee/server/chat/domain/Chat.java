@@ -1,6 +1,7 @@
 package com.coastee.server.chat.domain;
 
 import com.coastee.server.chatroom.domain.ChatRoom;
+import com.coastee.server.global.apipayload.exception.GeneralException;
 import com.coastee.server.global.domain.BaseEntity;
 import com.coastee.server.user.domain.User;
 import jakarta.persistence.*;
@@ -8,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
 
+import static com.coastee.server.global.apipayload.code.status.ErrorStatus._INVALID_AUTHORITY;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
@@ -44,5 +46,16 @@ public class Chat extends BaseEntity {
         this.chatRoom = chatRoom;
         this.content = content;
         this.type = chatType;
+    }
+
+    @Override
+    public void delete() {
+        super.delete();
+        this.type = ChatType.DELETE;
+    }
+
+    public void validateUser(final User user) {
+        if (this.user.equals(user)) return;
+        throw new GeneralException(_INVALID_AUTHORITY);
     }
 }

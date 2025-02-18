@@ -102,6 +102,11 @@ public class User extends BaseEntity {
         return id != null && Objects.equals(id, that.id);
     }
 
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
     public void updateRefreshToken(final String refreshToken) {
         this.refreshToken = refreshToken;
     }
