@@ -19,8 +19,6 @@ import static com.coastee.server.global.domain.Constant.*;
 public class RedisConfig {
     private static final String CHATROOM_ADAPTER = "chatRoomListenerAdapter";
     private static final String DMROOM_ADAPTER = "dmListenerAdapter";
-    private static final String CHATROOM_TOPIC = "chatRoomTopic";
-    private static final String DMROOM_TOPIC = "dmTopic";
 
     @Bean
     public ChannelTopic chatRoomTopic() {
@@ -29,7 +27,7 @@ public class RedisConfig {
 
     @Bean
     public ChannelTopic dmTopic() {
-        return new ChannelTopic(DM_CHANNEL_NAME);
+        return new ChannelTopic(DMROOM_CHANNEL_NAME);
     }
 
     @Bean
@@ -50,8 +48,8 @@ public class RedisConfig {
     ) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        container.addMessageListener(listenerAdapterMap.get(CHATROOM_ADAPTER), channelTopicMap.get(CHATROOM_TOPIC));
-        container.addMessageListener(listenerAdapterMap.get(DMROOM_ADAPTER), channelTopicMap.get(DMROOM_TOPIC));
+        container.addMessageListener(listenerAdapterMap.get(CHATROOM_ADAPTER), channelTopicMap.get(CHATROOM_TOPIC_KEY));
+        container.addMessageListener(listenerAdapterMap.get(DMROOM_ADAPTER), channelTopicMap.get(DMROOM_TOPIC_KEY));
         return container;
     }
 

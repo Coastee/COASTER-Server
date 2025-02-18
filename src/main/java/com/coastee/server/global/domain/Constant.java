@@ -12,8 +12,10 @@ public class Constant {
     // api
     public static final int DEFAULT_PAGING_SIZE = 40;
     // redis
+    public static final String CHATROOM_TOPIC_KEY = "chatRoomTopic";
+    public static final String DMROOM_TOPIC_KEY = "dmTopic";
     public static final String CHATROOM_CHANNEL_NAME = "chatroom";
-    public static final String DM_CHANNEL_NAME = "dm";
+    public static final String DMROOM_CHANNEL_NAME = "dm";
     public static final String CHATROOM_LISTENER_METHOD = "sendChat";
     public static final String DM_LISTENER_METHOD = "sendDM";
     // chatroom

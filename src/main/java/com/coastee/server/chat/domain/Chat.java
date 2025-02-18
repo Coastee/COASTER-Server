@@ -6,6 +6,7 @@ import com.coastee.server.user.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -14,6 +15,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @Entity
 @NoArgsConstructor(access = PROTECTED)
+@SQLRestriction("status = 'ACTIVE'")
 public class Chat extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)

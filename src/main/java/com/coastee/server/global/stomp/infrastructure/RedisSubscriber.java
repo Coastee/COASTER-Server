@@ -21,7 +21,6 @@ public class RedisSubscriber {
 
     public void sendChat(final String publishMessage) {
         try {
-            log.info("==sub== " + publishMessage);
             ChatElement chatElement = objectMapper.readValue(
                     publishMessage,
                     ChatElement.class
@@ -37,7 +36,6 @@ public class RedisSubscriber {
 
     public void sendDM(final String publishMessage) {
         try {
-            log.info("==sub== " + publishMessage);
             DMElement dmElement = objectMapper.readValue(
                     publishMessage,
                     DMElement.class

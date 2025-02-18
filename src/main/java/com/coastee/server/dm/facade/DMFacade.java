@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
-import static com.coastee.server.global.domain.Constant.DM_CHANNEL_NAME;
+import static com.coastee.server.global.domain.Constant.DMROOM_TOPIC_KEY;
 
 @Service
 @Transactional(readOnly = true)
@@ -46,7 +46,7 @@ public class DMFacade {
         }
         DirectMessage dm = dmService.save(dmRequest.toEntity(sender, dmRoom));
         redisTemplate.convertAndSend(
-                channelTopicMap.get(DM_CHANNEL_NAME).getTopic(),
+                channelTopicMap.get(DMROOM_TOPIC_KEY).getTopic(),
                 new DMElement(dm)
         );
     }

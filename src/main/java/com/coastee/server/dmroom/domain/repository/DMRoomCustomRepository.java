@@ -12,9 +12,9 @@ public interface DMRoomCustomRepository extends JpaRepository<DirectMessageRoom,
 
     @Query("""
             select d from DirectMessageRoom d
-            join DirectMessageRoomEntry e1 on d = e1.directMessageRoom and e1.user = :A
-            join DirectMessageRoomEntry e2 on d = e2.directMessageRoom and e2.user = :B
-            where (select count(e3) from DirectMessageRoomEntry e3 where e3.directMessageRoom = d) = 2
+            join DirectMessageRoomEntry e1 on d = e1.directMessageRoom and e1.user = :A and e1.status = 'ACTIVE'
+            join DirectMessageRoomEntry e2 on d = e2.directMessageRoom and e2.user = :B and e2.status = 'ACTIVE'
+            where (select count(e3) from DirectMessageRoomEntry e3 where e3.directMessageRoom = d and e3.status = 'ACTIVE') = 2
             """)
     Optional<DirectMessageRoom> findByUserAndUser(
             @Param("A") final User userA,
