@@ -11,7 +11,6 @@ ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
 
-
 == `GET` Find DMRoom
 
 DM 방 조회
@@ -40,7 +39,36 @@ include::{snippets}/find-all-dmroom/query-parameters.adoc[]
 
 ==== response body
 
-- 모든 그룹챗을 조회할 경우
-
 include::{snippets}/find-all-dmroom/response-body.adoc[]
 include::{snippets}/find-all-dmroom/response-fields.adoc[]
+
+== `GET` Find DMs
+
+DM 이력 조회
+
+=== Request
+
+```
+/api/v1/users/{userId}/dms/{dmRoomId}
+```
+
+include::{snippets}/find-all-dms/curl-request.adoc[]
+
+==== header
+
+include::{snippets}/find-all-dms/request-headers.adoc[]
+
+==== path parameters
+
+include::{snippets}/find-all-dms/path-parameters.adoc[]
+
+==== query parameters
+
+include::{snippets}/find-all-dms/query-parameters.adoc[]
+
+=== Response
+
+==== response body
+
+include::{snippets}/find-all-dms/response-body.adoc[]
+include::{snippets}/find-all-dms/response-fields.adoc[]
