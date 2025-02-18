@@ -31,11 +31,15 @@ coaster server
 |===
 
 == API List
+
 === User
+
 * link:login.html[로그인 기능]
 * link:user.html[유저 기능]
 * link:experience.html[경력 기능]
+* link:dmroom.html[DM 기능]
 
 === Server
+
 * link:server.html[서버 기능]
 * link:chatroom.html[채팅방 기능]
