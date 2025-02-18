@@ -25,21 +25,21 @@ public class DMStompController {
         dmFacade.message(accessor, dmRequest);
     }
 
-    @MessageMapping("/dms/{room-id}")
+    @MessageMapping("/dms/{roomId}")
     public void message(
             final Authentication authentication,
-            @DestinationVariable("room-id") final Long roomId,
+            @DestinationVariable("roomId") final Long roomId,
             final DMRequest dmRequest
     ) {
         Accessor accessor = Accessor.user(Long.parseLong(authentication.getPrincipal().toString()));
         dmFacade.message(accessor, roomId, dmRequest);
     }
 
-    @MessageMapping("/dms/{room-id}/{dm-id}/delete")
+    @MessageMapping("/dms/{roomId}/{dmId}/delete")
     public void deleteMessage(
             final Authentication authentication,
-            @DestinationVariable("room-id") final Long roomId,
-            @DestinationVariable("dm-id") final Long dmId
+            @DestinationVariable("roomId") final Long roomId,
+            @DestinationVariable("dmId") final Long dmId
     ) {
         Accessor accessor = Accessor.user(Long.parseLong(authentication.getPrincipal().toString()));
         dmFacade.deleteMessage(accessor, roomId, dmId);

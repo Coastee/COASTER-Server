@@ -1,0 +1,46 @@
+= DMRoom API
+coaster server
+:doctype: book
+:icons: font
+:source-highlighter: highlishtjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+
+== `GET` Find DMRoom
+
+DM 방 조회
+
+=== Request
+
+```
+/api/v1/users/{userId}/dms
+```
+
+include::{snippets}/find-all-dmroom/curl-request.adoc[]
+
+==== header
+
+include::{snippets}/find-all-dmroom/request-headers.adoc[]
+
+==== path parameters
+
+include::{snippets}/find-all-dmroom/path-parameters.adoc[]
+
+==== query parameters
+
+include::{snippets}/find-all-dmroom/query-parameters.adoc[]
+
+=== Response
+
+==== response body
+
+- 모든 그룹챗을 조회할 경우
+
+include::{snippets}/find-all-dmroom/response-body.adoc[]
+include::{snippets}/find-all-dmroom/response-fields.adoc[]

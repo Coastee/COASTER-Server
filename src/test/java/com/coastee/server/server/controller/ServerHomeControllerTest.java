@@ -222,7 +222,8 @@ public class ServerHomeControllerTest extends ControllerTest {
                                         fieldWithPath("result.chat.chatList[].user.userIntro.expYears").type(NUMBER).description("년차"),
                                         fieldWithPath("result.chat.chatList[].content").type(STRING).description("내용"),
                                         fieldWithPath("result.chat.chatList[].createdDate").type(ARRAY).description("보낸 시각"),
-                                        fieldWithPath("result.chat.chatList[].type").type(STRING).description("채팅 타입")
+                                        fieldWithPath("result.chat.chatList[].type").type(STRING).description("채팅 타입"),
+                                        fieldWithPath("result.chat.chatList[].chatRoomId").type(NUMBER).description("채팅방아이디")
                                 )
                         ))
                 .when().get("/api/v1/servers/{serverId}", server.getId())

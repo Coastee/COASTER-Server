@@ -356,7 +356,8 @@ class ChatRoomControllerTest extends ControllerTest {
                                         fieldWithPath("result.chatList[].content").type(STRING).description("채팅 내용"),
                                         fieldWithPath("result.chatList[].createdDate").type(ARRAY).description("전송 시간"),
                                         fieldWithPath("result.chatList[].type").type(STRING)
-                                                .description("타입 - `ENTER` : 참여, `QUIT` : 탈퇴, `TALK` : 대화, `DELETE` : 삭제")
+                                                .description("타입 - `ENTER` : 참여, `QUIT` : 탈퇴, `TALK` : 대화, `DELETE` : 삭제"),
+                                        fieldWithPath("result.chatList[].chatRoomId").type(NUMBER).description("채팅방아이디")
                                 )
                         ))
                 .when().get("/api/v1/servers/{serverId}/{chatRoomType}/{chatRoomId}", 1, "meetings", 1)
