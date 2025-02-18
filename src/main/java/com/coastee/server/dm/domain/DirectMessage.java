@@ -46,4 +46,10 @@ public class DirectMessage extends BaseEntity {
         this.content = content;
         this.type = type;
     }
+
+    @Override
+    public void delete() {
+        super.delete();
+        this.type = DMType.DELETE;
+    }
 }

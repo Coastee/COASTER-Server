@@ -68,4 +68,23 @@ public class DMFacade {
                 new DMElement(dm)
         );
     }
+
+    @Transactional
+    public void deleteMessage(
+            final Accessor accessor,
+            final Long roomId,
+            final Long dmId
+    ) {
+        User user = userService.findById(accessor.getUserId());
+        DirectMessageRoom dmRoom = dmRoomService.findById(roomId);
+        dmRoomEntryService.validateJoin(user, dmRoom);
+
+        DirectMessage dm = dmService.findById(dmId);
+        dm.delete();
+
+        redisTemplate.convertAndSend(
+                channelTopicMap.get(DMROOM_TOPIC_KEY).getTopic(),
+                new DMElement(dm)
+        );
+    }
 }
