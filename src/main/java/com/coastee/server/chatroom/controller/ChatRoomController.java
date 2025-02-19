@@ -19,6 +19,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 import static com.coastee.server.global.domain.Constant.DEFAULT_PAGING_SIZE;
 
 @RequiredArgsConstructor
@@ -29,18 +31,22 @@ public class ChatRoomController {
 
     @GetMapping("/{chatRoomType}")
     @UserOnly
-    public ApiResponse<ChatRoomElements> findByScope(
+    public ApiResponse<ChatRoomElements> findWithConditions(
             @Auth final Accessor accessor,
             @PathVariable("serverId") final Long serverId,
             @PathVariable("chatRoomType") final ChatRoomType chatRoomType,
             @RequestParam(value = "scope", required = false) final Scope scope,
+            @RequestParam(value = "keyword", required = false) final String keyword,
+            @RequestParam(value = "tags", required = false) final List<String> tagList,
             @PageableDefault(DEFAULT_PAGING_SIZE) final Pageable pageable
     ) {
-        return ApiResponse.onSuccess(chatRoomFacade.findByScope(
+        return ApiResponse.onSuccess(chatRoomFacade.findWithConditions(
                 accessor,
                 serverId,
                 chatRoomType,
                 scope,
+                keyword,
+                tagList,
                 pageable
         ));
     }

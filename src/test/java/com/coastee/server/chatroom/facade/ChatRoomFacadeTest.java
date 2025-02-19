@@ -67,11 +67,13 @@ class ChatRoomFacadeTest extends ServiceTest {
         );
 
         // when
-        ChatRoomElements elements = chatRoomFacade.findByScope(
+        ChatRoomElements elements = chatRoomFacade.findWithConditions(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
                 ChatRoomType.GROUP,
                 Scope.all,
+                null,
+                null,
                 PageRequest.of(0, 40)
         );
 
@@ -112,11 +114,13 @@ class ChatRoomFacadeTest extends ServiceTest {
         );
 
         // when
-        ChatRoomElements elements = chatRoomFacade.findByScope(
+        ChatRoomElements elements = chatRoomFacade.findWithConditions(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
                 ChatRoomType.GROUP,
                 Scope.all,
+                null,
+                null,
                 PageRequest.of(0, 40, Sort.by(Sort.Direction.ASC, "name"))
         );
 
@@ -158,11 +162,13 @@ class ChatRoomFacadeTest extends ServiceTest {
         );
 
         // when
-        ChatRoomElements elements = chatRoomFacade.findByScope(
+        ChatRoomElements elements = chatRoomFacade.findWithConditions(
                 Accessor.user(currentUser.getId()),
                 server.getId(),
                 ChatRoomType.GROUP,
                 Scope.owner,
+                null,
+                null,
                 PageRequest.of(0, 40)
         );
 

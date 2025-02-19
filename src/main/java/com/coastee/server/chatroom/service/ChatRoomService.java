@@ -2,8 +2,10 @@ package com.coastee.server.chatroom.service;
 
 import com.coastee.server.chatroom.domain.ChatRoom;
 import com.coastee.server.chatroom.domain.ChatRoomType;
+import com.coastee.server.chatroom.domain.repository.ChatRoomQuerydslRepository;
 import com.coastee.server.chatroom.domain.repository.ChatRoomRepository;
 import com.coastee.server.global.apipayload.exception.GeneralException;
+import com.coastee.server.hashtag.domain.HashTag;
 import com.coastee.server.server.domain.Server;
 import com.coastee.server.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ import static com.coastee.server.global.domain.Constant.DEFAULT_PAGING_SIZE;
 @RequiredArgsConstructor
 public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatRoomQuerydslRepository chatRoomQueryDSLRepository;
 
     @Transactional
     public ChatRoom save(final ChatRoom chatRoom) {
@@ -84,5 +87,21 @@ public class ChatRoomService {
             final Pageable pageable
     ) {
         return chatRoomRepository.findByServerAndUserAndChatRoomType(server, user, chatRoomType, pageable);
+    }
+
+    public Page<ChatRoom> findByServerAndTypeAndKeywordAndTagList(
+            final Server server,
+            final ChatRoomType type,
+            final String keyword,
+            final List<HashTag> tagList,
+            final Pageable pageable
+    ) {
+        return chatRoomQueryDSLRepository.findByServerAndTypeAndKeywordAndTagList(
+                server,
+                type,
+                keyword,
+                tagList,
+                pageable
+        );
     }
 }

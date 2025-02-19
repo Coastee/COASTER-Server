@@ -4,6 +4,9 @@ JwtToken.java
 ### data ###
 docker/redis
 
+### Querydsl ###
+src/main/generated
+
 ### STS ###
 .apt_generated
 .classpath

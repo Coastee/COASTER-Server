@@ -90,7 +90,7 @@ class ChatRoomControllerTest extends ControllerTest {
         chatRoomTagRepository.save(new ChatRoomTag(chatRoomList.get(1), hashTagC));
         chatRoomTagRepository.save(new ChatRoomTag(chatRoomList.get(2), hashTagA));
 
-        when(chatRoomFacade.findByScope(any(), any(), any(), any(), any()))
+        when(chatRoomFacade.findWithConditions(any(), any(), any(), any(), any(), any(), any()))
                 .thenReturn(
                         new ChatRoomElements(
                                 new PageInfo(true, 0, 3, 40),
@@ -106,6 +106,8 @@ class ChatRoomControllerTest extends ControllerTest {
                 .param("page", "0")
                 .param("sort", "name")
                 .param("scope", "all")
+                .param("keyword", "검색하는키워드")
+                .param("tagList", "#검색", "#해시태그")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .filter(
                         document("find-all-chatroom",
@@ -119,7 +121,9 @@ class ChatRoomControllerTest extends ControllerTest {
                                         parameterWithName("sort")
                                                 .description("정렬기준 - `name` : 이름순, `remain` : 마감임박순 (default: 최신순)"),
                                         parameterWithName("scope")
-                                                .description("조회 기준 - `joined` : 참여한 채팅방 조회, `owner` : 개설한 채팅방 조회 (default: 전체 조회)")
+                                                .description("조회 기준 - `joined` : 참여한 채팅방 조회, `owner` : 개설한 채팅방 조회 (default: 전체 조회)"),
+                                        parameterWithName("keyword").description("검색 키워드"),
+                                        parameterWithName("tagList").description("검색 해시태그")
                                 ),
                                 requestHeaders(
                                         headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰")
@@ -180,7 +184,7 @@ class ChatRoomControllerTest extends ControllerTest {
                 chatRoomRepository.save(ChatRoom.groupChatRoom(server, userC, "titleC", "contentC"))
         );
 
-        when(chatRoomFacade.findByScope(any(), any(), any(), any(), any()))
+        when(chatRoomFacade.findWithConditions(any(), any(), any(), any(), any(), any(), any()))
                 .thenReturn(new ChatRoomElements(
                                 new PageInfo(true, 0, 3, 40),
                                 chatRoomList.stream().map(ChatRoomElement::new).toList()

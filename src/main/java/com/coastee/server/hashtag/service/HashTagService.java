@@ -33,6 +33,10 @@ public class HashTagService {
         return hashTagRepository.findPopularTagByServer(server, pageable).getContent();
     }
 
+    public List<HashTag> findAllByContentIn(final Set<String> tagNameSet) {
+        return hashTagRepository.findAllByContentIn(tagNameSet);
+    }
+
     private void connectTag(final ChatRoom chatRoom, final List<HashTag> hashTagList) {
         List<ChatRoomTag> chatRoomTagList = hashTagList.stream()
                 .map(tag -> new ChatRoomTag(chatRoom, tag))
