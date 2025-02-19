@@ -76,6 +76,9 @@ include::{snippets}/get-server-home/request-headers.adoc[]
 ==== path parameter
 include::{snippets}/get-server-home/path-parameters.adoc[]
 
+==== query parameter
+include::{snippets}/get-server-home/query-parameters.adoc[]
+
 === Response
 
 > DTO 재사용성을 위해 .. 좀 복잡해지긴했는데.. (잘보면 다른 DTO들이랑 전부 겹치는 내용임) 원하시면 좀 단축해드림 😅😅
