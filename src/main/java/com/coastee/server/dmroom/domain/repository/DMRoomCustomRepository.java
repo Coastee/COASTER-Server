@@ -19,7 +19,7 @@ public interface DMRoomCustomRepository extends JpaRepository<DirectMessageRoom,
                 on r = e1.directMessageRoom
                 and e1.user != :user
                 and e1.status = 'ACTIVE'
-                and r in :dmRoomList
+                and r.id in :dmRoomList
             join User u on u = e1.user
             left join DirectMessage d
                 on r = d.directMessageRoom
@@ -27,7 +27,7 @@ public interface DMRoomCustomRepository extends JpaRepository<DirectMessageRoom,
             where (select count(e2) from DirectMessageRoomEntry e2 where r = e2.directMessageRoom and e2.status = 'ACTIVE') = 2
             """)
     List<FindAnotherUserAndRecentDM> findAnotherUserAndDMByDMRoomListAndUser(
-            @Param("dmRoomList") final List<DirectMessageRoom> dmRoomList,
+            @Param("dmRoomList") final List<Long> dmRoomIdList,
             @Param("user") final User user
     );
 }

@@ -44,10 +44,11 @@ public class DMRoomService {
             final List<DirectMessageRoom> dmRoomList,
             final User user
     ) {
-        List<FindAnotherUserAndRecentDM> resultList = dmRoomCustomRepository.findAnotherUserAndDMByDMRoomListAndUser(
-                dmRoomList,
-                user
-        );
+        List<FindAnotherUserAndRecentDM> resultList = dmRoomCustomRepository
+                .findAnotherUserAndDMByDMRoomListAndUser(
+                        dmRoomList.stream().map(DirectMessageRoom::getId).toList(),
+                        user
+                );
         return resultList.stream().collect(Collectors.toMap(
                 FindAnotherUserAndRecentDM::getDirectMessageRoomId,
                 result -> result
