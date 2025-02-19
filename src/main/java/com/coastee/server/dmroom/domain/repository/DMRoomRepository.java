@@ -24,12 +24,16 @@ public interface DMRoomRepository extends JpaRepository<DirectMessageRoom, Long>
     );
 
     @Query("""
-            select d from DirectMessageRoom d
+            select r from DirectMessageRoom r
             join DirectMessageRoomEntry e1
-                on d = e1.directMessageRoom
+                on r = e1.directMessageRoom
                 and e1.user = :user
                 and e1.status = 'ACTIVE'
-            where (select count(e2) from DirectMessageRoomEntry e2 where e2.directMessageRoom = d and e2.status = 'ACTIVE') = 2
+            left join DirectMessage d
+                on r = d.directMessageRoom
+                and d.createdDate = (select max(d2.createdDate) from DirectMessage d2 where r = d2.directMessageRoom)
+            where (select count(e2) from DirectMessageRoomEntry e2 where r = e2.directMessageRoom and e2.status = 'ACTIVE') = 2
+            order by d.createdDate desc
             """)
     Page<DirectMessageRoom> findByParticipant(
             @Param("user") final User user,

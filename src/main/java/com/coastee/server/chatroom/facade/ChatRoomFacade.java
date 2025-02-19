@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
+import static com.coastee.server.global.util.PageableUtil.setChatOrder;
 import static com.coastee.server.global.util.PageableUtil.setChatRoomOrder;
 
 @Service
@@ -88,7 +89,7 @@ public class ChatRoomFacade {
         User user = userService.findById(accessor.getUserId());
         ChatRoom chatRoom = chatRoomService.findById(chatRoomId);
         chatRoomEntryService.validateJoin(user, chatRoom);
-        Page<Chat> chatPage = chatService.findAllByChatRoom(chatRoom, pageable);
+        Page<Chat> chatPage = chatService.findAllByChatRoom(chatRoom, setChatOrder(pageable));
         return new ChatElements(chatPage);
     }
 
