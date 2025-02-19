@@ -4,6 +4,7 @@ import com.coastee.server.chatroom.domain.ChatRoom;
 import com.coastee.server.chatroom.domain.ChatRoomType;
 import com.coastee.server.global.util.QuerydslUtil;
 import com.coastee.server.hashtag.domain.HashTag;
+import com.coastee.server.server.domain.Server;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -25,13 +26,14 @@ import static com.coastee.server.hashtag.domain.QHashTag.hashTag;
 public class ChatRoomQuerydslRepository {
     private final JPAQueryFactory query;
 
-    public Page<ChatRoom> findByTypeAndKeywordAndTagList(
+    public Page<ChatRoom> findByServerAndTypeAndKeywordAndTagList(
+            final Server server,
             final ChatRoomType chatRoomType,
             final String keyword,
             final List<HashTag> tagList,
             final Pageable pageable
     ) {
-        List<ChatRoom> chatRoomList = findByTypeAndKeywordAndTagList(chatRoomType, keyword, tagList)
+        List<ChatRoom> chatRoomList = findByServerAndTypeAndKeywordAndTagList(server, chatRoomType, keyword, tagList)
                 .orderBy(QuerydslUtil.getSort(pageable, chatRoom))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -40,12 +42,13 @@ public class ChatRoomQuerydslRepository {
         JPAQuery<Long> countQuery = query
                 .select(chatRoom.count())
                 .from(chatRoom)
-                .where(chatRoom.in(findByTypeAndKeywordAndTagList(chatRoomType, keyword, tagList)));
+                .where(chatRoom.in(findByServerAndTypeAndKeywordAndTagList(server, chatRoomType, keyword, tagList)));
 
         return PageableExecutionUtils.getPage(chatRoomList, pageable, countQuery::fetchOne);
     }
 
-    private JPQLQuery<ChatRoom> findByTypeAndKeywordAndTagList(
+    private JPQLQuery<ChatRoom> findByServerAndTypeAndKeywordAndTagList(
+            final Server server,
             final ChatRoomType chatRoomType,
             final String keyword,
             final List<HashTag> tagList
@@ -53,7 +56,8 @@ public class ChatRoomQuerydslRepository {
         return query
                 .selectFrom(chatRoom)
                 .where(
-                        chatRoom.chatRoomType.eq(chatRoomType)
+                        chatRoom.server.eq(server)
+                                .and(chatRoom.chatRoomType.eq(chatRoomType))
                                 .and(likeKeyword(keyword))
                                 .and(eqTagList(tagList))
                 );

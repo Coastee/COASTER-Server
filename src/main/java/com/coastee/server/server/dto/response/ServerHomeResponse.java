@@ -30,6 +30,16 @@ public class ServerHomeResponse {
     public ServerHomeResponse(
             final List<HashTag> hashTagList,
             final Page<ChatRoom> groupChatRoomPage,
+            final Page<ChatRoom> meetingChatRoomPage
+    ) {
+        this.hashTagList = hashTagList.stream().map(HashTagElement::new).toList();
+        this.groupChatRoom = ChatRoomElements.detail(groupChatRoomPage);
+        this.meetingChatRoom = ChatRoomElements.detail(meetingChatRoomPage);
+    }
+
+    public ServerHomeResponse(
+            final List<HashTag> hashTagList,
+            final Page<ChatRoom> groupChatRoomPage,
             final Page<ChatRoom> meetingChatRoomPage,
             final Page<Notice> noticePage,
             final Page<Chat> chatPage

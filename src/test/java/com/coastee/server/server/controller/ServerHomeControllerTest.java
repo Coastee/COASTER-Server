@@ -23,7 +23,6 @@ import com.coastee.server.server.dto.response.ServerHomeResponse;
 import com.coastee.server.server.facade.ServerFacade;
 import com.coastee.server.user.domain.User;
 import com.coastee.server.util.ControllerTest;
-import com.sun.jna.platform.win32.WinDef;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,14 +33,14 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 
 
@@ -87,7 +86,7 @@ public class ServerHomeControllerTest extends ControllerTest {
         ChatRoom serverChatRoom = chatRoomRepository.save(ChatRoomFixture.getEntire(server));
         List<Chat> chatList = chatRepository.saveAll(ChatFixture.getAll(currentUser, serverChatRoom));
 
-        when(serverFacade.getHome(any(), any())).thenReturn(
+        when(serverFacade.getHomeWithConditions(any(), any(), anyString(), any())).thenReturn(
                 new ServerHomeResponse(
                         hashTagList.stream().map(HashTagElement::new).toList(),
                         new ChatRoomElements(
@@ -113,10 +112,16 @@ public class ServerHomeControllerTest extends ControllerTest {
         RestAssured.given(spec).log().all()
                 .header(ACCESS_TOKEN_HEADER, ACCESS_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .param("keyword", "검색하는키워드")
+                .param("tagList", "#검색", "#해시태그")
                 .filter(
                         document("get-server-home",
                                 pathParameters(
                                         parameterWithName("serverId").description("서버 아이디")
+                                ),
+                                queryParameters(
+                                        parameterWithName("keyword").description("검색 키워드"),
+                                        parameterWithName("tagList").description("검색 해시태그")
                                 ),
                                 requestHeaders(
                                         headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰")

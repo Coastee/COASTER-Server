@@ -89,13 +89,15 @@ public class ChatRoomService {
         return chatRoomRepository.findByServerAndUserAndChatRoomType(server, user, chatRoomType, pageable);
     }
 
-    public Page<ChatRoom> findByKeywordAndTagList(
+    public Page<ChatRoom> findByServerAndTypeAndKeywordAndTagList(
+            final Server server,
             final ChatRoomType type,
             final String keyword,
             final List<HashTag> tagList,
             final Pageable pageable
     ) {
-        return chatRoomQueryDSLRepository.findByTypeAndKeywordAndTagList(
+        return chatRoomQueryDSLRepository.findByServerAndTypeAndKeywordAndTagList(
+                server,
                 type,
                 keyword,
                 tagList,

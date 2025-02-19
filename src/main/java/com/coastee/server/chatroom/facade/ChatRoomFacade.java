@@ -12,6 +12,7 @@ import com.coastee.server.chatroom.dto.ChatRoomElements;
 import com.coastee.server.chatroom.dto.request.ChatRoomCreateRequest;
 import com.coastee.server.chatroom.service.ChatRoomEntryService;
 import com.coastee.server.chatroom.service.ChatRoomService;
+import com.coastee.server.hashtag.domain.HashTag;
 import com.coastee.server.hashtag.service.HashTagService;
 import com.coastee.server.image.domain.DirName;
 import com.coastee.server.image.service.BlobStorageService;
@@ -27,6 +28,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 import static com.coastee.server.global.util.PageableUtil.setChatOrder;
@@ -63,11 +67,13 @@ public class ChatRoomFacade {
         chatRoomEntryService.enter(user, chatRoom);
     }
 
-    public ChatRoomElements findByScope(
+    public ChatRoomElements findWithConditions(
             final Accessor accessor,
             final Long serverId,
             final ChatRoomType type,
             final Scope scope,
+            final String keyword,
+            final List<String> tagNameList,
             final Pageable pageable
     ) {
         User user = userService.findById(accessor.getUserId());
@@ -77,7 +83,7 @@ public class ChatRoomFacade {
         } else if (scope.equals(Scope.joined)) {
             return findAllByServerAndParticipant(server, user, type, setChatRoomOrder(pageable));
         } else {
-            return findAllByServer(server, user, type, setChatRoomOrder(pageable));
+            return findAllByServer(server, user, type, keyword, tagNameList, setChatRoomOrder(pageable));
         }
     }
 
@@ -153,11 +159,19 @@ public class ChatRoomFacade {
             final Server server,
             final User currentUser,
             final ChatRoomType type,
+            final String keyword,
+            final List<String> tagNameList,
             final Pageable pageable
     ) {
-        Page<ChatRoom> chatRoomPage = chatRoomService.findAllByServerAndType(
+        List<HashTag> hashTagList = new ArrayList<>();
+        if (tagNameList != null && !tagNameList.isEmpty())
+            hashTagList = hashTagService.findAllByContentIn(new HashSet<>(tagNameList));
+
+        Page<ChatRoom> chatRoomPage = chatRoomService.findByServerAndTypeAndKeywordAndTagList(
                 server,
                 type,
+                keyword,
+                hashTagList,
                 pageable
         );
         Map<Long, Boolean> hasEnteredMap = chatRoomEntryService.findHasEnteredByChatRoomList(

@@ -26,7 +26,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+
+import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Service
 @Transactional(readOnly = true)
@@ -46,35 +50,49 @@ public class ServerFacade {
         return new ServerElements(serverList);
     }
 
-    public ServerHomeResponse getHome(
+    public ServerHomeResponse getHomeWithConditions(
             final Accessor accessor,
-            final Long serverId
+            final Long serverId,
+            final String keyword,
+            final List<String> tagNameList
     ) {
         User user = userService.findById(accessor.getUserId());
         Server server = serverService.findById(serverId);
         serverEntryService.validateJoin(user, server);
+
         List<HashTag> hashTagList = hashTagService.findPopularTagByServer(
                 server,
                 PageRequest.of(0, 10)
         );
-        Page<ChatRoom> groupPage = chatRoomService.findAllByServerAndType(
+
+        List<HashTag> searchTagList = new ArrayList<>();
+        if (tagNameList != null && !tagNameList.isEmpty())
+            searchTagList = hashTagService.findAllByContentIn(new HashSet<>(tagNameList));
+        Page<ChatRoom> groupPage = chatRoomService.findByServerAndTypeAndKeywordAndTagList(
                 server,
                 ChatRoomType.GROUP,
-                PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "createdDate"))
+                keyword,
+                searchTagList,
+                PageRequest.of(0, 3, Sort.by(DESC, "createdDate"))
         );
-        Page<ChatRoom> meetingPage = chatRoomService.findAllByServerAndType(
+        Page<ChatRoom> meetingPage = chatRoomService.findByServerAndTypeAndKeywordAndTagList(
                 server,
                 ChatRoomType.MEETING,
-                PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "remainCount"))
+                keyword,
+                searchTagList,
+                PageRequest.of(0, 3, Sort.by(DESC, "remainCount"))
         );
+        if (isSearch(keyword, tagNameList))
+            return new ServerHomeResponse(hashTagList, groupPage, meetingPage);
+
         Page<Notice> noticePage = noticeService.findAllByServer(
                 server,
-                PageRequest.of(0, 10)
+                PageRequest.of(0, 10, Sort.by(DESC, "createdDate"))
         );
         ChatRoom serverChatRoom = chatRoomService.findEntireChatRoomByServer(server);
         Page<Chat> chatPage = chatService.findAllByChatRoom(
                 serverChatRoom,
-                PageRequest.of(0, 10)
+                PageRequest.of(0, 10, Sort.by(DESC, "createdDate"))
         );
         return new ServerHomeResponse(
                 hashTagList,
@@ -83,6 +101,10 @@ public class ServerFacade {
                 noticePage,
                 chatPage
         );
+    }
+
+    private boolean isSearch(final String keyword, final List<String> tagNameList) {
+        return keyword != null || (tagNameList != null && !tagNameList.isEmpty());
     }
 
     @Transactional
