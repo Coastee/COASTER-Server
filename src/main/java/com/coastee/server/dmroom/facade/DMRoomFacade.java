@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+import static com.coastee.server.global.util.PageableUtil.setChatOrder;
+
 @Service
 @RequiredArgsConstructor
 public class DMRoomFacade {
@@ -44,7 +46,7 @@ public class DMRoomFacade {
         User user = userService.findById(accessor.getUserId());
         DirectMessageRoom dmRoom = dmRoomService.findById(roomId);
         dmRoomEntryService.validateJoin(user, dmRoom);
-        Page<DirectMessage> dmPage = dmService.findAllByDirectMessageRoom(dmRoom, pageable);
+        Page<DirectMessage> dmPage = dmService.findAllByDirectMessageRoom(dmRoom, setChatOrder(pageable));
         return new DMElements(dmPage);
     }
 }
