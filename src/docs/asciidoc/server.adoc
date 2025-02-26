@@ -23,45 +23,6 @@ include::{snippets}/find-all-server/curl-request.adoc[]
 include::{snippets}/find-all-server/response-body.adoc[]
 include::{snippets}/find-all-server/response-fields.adoc[]
 
-== `DELETE` Exit Server
-서버 탈퇴
-```
-/api/v1/{serverId}
-```
-include::{snippets}/exit-server/curl-request.adoc[]
-
-==== header
-include::{snippets}/exit-server/request-headers.adoc[]
-
-==== path variable
-include::{snippets}/exit-server/path-parameters.adoc[]
-
-=== Response
-==== response body
-include::{snippets}/exit-server/response-body.adoc[]
-include::{snippets}/exit-server/response-fields.adoc[]
-
-== `POST` Enter Server
-서버 참여
-
-=== Request
-```
-/api/v1/servers/enter
-```
-include::{snippets}/enter-server/curl-request.adoc[]
-
-==== header
-include::{snippets}/enter-server/request-headers.adoc[]
-
-==== request body
-include::{snippets}/enter-server/request-body.adoc[]
-include::{snippets}/enter-server/request-fields.adoc[]
-
-=== Response
-==== response body
-include::{snippets}/enter-server/response-body.adoc[]
-include::{snippets}/enter-server/response-fields.adoc[]
-
 == `GET` Server Home
 
 === Request
@@ -85,3 +46,41 @@ include::{snippets}/get-server-home/query-parameters.adoc[]
 
 include::{snippets}/get-server-home/response-body.adoc[]
 include::{snippets}/get-server-home/response-fields.adoc[]
+
+== `POST` Enter Server
+서버 참여
+
+=== Request
+```
+/api/v1/servers/{serverId}
+```
+include::{snippets}/enter-server/curl-request.adoc[]
+
+==== header
+include::{snippets}/enter-server/request-headers.adoc[]
+
+==== path parameter
+include::{snippets}/enter-server/path-parameters.adoc[]
+
+=== Response
+==== response body
+include::{snippets}/enter-server/response-body.adoc[]
+include::{snippets}/enter-server/response-fields.adoc[]
+
+== `DELETE` Exit Server
+서버 탈퇴
+```
+/api/v1/{serverId}
+```
+include::{snippets}/exit-server/curl-request.adoc[]
+
+==== header
+include::{snippets}/exit-server/request-headers.adoc[]
+
+==== path variable
+include::{snippets}/exit-server/path-parameters.adoc[]
+
+=== Response
+==== response body
+include::{snippets}/exit-server/response-body.adoc[]
+include::{snippets}/exit-server/response-fields.adoc[]

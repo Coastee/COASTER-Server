@@ -4,8 +4,11 @@ import com.coastee.server.auth.Auth;
 import com.coastee.server.auth.UserOnly;
 import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.global.apipayload.ApiResponse;
+import com.coastee.server.global.util.CookieUtil;
 import com.coastee.server.login.domain.AuthTokens;
+import com.coastee.server.login.dto.request.SignupRequest;
 import com.coastee.server.login.dto.response.AccessTokenResponse;
+import com.coastee.server.login.facade.LoginFacade;
 import com.coastee.server.login.infrastructure.JwtHeaderUtil;
 import com.coastee.server.login.infrastructure.RedirectUriUtil;
 import com.coastee.server.login.infrastructure.SessionManager;
@@ -13,7 +16,6 @@ import com.coastee.server.login.infrastructure.loginparams.GoogleLoginParams;
 import com.coastee.server.login.infrastructure.loginparams.KakaoLoginParams;
 import com.coastee.server.login.infrastructure.loginparams.LinkedInLoginParams;
 import com.coastee.server.login.infrastructure.loginparams.NaverLoginParams;
-import com.coastee.server.login.facade.LoginFacade;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.Size;
@@ -32,20 +34,56 @@ public class LoginController {
     private final LoginFacade loginFacade;
     private final SessionManager sessionManager;
     private final RedirectUriUtil redirectUriUtil;
+    private final CookieUtil cookieUtil;
 
     @GetMapping("/api/v1/login/naver-callback")
-    public ApiResponse<AuthTokens> naverLogin(@ModelAttribute final NaverLoginParams naverLoginParams) {
-        return ApiResponse.onSuccess(loginFacade.login(naverLoginParams));
+    public void naverLogin(
+            @ModelAttribute final NaverLoginParams naverLoginParams,
+            final HttpServletResponse response
+    ) throws IOException {
+        AuthTokens authTokens = loginFacade.login(naverLoginParams);
+        cookieUtil.setAuthCookie(response, authTokens);
+        response.sendRedirect(authTokens.isNewUser() ? redirectUriUtil.getHomeUri() : redirectUriUtil.getProfileSettingUri());
     }
 
     @GetMapping("/api/v1/login/kakao-callback")
-    public ApiResponse<AuthTokens> kakaoLogin(@ModelAttribute final KakaoLoginParams kakaoLoginParams) {
-        return ApiResponse.onSuccess(loginFacade.login(kakaoLoginParams));
+    public void kakaoLogin(
+            @ModelAttribute final KakaoLoginParams kakaoLoginParams,
+            final HttpServletResponse response
+    ) throws IOException {
+        AuthTokens authTokens = loginFacade.login(kakaoLoginParams);
+        cookieUtil.setAuthCookie(response, authTokens);
+        response.sendRedirect(authTokens.isNewUser() ? redirectUriUtil.getHomeUri() : redirectUriUtil.getProfileSettingUri());
     }
 
     @GetMapping("/api/v1/login/google-callback")
-    public ApiResponse<AuthTokens> googleLogin(@ModelAttribute final GoogleLoginParams googleLoginParams) {
-        return ApiResponse.onSuccess(loginFacade.login(googleLoginParams));
+    public void googleLogin(
+            @ModelAttribute final GoogleLoginParams googleLoginParams,
+            final HttpServletResponse response
+    ) throws IOException {
+        AuthTokens authTokens = loginFacade.login(googleLoginParams);
+        cookieUtil.setAuthCookie(response, authTokens);
+        response.sendRedirect(authTokens.isNewUser() ? redirectUriUtil.getHomeUri() : redirectUriUtil.getProfileSettingUri());
+    }
+
+    @PostMapping("/api/v1/signup")
+    public ApiResponse<Void> signup(
+            @Auth final Accessor accessor,
+            @RequestBody final SignupRequest signupRequest
+    ) {
+        loginFacade.signup(accessor, signupRequest);
+        return ApiResponse.onSuccess();
+    }
+
+    @GetMapping("/api/v1/connect/linkedin")
+    @UserOnly
+    public void connectLinkedin(
+            @Auth final Accessor accessor,
+            final HttpServletRequest request,
+            final HttpServletResponse response
+    ) throws IOException {
+        sessionManager.setSession(accessor.getUserId(), request);
+        response.sendRedirect(redirectUriUtil.getLinkedinRedirectUri());
     }
 
     @GetMapping("/api/v1/login/linkedin-callback")
@@ -57,17 +95,6 @@ public class LoginController {
         loginFacade.connect(Accessor.user(userId), linkedInLoginParams);
         sessionManager.removeSession(request);
         return ApiResponse.onSuccess();
-    }
-
-    @GetMapping("/api/v1/connect/linkedin")
-    @UserOnly
-    public void connectLinkedin(
-            @Auth final Accessor accessor,
-            final HttpServletRequest request,
-            final HttpServletResponse response
-    ) throws IOException {
-        sessionManager.setSession(request, accessor.getUserId());
-        response.sendRedirect(redirectUriUtil.getLinkedinRedirectUri());
     }
 
     @PostMapping("/api/v1/refresh")

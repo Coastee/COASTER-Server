@@ -12,7 +12,6 @@ import com.coastee.server.hashtag.service.HashTagService;
 import com.coastee.server.server.domain.Notice;
 import com.coastee.server.server.domain.Server;
 import com.coastee.server.server.dto.ServerElements;
-import com.coastee.server.server.dto.request.ServerEntryRequest;
 import com.coastee.server.server.dto.response.ServerHomeResponse;
 import com.coastee.server.server.service.NoticeService;
 import com.coastee.server.server.service.ServerEntryService;
@@ -108,12 +107,12 @@ public class ServerFacade {
     }
 
     @Transactional
-    public void enter(final Accessor accessor, final ServerEntryRequest request) {
+    public void enter(final Accessor accessor, final Long serverId) {
         User user = userService.findById(accessor.getUserId());
-        List<Server> serverList = serverService.findAllById(request.getIdList());
-        serverEntryService.enter(user, serverList);
-        List<ChatRoom> serverChatRoomList = chatRoomService.findEntireChatRoomsByServers(serverList);
-        chatRoomEntryService.enter(user, serverChatRoomList);
+        Server server = serverService.findById(serverId);
+        serverEntryService.enter(user, server);
+        ChatRoom serverChatRoom = chatRoomService.findEntireChatRoomByServer(server);
+        chatRoomEntryService.enter(user, serverChatRoom);
     }
 
     @Transactional
@@ -121,7 +120,7 @@ public class ServerFacade {
         User user = userService.findById(accessor.getUserId());
         Server server = serverService.findById(serverId);
         serverEntryService.exit(user, server);
-        ChatRoom serverChatRoom = chatRoomService.findEntireChatRoomByServer(server);
-        chatRoomEntryService.exit(user, serverChatRoom);
+        chatRoomService.exit(user, server);
+        chatRoomEntryService.exit(user, server);
     }
 }

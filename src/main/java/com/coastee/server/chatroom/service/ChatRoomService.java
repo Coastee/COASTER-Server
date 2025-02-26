@@ -55,20 +55,20 @@ public class ChatRoomService {
         return chatRoomList;
     }
 
-    public Page<ChatRoom> findAllByServerAndType(
-            final Server server,
-            final ChatRoomType chatRoomType,
-            final Pageable pageable
-    ) {
-        return chatRoomRepository.findByServerAndChatRoomType(server, chatRoomType, pageable);
-    }
-
     public Page<ChatRoom> findAllByServersAndType(
             final List<Server> serverList,
             final ChatRoomType chatRoomType,
             final Pageable pageable
     ) {
         return chatRoomRepository.findByServerInAndChatRoomType(serverList, chatRoomType, pageable);
+    }
+
+    public Page<ChatRoom> findAllByServerAndType(
+            final Server server,
+            final ChatRoomType chatRoomType,
+            final Pageable pageable
+    ) {
+        return chatRoomRepository.findByServerAndChatRoomType(server, chatRoomType, pageable);
     }
 
     public Page<ChatRoom> findAllByServerAndParticipantAndType(
@@ -103,5 +103,10 @@ public class ChatRoomService {
                 tagList,
                 pageable
         );
+    }
+
+    @Transactional
+    public void exit(final User user, final Server server) {
+        chatRoomRepository.exitByUserAndServer(user, server);
     }
 }

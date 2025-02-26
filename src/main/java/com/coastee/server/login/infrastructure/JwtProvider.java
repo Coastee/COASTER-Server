@@ -24,8 +24,8 @@ import static com.coastee.server.global.domain.Constant.AUTHORITIES_KEY;
 @RequiredArgsConstructor
 public class JwtProvider {
     public static final String EMPTY_SUBJECT = "";
-    private final long accessTokenExpirationTime = 1000L * 60 * 30; // 30min
-    private final long refreshTokenExpirationTime = 1000L * 60 * 60 * 24 * 30; // 1month
+    public static final long accessTokenExpirationTime = 1000L * 60 * 30; // 30min
+    public static final long refreshTokenExpirationTime = 1000L * 60 * 60 * 24 * 30; // 1month
     private Key key;
 
     @Value("${jwt.secretKey}")

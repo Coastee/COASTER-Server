@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -50,5 +51,17 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
             @Param("user") final User user,
             @Param("type") final ChatRoomType chatRoomType,
             final Pageable pageable
+    );
+
+    @Modifying
+    @Query(value = """
+            update ChatRoom c
+            set c.currentCount = c.currentCount - 1, c.remainCount = c.remainCount + 1
+            where c in (select e.chatRoom from ChatRoomEntry e where e.user = :user)
+            and c.server = :server
+            """)
+    void exitByUserAndServer(
+            @Param("user") final User user,
+            @Param("server") final Server server
     );
 }

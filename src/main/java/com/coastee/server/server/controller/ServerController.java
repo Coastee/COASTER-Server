@@ -5,7 +5,6 @@ import com.coastee.server.auth.UserOnly;
 import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.global.apipayload.ApiResponse;
 import com.coastee.server.server.dto.ServerElements;
-import com.coastee.server.server.dto.request.ServerEntryRequest;
 import com.coastee.server.server.dto.response.ServerHomeResponse;
 import com.coastee.server.server.facade.ServerFacade;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +34,16 @@ public class ServerController {
         return ApiResponse.onSuccess(serverFacade.getHomeWithConditions(accessor, serverId, keyword, tagList));
     }
 
+    @PostMapping("/{serverId}")
+    @UserOnly
+    public ApiResponse<Void> enterServer(
+            @Auth final Accessor accessor,
+            @PathVariable final Long serverId
+    ) {
+        serverFacade.enter(accessor, serverId);
+        return ApiResponse.onSuccess();
+    }
+
     @DeleteMapping("/{serverId}")
     @UserOnly
     public ApiResponse<Void> exitServer(
@@ -42,16 +51,6 @@ public class ServerController {
             @PathVariable final Long serverId
     ) {
         serverFacade.exit(accessor, serverId);
-        return ApiResponse.onSuccess();
-    }
-
-    @PostMapping("/enter")
-    @UserOnly
-    public ApiResponse<Void> enterServer(
-            @Auth final Accessor accessor,
-            @RequestBody final ServerEntryRequest request
-    ) {
-        serverFacade.enter(accessor, request);
         return ApiResponse.onSuccess();
     }
 }

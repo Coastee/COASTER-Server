@@ -1,9 +1,6 @@
 package com.coastee.server.login.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import static com.coastee.server.global.domain.Constant.TOKEN_PREFIX;
 
@@ -14,6 +11,8 @@ public class AuthTokens {
     private Long userId;
     private String accessToken;
     private String refreshToken;
+    @Setter
+    private boolean newUser;
 
     @Builder(builderMethodName = "of")
     public AuthTokens(

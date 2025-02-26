@@ -20,6 +20,19 @@ public class ServerEntryService {
     private final ServerEntryRepository serverEntryRepository;
 
     @Transactional
+    public ServerEntry enter(final User user, final Server server) {
+        ServerEntry serverEntry = serverEntryRepository
+                .findByUserAndServer(user, server)
+                .orElse(createAndSave(user, server));
+        serverEntry.activate();
+        return serverEntry;
+    }
+
+    private ServerEntry createAndSave(final User user, final Server server) {
+        return serverEntryRepository.save(new ServerEntry(user, server));
+    }
+
+    @Transactional
     public void enter(final User user, final List<Server> serverList) {
         List<ServerEntry> serverEntryList = serverList.stream()
                 .map(server -> new ServerEntry(user, server)).toList();
