@@ -11,8 +11,8 @@ public class RedirectUriUtil {
     @Value("${login.linkedin.callback-uri}")
     private String linkedinCallbackUri;
 
-    public String getHomeUri() {
-        return "https://coasterchat.com";
+    public String getHomeUri(final Long serverId) {
+        return "https://coasterchat.com/" + serverId + "/home";
     }
 
     public String getLinkedinRedirectUri() {

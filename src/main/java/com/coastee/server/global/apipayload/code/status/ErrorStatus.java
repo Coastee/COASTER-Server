@@ -43,6 +43,7 @@ public enum ErrorStatus implements BaseErrorCode {
     // Server
     INVALID_SERVER_ID(BAD_REQUEST, "SERVER4001", "유효하지 않은 서버 아이디입니다."),
     NOT_IN_SERVER(BAD_REQUEST, "SERVER4002", "현재 유저는 이 서버에 참여하고 있지 않습니다."),
+    NOT_IN_ANY_SERVER(BAD_REQUEST, "SERVER4003", "어느 서버에도 참여하고 있지 않습니다."),
 
     // Chat
     INVALID_CHAT_ID(BAD_REQUEST, "CHAT4001", "유효하지 않은 채팅 아이디입니다."),
