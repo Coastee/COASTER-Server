@@ -6,6 +6,7 @@ import com.coastee.server.chatroom.domain.repository.ChatRoomEntryCustomReposito
 import com.coastee.server.chatroom.domain.repository.ChatRoomEntryRepository;
 import com.coastee.server.chatroom.domain.repository.dto.FindHasEntered;
 import com.coastee.server.global.apipayload.exception.GeneralException;
+import com.coastee.server.server.domain.Server;
 import com.coastee.server.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -54,21 +55,15 @@ public class ChatRoomEntryService {
     }
 
     @Transactional
-    public List<ChatRoomEntry> enter(final User user, final List<ChatRoom> chatRoomList) {
-        List<ChatRoomEntry> entryList = chatRoomList.stream().map(
-                chatRoom -> {
-                    chatRoom.enter();
-                    return new ChatRoomEntry(user, chatRoom);
-                }
-        ).toList();
-        return chatRoomEntryRepository.saveAll(entryList);
-    }
-
-    @Transactional
     public void exit(final User user, final ChatRoom chatRoom) {
         chatRoom.exit();
         ChatRoomEntry chatRoomEntry = validateJoin(user, chatRoom);
         chatRoomEntry.delete();
+    }
+
+    @Transactional
+    public void exit(final User user, final Server server) {
+        chatRoomEntryRepository.deleteAllByUserAndServer(user, server);
     }
 
     public ChatRoomEntry validateJoin(final User user, final ChatRoom chatRoom) {
