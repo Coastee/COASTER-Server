@@ -6,6 +6,7 @@ import com.coastee.server.chatroom.domain.repository.ChatRoomEntryCustomReposito
 import com.coastee.server.chatroom.domain.repository.ChatRoomEntryRepository;
 import com.coastee.server.chatroom.domain.repository.dto.FindHasEntered;
 import com.coastee.server.global.apipayload.exception.GeneralException;
+import com.coastee.server.global.domain.BaseEntityStatus;
 import com.coastee.server.server.domain.Server;
 import com.coastee.server.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class ChatRoomEntryService {
     private final ChatRoomEntryCustomRepository chatRoomEntryCustomRepository;
 
     public Page<ChatRoomEntry> findAllByChatRoom(final ChatRoom chatRoom, final Pageable pageable) {
-        return chatRoomEntryRepository.findAllByChatRoom(chatRoom, pageable);
+        return chatRoomEntryRepository.findAllByChatRoomAndStatus(chatRoom, BaseEntityStatus.ACTIVE, pageable);
     }
 
     public Map<Long, Boolean> findHasEnteredByChatRoomList(
