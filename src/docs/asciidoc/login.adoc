@@ -11,17 +11,6 @@ ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
 
-== `GET` Login
-
-로그인
-
-- Request는 social login callback으로 처리되어 Response로 전달되는 token 값만 처리하면 됩니다.
-
-=== Response
-==== response body
-include::{snippets}/login/response-body.adoc[]
-include::{snippets}/login/response-fields.adoc[]
-
 == `POST` Refresh Token
 
 토큰 재발급
