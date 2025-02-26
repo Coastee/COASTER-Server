@@ -1,6 +1,7 @@
 package com.coastee.server.server.service;
 
 import com.coastee.server.global.apipayload.exception.GeneralException;
+import com.coastee.server.global.domain.BaseEntityStatus;
 import com.coastee.server.server.domain.Server;
 import com.coastee.server.server.domain.ServerEntry;
 import com.coastee.server.server.domain.repository.ServerEntryRepository;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.coastee.server.global.apipayload.code.status.ErrorStatus.NOT_IN_ANY_SERVER;
 import static com.coastee.server.global.apipayload.code.status.ErrorStatus.NOT_IN_SERVER;
 
 @Service
@@ -18,6 +20,11 @@ import static com.coastee.server.global.apipayload.code.status.ErrorStatus.NOT_I
 @RequiredArgsConstructor
 public class ServerEntryService {
     private final ServerEntryRepository serverEntryRepository;
+
+    public ServerEntry findAnyByUser(final User user) {
+        return serverEntryRepository.findFirstByUserAndStatus(user, BaseEntityStatus.ACTIVE)
+                .orElseThrow(() -> new GeneralException(NOT_IN_ANY_SERVER));
+    }
 
     @Transactional
     public ServerEntry enter(final User user, final Server server) {

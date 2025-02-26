@@ -99,6 +99,18 @@ public class ChatRoomController {
         return ApiResponse.onSuccess(chatRoomFacade.getParticipants(accessor, chatRoomId, pageable));
     }
 
+    @PostMapping("/{chatRoomType}/{chatRoomId}/favorite")
+    @UserOnly
+    public ApiResponse<Void> toggleFavorite(
+            @Auth final Accessor accessor,
+            @PathVariable("serverId") final Long serverId,
+            @PathVariable("chatRoomType") final ChatRoomType chatRoomType,
+            @PathVariable("chatRoomId") final Long chatRoomId
+    ) {
+        chatRoomFacade.toggleFavorite(accessor, chatRoomId);
+        return ApiResponse.onSuccess();
+    }
+
     @PostMapping("/{chatRoomType}/{chatRoomId}")
     @UserOnly
     public ApiResponse<Void> enterChatRoom(

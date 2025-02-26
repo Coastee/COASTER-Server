@@ -11,6 +11,7 @@ import com.coastee.server.hashtag.domain.HashTag;
 import com.coastee.server.hashtag.service.HashTagService;
 import com.coastee.server.server.domain.Notice;
 import com.coastee.server.server.domain.Server;
+import com.coastee.server.server.domain.ServerEntry;
 import com.coastee.server.server.dto.ServerElements;
 import com.coastee.server.server.dto.response.ServerHomeResponse;
 import com.coastee.server.server.service.NoticeService;
@@ -47,6 +48,12 @@ public class ServerFacade {
     public ServerElements findAll() {
         List<Server> serverList = serverService.findAll();
         return new ServerElements(serverList);
+    }
+
+    public Long findJoinServer(final Accessor accessor) {
+        User user = userService.findById(accessor.getUserId());
+        ServerEntry entry = serverEntryService.findAnyByUser(user);
+        return entry.getServer().getId();
     }
 
     public ServerHomeResponse getHomeWithConditions(

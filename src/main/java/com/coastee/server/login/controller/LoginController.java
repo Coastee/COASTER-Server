@@ -16,6 +16,7 @@ import com.coastee.server.login.infrastructure.loginparams.GoogleLoginParams;
 import com.coastee.server.login.infrastructure.loginparams.KakaoLoginParams;
 import com.coastee.server.login.infrastructure.loginparams.LinkedInLoginParams;
 import com.coastee.server.login.infrastructure.loginparams.NaverLoginParams;
+import com.coastee.server.server.facade.ServerFacade;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.Size;
@@ -32,6 +33,7 @@ import static com.coastee.server.global.domain.Constant.*;
 @RequiredArgsConstructor
 public class LoginController {
     private final LoginFacade loginFacade;
+    private final ServerFacade serverFacade;
     private final SessionManager sessionManager;
     private final RedirectUriUtil redirectUriUtil;
     private final CookieUtil cookieUtil;
@@ -43,7 +45,10 @@ public class LoginController {
     ) throws IOException {
         AuthTokens authTokens = loginFacade.login(naverLoginParams);
         cookieUtil.setAuthCookie(response, authTokens);
-        response.sendRedirect(authTokens.isNewUser() ? redirectUriUtil.getHomeUri() : redirectUriUtil.getProfileSettingUri());
+        response.sendRedirect(authTokens.isNewUser() ?
+                redirectUriUtil.getHomeUri(serverFacade.findJoinServer(Accessor.user(authTokens.getUserId()))) :
+                redirectUriUtil.getProfileSettingUri()
+        );
     }
 
     @GetMapping("/api/v1/login/kakao-callback")
@@ -53,7 +58,10 @@ public class LoginController {
     ) throws IOException {
         AuthTokens authTokens = loginFacade.login(kakaoLoginParams);
         cookieUtil.setAuthCookie(response, authTokens);
-        response.sendRedirect(authTokens.isNewUser() ? redirectUriUtil.getHomeUri() : redirectUriUtil.getProfileSettingUri());
+        response.sendRedirect(authTokens.isNewUser() ?
+                redirectUriUtil.getHomeUri(serverFacade.findJoinServer(Accessor.user(authTokens.getUserId()))) :
+                redirectUriUtil.getProfileSettingUri()
+        );
     }
 
     @GetMapping("/api/v1/login/google-callback")
@@ -63,7 +71,10 @@ public class LoginController {
     ) throws IOException {
         AuthTokens authTokens = loginFacade.login(googleLoginParams);
         cookieUtil.setAuthCookie(response, authTokens);
-        response.sendRedirect(authTokens.isNewUser() ? redirectUriUtil.getHomeUri() : redirectUriUtil.getProfileSettingUri());
+        response.sendRedirect(authTokens.isNewUser() ?
+                redirectUriUtil.getHomeUri(serverFacade.findJoinServer(Accessor.user(authTokens.getUserId()))) :
+                redirectUriUtil.getProfileSettingUri()
+        );
     }
 
     @PostMapping("/api/v1/signup")

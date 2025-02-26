@@ -30,10 +30,21 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
             final Pageable pageable
     );
 
+    @Query("""
+            select c from ChatRoom c
+            join ChatRoomEntry e
+                on c = e.chatRoom
+                and e.user = :user
+                and e.status = 'ACTIVE'
+                and c.user = :user
+                and c.server = :server
+                and c.chatRoomType = :type
+            order by e.favorite desc
+            """)
     Page<ChatRoom> findByServerAndUserAndChatRoomType(
-            final Server server,
-            final User user,
-            final ChatRoomType type,
+            @Param("server") final Server server,
+            @Param("user") final User user,
+            @Param("type") final ChatRoomType chatRoomType,
             final Pageable pageable
     );
 
@@ -43,8 +54,10 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
                 on c = e.chatRoom
                 and e.user = :user
                 and e.status = 'ACTIVE'
-                and c.server = :server
                 and c.user != :user
+                and c.server = :server
+                and c.chatRoomType = :type
+            order by e.favorite desc
             """)
     Page<ChatRoom> findByServerAndParticipantAndChatRoomType(
             @Param("server") final Server server,
