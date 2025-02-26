@@ -42,6 +42,7 @@ public class LoginFacade {
         OAuthUserInfo userInfo = oAuthInfoService.request(params);
         User user = userService.findOrCreateUser(userInfo);
         AuthTokens tokens = jwtProvider.createTokens(user.getId().toString());
+        tokens.setNewUser(user.getRefreshToken() == null);
         user.updateRefreshToken(tokens.getRefreshToken());
         return tokens;
     }

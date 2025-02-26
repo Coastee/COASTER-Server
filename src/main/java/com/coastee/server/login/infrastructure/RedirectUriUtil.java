@@ -11,6 +11,10 @@ public class RedirectUriUtil {
     @Value("${login.linkedin.callback-uri}")
     private String linkedinCallbackUri;
 
+    public String getHomeUri() {
+        return "https://coasterchat.com";
+    }
+
     public String getLinkedinRedirectUri() {
         return "https://www.linkedin.com/oauth/v2/authorization" +
                 "?response_type=code" +

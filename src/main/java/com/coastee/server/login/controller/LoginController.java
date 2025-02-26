@@ -43,7 +43,7 @@ public class LoginController {
     ) throws IOException {
         AuthTokens authTokens = loginFacade.login(naverLoginParams);
         cookieUtil.setAuthCookie(response, authTokens);
-        response.sendRedirect(redirectUriUtil.getProfileSettingUri());
+        response.sendRedirect(authTokens.isNewUser() ? redirectUriUtil.getHomeUri() : redirectUriUtil.getProfileSettingUri());
     }
 
     @GetMapping("/api/v1/login/kakao-callback")
@@ -53,7 +53,7 @@ public class LoginController {
     ) throws IOException {
         AuthTokens authTokens = loginFacade.login(kakaoLoginParams);
         cookieUtil.setAuthCookie(response, authTokens);
-        response.sendRedirect(redirectUriUtil.getProfileSettingUri());
+        response.sendRedirect(authTokens.isNewUser() ? redirectUriUtil.getHomeUri() : redirectUriUtil.getProfileSettingUri());
     }
 
     @GetMapping("/api/v1/login/google-callback")
@@ -63,7 +63,7 @@ public class LoginController {
     ) throws IOException {
         AuthTokens authTokens = loginFacade.login(googleLoginParams);
         cookieUtil.setAuthCookie(response, authTokens);
-        response.sendRedirect(redirectUriUtil.getProfileSettingUri());
+        response.sendRedirect(authTokens.isNewUser() ? redirectUriUtil.getHomeUri() : redirectUriUtil.getProfileSettingUri());
     }
 
     @PostMapping("/api/v1/signup")
