@@ -30,3 +30,25 @@ include::{snippets}/refresh-token/request-headers.adoc[]
 ==== response body
 include::{snippets}/refresh-token/response-body.adoc[]
 include::{snippets}/refresh-token/response-fields.adoc[]
+
+== `POST` Signup
+
+회원가입
+
+=== Request
+```
+/api/v1/signup
+```
+include::{snippets}/signup/curl-request.adoc[]
+
+==== Header
+include::{snippets}/signup/request-headers.adoc[]
+
+==== request body
+include::{snippets}/signup/request-body.adoc[]
+include::{snippets}/signup/request-fields.adoc[]
+
+=== Response
+==== response body
+include::{snippets}/signup/response-body.adoc[]
+include::{snippets}/signup/response-fields.adoc[]
