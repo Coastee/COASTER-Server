@@ -67,6 +67,12 @@ public class ChatRoomEntryService {
     }
 
     @Transactional
+    public void toggleFavorite(final User user, final ChatRoom chatRoom) {
+        ChatRoomEntry chatRoomEntry = validateJoin(user, chatRoom);
+        chatRoomEntry.toggleFavorite();
+    }
+
+    @Transactional
     public void exit(final User user, final ChatRoom chatRoom) {
         chatRoom.exit();
         ChatRoomEntry chatRoomEntry = validateJoin(user, chatRoom);

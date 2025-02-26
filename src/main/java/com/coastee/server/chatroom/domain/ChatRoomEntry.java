@@ -25,8 +25,15 @@ public class ChatRoomEntry extends BaseEntity {
     @JoinColumn(name = "chatroom_id")
     private ChatRoom chatRoom;
 
+    private boolean favorite;
+
     public ChatRoomEntry(final User user, final ChatRoom chatRoom) {
         this.user = user;
         this.chatRoom = chatRoom;
+        this.favorite = false;
+    }
+
+    public void toggleFavorite() {
+        this.favorite = !this.favorite;
     }
 }
