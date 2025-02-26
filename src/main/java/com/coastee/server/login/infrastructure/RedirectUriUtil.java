@@ -18,4 +18,8 @@ public class RedirectUriUtil {
                 "&redirect_uri=" + linkedinCallbackUri +
                 "&state=STATE_STRING&scope=profile%20email%20openid";
     }
+
+    public String getProfileSettingUri() {
+        return "https://coasterchat.com/signup";
+    }
 }
