@@ -6,6 +6,7 @@ import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.global.apipayload.ApiResponse;
 import com.coastee.server.global.util.CookieUtil;
 import com.coastee.server.login.domain.AuthTokens;
+import com.coastee.server.login.dto.request.SignupRequest;
 import com.coastee.server.login.dto.response.AccessTokenResponse;
 import com.coastee.server.login.facade.LoginFacade;
 import com.coastee.server.login.infrastructure.JwtHeaderUtil;
@@ -65,6 +66,15 @@ public class LoginController {
         response.sendRedirect(redirectUriUtil.getProfileSettingUri());
     }
 
+    @PostMapping("/api/v1/signup")
+    public ApiResponse<Void> signup(
+            @Auth final Accessor accessor,
+            @RequestBody final SignupRequest signupRequest
+    ) {
+        loginFacade.signup(accessor, signupRequest);
+        return ApiResponse.onSuccess();
+    }
+
     @GetMapping("/api/v1/connect/linkedin")
     @UserOnly
     public void connectLinkedin(
@@ -72,7 +82,7 @@ public class LoginController {
             final HttpServletRequest request,
             final HttpServletResponse response
     ) throws IOException {
-        sessionManager.setSession(request, accessor.getUserId());
+        sessionManager.setSession(accessor.getUserId(), request);
         response.sendRedirect(redirectUriUtil.getLinkedinRedirectUri());
     }
 

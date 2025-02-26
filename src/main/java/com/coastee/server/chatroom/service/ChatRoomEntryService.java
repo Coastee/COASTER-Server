@@ -50,6 +50,17 @@ public class ChatRoomEntryService {
         return chatRoomEntry;
     }
 
+    @Transactional
+    public List<ChatRoomEntry> enter(final User user, final List<ChatRoom> chatRoomList) {
+        List<ChatRoomEntry> entryList = chatRoomList.stream().map(
+                chatRoom -> {
+                    chatRoom.enter();
+                    return new ChatRoomEntry(user, chatRoom);
+                }
+        ).toList();
+        return chatRoomEntryRepository.saveAll(entryList);
+    }
+
     private ChatRoomEntry createAndSave(final User user, final ChatRoom chatRoom) {
         return chatRoomEntryRepository.save(new ChatRoomEntry(user, chatRoom));
     }

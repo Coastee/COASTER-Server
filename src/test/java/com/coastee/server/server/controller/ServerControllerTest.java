@@ -4,7 +4,6 @@ import com.coastee.server.fixture.ServerFixture;
 import com.coastee.server.server.domain.Server;
 import com.coastee.server.server.domain.repository.ServerRepository;
 import com.coastee.server.server.dto.ServerElements;
-import com.coastee.server.server.dto.request.ServerEntryRequest;
 import com.coastee.server.server.facade.ServerFacade;
 import com.coastee.server.util.ControllerTest;
 import io.restassured.RestAssured;
@@ -69,7 +68,6 @@ class ServerControllerTest extends ControllerTest {
     void exit() throws Exception {
         // given
         doNothing().when(serverFacade).enter(any(), any());
-        ServerEntryRequest request = new ServerEntryRequest(List.of(1L, 2L, 3L));
 
         // when & then
         RestAssured.given(spec).log().all()

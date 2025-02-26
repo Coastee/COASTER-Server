@@ -13,8 +13,8 @@ public class SessionManager {
     private static final int EXPIRATION_TIME = 1800;
 
     public void setSession(
-            final HttpServletRequest request,
-            final Long userId
+            final Long userId,
+            final HttpServletRequest request
     ) {
         request.getSession().invalidate();
         HttpSession session = request.getSession(true);
