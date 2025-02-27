@@ -368,6 +368,36 @@ class ChatRoomControllerTest extends ControllerTest {
                 .then().log().all().statusCode(200);
     }
 
+    @DisplayName("채팅방을 즐겨찾기한다.")
+    @Test
+    void favorite() throws Exception {
+        // given
+        doNothing().when(chatRoomFacade).toggleFavorite(any(), any());
+
+        // when & then
+        RestAssured.given(spec).log().all()
+                .header(ACCESS_TOKEN_HEADER, ACCESS_TOKEN)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .filter(
+                        document("favorite-chatroom",
+                                pathParameters(
+                                        parameterWithName("serverId").description("서버 아이디"),
+                                        parameterWithName("chatRoomType").description("채팅방 타입 - `groups` : 그룹챗, `meetings` 커피챗"),
+                                        parameterWithName("chatRoomId").description("채팅방 아이디")
+                                ),
+                                requestHeaders(
+                                        headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰")
+                                ),
+                                responseFields(
+                                        fieldWithPath("isSuccess").type(BOOLEAN).description("성공 여부"),
+                                        fieldWithPath("code").type(STRING).description("결과 코드"),
+                                        fieldWithPath("message").type(STRING).description("결과 메세지")
+                                )
+                        ))
+                .when().post("/api/v1/servers/{serverId}/{chatRoomType}/{chatRoomId}/favorite", 1, "meetings", 2)
+                .then().log().all().statusCode(200);
+    }
+
     @DisplayName("채팅방에 참여한다.")
     @Test
     void enter() throws Exception {
