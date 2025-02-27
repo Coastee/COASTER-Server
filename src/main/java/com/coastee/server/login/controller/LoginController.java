@@ -46,8 +46,8 @@ public class LoginController {
         AuthTokens authTokens = loginFacade.login(naverLoginParams);
         cookieUtil.setAuthCookie(response, authTokens);
         response.sendRedirect(authTokens.isNewUser() ?
-                redirectUriUtil.getHomeUri(serverFacade.findJoinServer(Accessor.user(authTokens.getUserId()))) :
-                redirectUriUtil.getProfileSettingUri()
+                redirectUriUtil.getProfileSettingUri() :
+                redirectUriUtil.getHomeUri(serverFacade.findJoinServer(Accessor.user(authTokens.getUserId())))
         );
     }
 
@@ -59,8 +59,8 @@ public class LoginController {
         AuthTokens authTokens = loginFacade.login(kakaoLoginParams);
         cookieUtil.setAuthCookie(response, authTokens);
         response.sendRedirect(authTokens.isNewUser() ?
-                redirectUriUtil.getHomeUri(serverFacade.findJoinServer(Accessor.user(authTokens.getUserId()))) :
-                redirectUriUtil.getProfileSettingUri()
+                redirectUriUtil.getProfileSettingUri() :
+                redirectUriUtil.getHomeUri(serverFacade.findJoinServer(Accessor.user(authTokens.getUserId())))
         );
     }
 
@@ -72,8 +72,8 @@ public class LoginController {
         AuthTokens authTokens = loginFacade.login(googleLoginParams);
         cookieUtil.setAuthCookie(response, authTokens);
         response.sendRedirect(authTokens.isNewUser() ?
-                redirectUriUtil.getHomeUri(serverFacade.findJoinServer(Accessor.user(authTokens.getUserId()))) :
-                redirectUriUtil.getProfileSettingUri()
+                redirectUriUtil.getProfileSettingUri() :
+                redirectUriUtil.getHomeUri(serverFacade.findJoinServer(Accessor.user(authTokens.getUserId())))
         );
     }
 

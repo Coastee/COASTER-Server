@@ -12,7 +12,7 @@ public class RedirectUriUtil {
     private String linkedinCallbackUri;
 
     public String getHomeUri(final Long serverId) {
-        return "https://coasterchat.com/" + serverId + "/home";
+        return "http://localhost:5173/" + serverId + "/home";
     }
 
     public String getLinkedinRedirectUri() {
@@ -24,6 +24,6 @@ public class RedirectUriUtil {
     }
 
     public String getProfileSettingUri() {
-        return "https://coasterchat.com/signup";
+        return "http://localhost:5173/signup";
     }
 }

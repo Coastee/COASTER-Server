@@ -20,7 +20,6 @@ public class CookieUtil {
                 .secure(true)
                 .maxAge(JwtProvider.refreshTokenExpirationTime / 1000L)
                 .path("/")
-                .domain("coasterchat.com")
                 .sameSite("None")
                 .build();
 
@@ -29,7 +28,6 @@ public class CookieUtil {
                 .secure(true)
                 .maxAge(JwtProvider.accessTokenExpirationTime / 1000L)
                 .path("/")
-                .domain("coasterchat.com")
                 .sameSite("None")
                 .build();
 
