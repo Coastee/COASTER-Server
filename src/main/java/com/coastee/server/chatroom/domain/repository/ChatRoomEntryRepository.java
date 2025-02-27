@@ -2,6 +2,7 @@ package com.coastee.server.chatroom.domain.repository;
 
 import com.coastee.server.chatroom.domain.ChatRoom;
 import com.coastee.server.chatroom.domain.ChatRoomEntry;
+import com.coastee.server.global.domain.BaseEntityStatus;
 import com.coastee.server.server.domain.Server;
 import com.coastee.server.user.domain.User;
 import org.springframework.data.domain.Page;
@@ -22,8 +23,9 @@ public interface ChatRoomEntryRepository extends JpaRepository<ChatRoomEntry, Lo
     );
 
     @EntityGraph(attributePaths = {"user"})
-    Page<ChatRoomEntry> findAllByChatRoom(
+    Page<ChatRoomEntry> findAllByChatRoomAndStatus(
             final ChatRoom chatRoom,
+            final BaseEntityStatus status,
             final Pageable pageable
     );
 

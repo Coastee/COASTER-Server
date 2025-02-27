@@ -203,6 +203,34 @@ include::{snippets}/find-chats/path-parameters.adoc[]
 include::{snippets}/find-chats/response-body.adoc[]
 include::{snippets}/find-chats/response-fields.adoc[]
 
+== `POST` Favorite
+
+채팅방 즐겨찾기 설정
+
+=== Request
+
+```
+/api/v1/servers/{serverId}/{chatRoomType}/{groupId}/favorite
+```
+
+include::{snippets}/favorite-chatroom/curl-request.adoc[]
+
+==== header
+
+include::{snippets}/favorite-chatroom/request-headers.adoc[]
+
+==== path parameters
+
+include::{snippets}/favorite-chatroom/path-parameters.adoc[]
+
+=== Response
+
+==== response body
+
+include::{snippets}/favorite-chatroom/response-body.adoc[]
+include::{snippets}/favorite-chatroom/response-fields.adoc[]
+
+
 == `POST` Enter ChatRoom
 
 채팅방 입장

@@ -112,6 +112,13 @@ public class ChatRoomFacade {
     }
 
     @Transactional
+    public void toggleFavorite(final Accessor accessor, final Long chatRoomId) {
+        User user = userService.findById(accessor.getUserId());
+        ChatRoom chatRoom = chatRoomService.findById(chatRoomId);
+        chatRoomEntryService.toggleFavorite(user, chatRoom);
+    }
+
+    @Transactional
     public void enter(final Accessor accessor, final Long chatRoomId) {
         User user = userService.findById(accessor.getUserId());
         ChatRoom chatRoom = chatRoomService.findById(chatRoomId);
