@@ -3,8 +3,8 @@ package com.coastee.server.user.controller;
 import com.coastee.server.fixture.ExperienceFixture;
 import com.coastee.server.user.domain.Experience;
 import com.coastee.server.user.domain.repository.ExperienceRepository;
-import com.coastee.server.user.dto.response.UserDetailElement;
 import com.coastee.server.user.dto.request.UserUpdateRequest;
+import com.coastee.server.user.dto.response.UserDetailElement;
 import com.coastee.server.user.facade.UserFacade;
 import com.coastee.server.util.ControllerTest;
 import io.restassured.RestAssured;
@@ -49,19 +49,24 @@ class UserControllerTest extends ControllerTest {
     void getProfile() throws Exception {
         // given
         List<Experience> experienceList = experienceRepository.saveAll(ExperienceFixture.getAll(currentUser));
-        when(userFacade.getProfile(any(), any())).thenReturn(
+        when(userFacade.getProfile(any(), any(), any())).thenReturn(
                 UserDetailElement.from()
                         .user(currentUser)
+                        .dmRoomId(1L)
                         .experiencePage(toPage(experienceList, PageRequest.of(0, DEFAULT_PAGING_SIZE)))
                         .build()
         );
 
         // when & then
         RestAssured.given(spec).log().all()
+                .header(ACCESS_TOKEN_HEADER, ACCESS_TOKEN)
                 .contentType(ContentType.JSON)
                 .param("page", "0")
                 .filter(
                         document("get-profile",
+                                requestHeaders(
+                                        headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰")
+                                ),
                                 pathParameters(
                                         parameterWithName("userId").description("유저 아이디")
                                 ),
@@ -83,6 +88,7 @@ class UserControllerTest extends ControllerTest {
                                         fieldWithPath("result.userIntro.expYears").type(NUMBER).description("경력 년차"),
                                         fieldWithPath("result.bio").type(STRING).description("헤드라인"),
                                         fieldWithPath("result.urlList").type(ARRAY).description("URL 리스트"),
+                                        fieldWithPath("result.dmRoomId").type(NUMBER).description("해당 유저와의 DM 채팅방 아이디 (없을 경우 null로 전달됨)"),
                                         fieldWithPath("result.experience").type(OBJECT).description("경력"),
                                         fieldWithPath("result.experience.pageInfo").type(OBJECT).description("페이징 정보"),
                                         fieldWithPath("result.experience.pageInfo.lastPage").type(BOOLEAN).description("마지막 페이지 여부"),

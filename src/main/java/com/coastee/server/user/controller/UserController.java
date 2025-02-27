@@ -23,11 +23,13 @@ public class UserController {
     private final UserFacade userFacade;
 
     @GetMapping("/{id}")
+    @UserOnly
     public ApiResponse<UserDetailElement> getProfile(
+            @Auth final Accessor accessor,
             @PathVariable("id") final Long userId,
             @PageableDefault(DEFAULT_PAGING_SIZE) final Pageable pageable
     ) {
-        return ApiResponse.onSuccess(userFacade.getProfile(userId, pageable));
+        return ApiResponse.onSuccess(userFacade.getProfile(accessor, userId, pageable));
     }
 
     @PostMapping("/{id}")

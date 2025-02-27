@@ -1,13 +1,15 @@
 package com.coastee.server.user.facade;
 
 import com.coastee.server.auth.domain.Accessor;
+import com.coastee.server.dmroom.domain.DirectMessageRoom;
+import com.coastee.server.dmroom.service.DMRoomService;
 import com.coastee.server.global.apipayload.exception.GeneralException;
 import com.coastee.server.image.domain.DirName;
 import com.coastee.server.image.service.BlobStorageService;
 import com.coastee.server.user.domain.Experience;
 import com.coastee.server.user.domain.User;
-import com.coastee.server.user.dto.response.UserDetailElement;
 import com.coastee.server.user.dto.request.UserUpdateRequest;
+import com.coastee.server.user.dto.response.UserDetailElement;
 import com.coastee.server.user.service.ExperienceService;
 import com.coastee.server.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,13 +27,24 @@ import static com.coastee.server.global.apipayload.code.status.ErrorStatus._INVA
 public class UserFacade {
     private final UserService userService;
     private final ExperienceService experienceService;
+    private final DMRoomService dmRoomService;
     private final BlobStorageService blobStorageService;
 
-    public UserDetailElement getProfile(final Long userId, final Pageable pageable) {
+    public UserDetailElement getProfile(
+            final Accessor accessor,
+            final Long userId,
+            final Pageable pageable
+    ) {
         User user = userService.findById(userId);
         Page<Experience> experiencePage = experienceService.findAllByUser(user, pageable);
+        User currentUser = userService.findById(accessor.getUserId());
+        Long dmRoomId = dmRoomService.findByUserAndUser(user, currentUser)
+                .map(DirectMessageRoom::getId)
+                .orElse(null);
+
         return UserDetailElement.from()
                 .user(user)
+                .dmRoomId(dmRoomId)
                 .experiencePage(experiencePage)
                 .build();
     }

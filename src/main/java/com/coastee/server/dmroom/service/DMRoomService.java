@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.coastee.server.global.apipayload.code.status.ErrorStatus.INVALID_DMROOM_ID;
@@ -27,6 +28,10 @@ public class DMRoomService {
 
     public DirectMessageRoom findById(final Long roomId) {
         return dmRoomRepository.findById(roomId).orElseThrow(() -> new GeneralException(INVALID_DMROOM_ID));
+    }
+
+    public Optional<DirectMessageRoom> findByUserAndUser(final User userA, final User userB) {
+        return dmRoomRepository.findByUserAndUser(userA, userB);
     }
 
     @Transactional

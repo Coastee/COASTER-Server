@@ -27,6 +27,10 @@ include::{snippets}/get-profile/curl-request.adoc[]
 
 include::{snippets}/get-profile/path-parameters.adoc[]
 
+==== request header
+
+include::{snippets}/get-profile/request-headers.adoc[]
+
 ==== query params
 
 include::{snippets}/get-profile/query-parameters.adoc[]
