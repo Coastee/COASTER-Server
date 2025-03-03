@@ -26,4 +26,8 @@ public class RedirectUriUtil {
     public String getProfileSettingUri() {
         return "http://localhost:5173/signup";
     }
+
+    public String getProfileSettingUri(final String errorCode) {
+        return "http://localhost:5173/signup?error=" + errorCode;
+    }
 }
