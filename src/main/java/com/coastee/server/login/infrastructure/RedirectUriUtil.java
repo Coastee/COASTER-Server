@@ -12,7 +12,7 @@ public class RedirectUriUtil {
     private String linkedinCallbackUri;
 
     public String getHomeUri(final Long serverId) {
-        return "http://localhost:5173/" + serverId + "/home";
+        return "https://localhost:5173/" + serverId + "/home";
     }
 
     public String getLinkedinRedirectUri() {
@@ -24,10 +24,10 @@ public class RedirectUriUtil {
     }
 
     public String getProfileSettingUri() {
-        return "http://localhost:5173/signup";
+        return "https://localhost:5173/signup";
     }
 
     public String getProfileSettingUri(final String errorCode) {
-        return "http://localhost:5173/signup?error=" + errorCode;
+        return "https://localhost:5173/signup?error=" + errorCode;
     }
 }
