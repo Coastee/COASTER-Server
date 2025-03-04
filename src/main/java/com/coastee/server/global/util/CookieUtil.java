@@ -17,7 +17,6 @@ public class CookieUtil {
     ) {
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refresh-token", authTokens.getRefreshToken())
                 .httpOnly(true)
-                .secure(true)
                 .maxAge(JwtProvider.refreshTokenExpirationTime / 1000L)
                 .path("/")
                 .sameSite("None")
@@ -25,7 +24,6 @@ public class CookieUtil {
 
         ResponseCookie accessTokenCookie = ResponseCookie.from("access-token", authTokens.getAccessToken())
                 .httpOnly(true)
-                .secure(true)
                 .maxAge(JwtProvider.accessTokenExpirationTime / 1000L)
                 .path("/")
                 .sameSite("None")
