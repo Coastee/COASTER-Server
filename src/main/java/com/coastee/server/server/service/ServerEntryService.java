@@ -21,6 +21,10 @@ import static com.coastee.server.global.apipayload.code.status.ErrorStatus.NOT_I
 public class ServerEntryService {
     private final ServerEntryRepository serverEntryRepository;
 
+    public List<ServerEntry> findByUser(final User user) {
+        return serverEntryRepository.findByUserAndStatus(user, BaseEntityStatus.ACTIVE);
+    }
+
     public ServerEntry findAnyByUser(final User user) {
         return serverEntryRepository.findFirstByUserAndStatus(user, BaseEntityStatus.ACTIVE)
                 .orElseThrow(() -> new GeneralException(NOT_IN_ANY_SERVER));

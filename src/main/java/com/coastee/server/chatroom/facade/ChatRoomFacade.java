@@ -78,9 +78,9 @@ public class ChatRoomFacade {
     ) {
         User user = userService.findById(accessor.getUserId());
         Server server = serverService.findById(serverId);
-        if (scope.equals(Scope.owner)) {
+        if (scope == Scope.owner) {
             return findAllByServerAndOwner(server, user, type, setChatRoomOrder(pageable));
-        } else if (scope.equals(Scope.joined)) {
+        } else if (scope == Scope.joined) {
             return findAllByServerAndParticipant(server, user, type, setChatRoomOrder(pageable));
         } else {
             return findAllByServer(server, user, type, keyword, tagNameList, setChatRoomOrder(pageable));
