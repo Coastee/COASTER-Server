@@ -30,7 +30,7 @@ public class ServerEntryService {
     public ServerEntry enter(final User user, final Server server) {
         ServerEntry serverEntry = serverEntryRepository
                 .findByUserAndServer(user, server)
-                .orElse(createAndSave(user, server));
+                .orElseGet(() -> createAndSave(user, server));
         serverEntry.activate();
         return serverEntry;
     }

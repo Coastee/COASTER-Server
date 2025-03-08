@@ -29,7 +29,7 @@ public class DMRoomEntryService {
     public DirectMessageRoomEntry enter(final User user, final DirectMessageRoom dmRoom) {
         DirectMessageRoomEntry entry = dmRoomEntryRepository
                 .findByUserAndDirectMessageRoom(user, dmRoom)
-                .orElse(createAndSave(user, dmRoom));
+                .orElseGet(() -> createAndSave(user, dmRoom));
         entry.activate();
         return entry;
     }

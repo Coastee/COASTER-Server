@@ -25,6 +25,6 @@ public enum Scope {
         return Arrays.stream(Authority.values())
                 .filter(r -> r.getCode().equals(code.toLowerCase()))
                 .findAny()
-                .orElse(null);
+                .orElseGet(() -> null);
     }
 }

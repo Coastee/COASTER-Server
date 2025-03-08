@@ -38,7 +38,7 @@ public class DMRoomService {
     public DirectMessageRoom findOrCreateByUserAndUser(final User sender, final User receiver) {
         return dmRoomRepository
                 .findByUserAndUser(sender, receiver)
-                .orElse(save(new DirectMessageRoom(sender)));
+                .orElseGet(() -> save(new DirectMessageRoom(sender)));
     }
 
     public Page<DirectMessageRoom> findByParticipant(final User user, final Pageable pageable) {

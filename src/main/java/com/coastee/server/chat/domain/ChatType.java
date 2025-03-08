@@ -20,6 +20,6 @@ public enum ChatType {
         return Arrays.stream(ChatType.values())
                 .filter(r -> r.getCode().equals(code.toUpperCase()))
                 .findAny()
-                .orElse(null);
+                .orElseGet(() -> null);
     }
 }

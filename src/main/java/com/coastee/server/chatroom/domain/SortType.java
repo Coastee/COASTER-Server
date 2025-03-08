@@ -24,6 +24,6 @@ public enum SortType {
         return Arrays.stream(Authority.values())
                 .filter(r -> r.getCode().equals(code.toUpperCase()))
                 .findAny()
-                .orElse(null);
+                .orElseGet(() -> null);
     }
 }

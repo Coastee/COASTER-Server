@@ -11,8 +11,7 @@ public enum SocialType {
     GOOGLE("GOOGLE"),
     KAKAO("KAKAO"),
     NAVER("NAVER"),
-    LINKEDIN("LINKEDIN")
-    ;
+    LINKEDIN("LINKEDIN");
 
     private final String code;
 
@@ -20,6 +19,6 @@ public enum SocialType {
         return Arrays.stream(SocialType.values())
                 .filter(r -> r.getCode().equals(code.toUpperCase()))
                 .findAny()
-                .orElse(null);
+                .orElseGet(() -> null);
     }
 }

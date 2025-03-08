@@ -20,6 +20,6 @@ public enum DMType {
         return Arrays.stream(DMType.values())
                 .filter(r -> r.getCode().equals(code.toUpperCase()))
                 .findAny()
-                .orElse(null);
+                .orElseGet(() -> null);
     }
 }

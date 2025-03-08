@@ -21,13 +21,13 @@ public enum ChatRoomType {
         return Arrays.stream(ChatRoomType.values())
                 .filter(r -> r.getCode().equals(code.toUpperCase()))
                 .findAny()
-                .orElse(null);
+                .orElseGet(() -> null);
     }
 
     public static ChatRoomType url(final String url) {
         return Arrays.stream(ChatRoomType.values())
                 .filter(r -> r.getPathParam().equals(url.toLowerCase()))
                 .findAny()
-                .orElse(null);
+                .orElseGet(() -> null);
     }
 }

@@ -40,7 +40,7 @@ public class UserFacade {
         User currentUser = userService.findById(accessor.getUserId());
         Long dmRoomId = dmRoomService.findByUserAndUser(user, currentUser)
                 .map(DirectMessageRoom::getId)
-                .orElse(null);
+                .orElseGet(() -> null);
 
         return UserDetailElement.from()
                 .user(user)

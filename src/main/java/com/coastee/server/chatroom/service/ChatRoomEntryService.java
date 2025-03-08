@@ -43,11 +43,13 @@ public class ChatRoomEntryService {
 
     @Transactional
     public ChatRoomEntry enter(final User user, final ChatRoom chatRoom) {
-        chatRoom.enter();
         ChatRoomEntry chatRoomEntry = chatRoomEntryRepository
                 .findByUserAndChatRoom(user, chatRoom)
-                .orElse(createAndSave(user, chatRoom));
-        chatRoomEntry.activate();
+                .orElseGet(() -> createAndSave(user, chatRoom));
+        if (chatRoomEntry.isDeleted()) {
+            chatRoom.enter();
+            chatRoomEntry.activate();
+        }
         return chatRoomEntry;
     }
 
@@ -63,6 +65,7 @@ public class ChatRoomEntryService {
     }
 
     private ChatRoomEntry createAndSave(final User user, final ChatRoom chatRoom) {
+        chatRoom.enter();
         return chatRoomEntryRepository.save(new ChatRoomEntry(user, chatRoom));
     }
 
@@ -74,8 +77,8 @@ public class ChatRoomEntryService {
 
     @Transactional
     public void exit(final User user, final ChatRoom chatRoom) {
-        chatRoom.exit();
         ChatRoomEntry chatRoomEntry = validateJoin(user, chatRoom);
+        chatRoom.exit();
         chatRoomEntry.delete();
     }
 
