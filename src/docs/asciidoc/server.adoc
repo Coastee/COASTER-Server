@@ -11,17 +11,27 @@ ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
 
-== `GET` Find All Servers
-모든 서버 조회
+== `GET` Find Servers
+
+모든 / 참여한 서버 조회
+
+=== Request
+
 ```
 /api/v1/servers
 ```
-include::{snippets}/find-all-server/curl-request.adoc[]
+include::{snippets}/find-servers/curl-request.adoc[]
+
+==== header
+include::{snippets}/find-servers/request-headers.adoc[]
+
+==== query parameter
+include::{snippets}/find-servers/query-parameters.adoc[]
 
 === Response
 ==== response body
-include::{snippets}/find-all-server/response-body.adoc[]
-include::{snippets}/find-all-server/response-fields.adoc[]
+include::{snippets}/find-servers/response-body.adoc[]
+include::{snippets}/find-servers/response-fields.adoc[]
 
 == `GET` Server Home
 
