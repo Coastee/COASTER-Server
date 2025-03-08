@@ -34,6 +34,14 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
             final NativeWebRequest webRequest,
             final WebDataBinderFactory binderFactory
     ) {
+        return getAccessor();
+    }
+
+    public Accessor resolveArgument() {
+        return getAccessor();
+    }
+
+    private Accessor getAccessor() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         try {
             final Long userId = Long.valueOf(authentication.getPrincipal().toString());

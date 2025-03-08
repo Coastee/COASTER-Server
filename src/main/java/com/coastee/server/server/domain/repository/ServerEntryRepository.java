@@ -7,6 +7,7 @@ import com.coastee.server.user.domain.User;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ServerEntryRepository extends JpaRepository<ServerEntry, Long> {
@@ -15,4 +16,7 @@ public interface ServerEntryRepository extends JpaRepository<ServerEntry, Long> 
 
     @EntityGraph(attributePaths = {"server"})
     Optional<ServerEntry> findFirstByUserAndStatus(final User user, final BaseEntityStatus status);
+
+    @EntityGraph(attributePaths = {"server"})
+    List<ServerEntry> findByUserAndStatus(final User user, final BaseEntityStatus baseEntityStatus);
 }

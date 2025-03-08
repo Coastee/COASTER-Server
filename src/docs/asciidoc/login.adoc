@@ -11,6 +11,27 @@ ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
 
+== `GET` Login
+
+로그인
+
+=== Request
+```
+/api/v1/login/naver-callback
+/api/v1/login/kakao-callback
+/api/v1/login/google-callback
+
+```
+include::{snippets}/login/curl-request.adoc[]
+
+==== query parameter
+include::{snippets}/login/query-parameters.adoc[]
+
+=== Response
+==== response body
+include::{snippets}/login/response-body.adoc[]
+include::{snippets}/login/response-fields.adoc[]
+
 == `POST` Refresh Token
 
 토큰 재발급

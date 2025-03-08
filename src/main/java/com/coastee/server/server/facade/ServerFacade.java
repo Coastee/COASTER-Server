@@ -1,10 +1,12 @@
 package com.coastee.server.server.facade;
 
 import com.coastee.server.auth.domain.Accessor;
+import com.coastee.server.auth.infrastructurre.AuthArgumentResolver;
 import com.coastee.server.chat.domain.Chat;
 import com.coastee.server.chat.service.ChatService;
 import com.coastee.server.chatroom.domain.ChatRoom;
 import com.coastee.server.chatroom.domain.ChatRoomType;
+import com.coastee.server.chatroom.domain.Scope;
 import com.coastee.server.chatroom.service.ChatRoomEntryService;
 import com.coastee.server.chatroom.service.ChatRoomService;
 import com.coastee.server.hashtag.domain.HashTag;
@@ -45,8 +47,19 @@ public class ServerFacade {
     private final ChatService chatService;
     private final NoticeService noticeService;
 
-    public ServerElements findAll() {
-        List<Server> serverList = serverService.findAll();
+    private final AuthArgumentResolver authArgumentResolver;
+
+    public ServerElements findWithConditions(final Scope scope) {
+        List<Server> serverList;
+        if (scope == Scope.joined) {
+            Accessor accessor = authArgumentResolver.resolveArgument();
+            User user = userService.findById(accessor.getUserId());
+            serverList = serverEntryService.findByUser(user).stream()
+                    .map(ServerEntry::getServer)
+                    .toList();
+        } else {
+            serverList = serverService.findAll();
+        }
         return new ServerElements(serverList);
     }
 

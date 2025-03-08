@@ -4,10 +4,8 @@ import com.coastee.server.auth.Auth;
 import com.coastee.server.auth.UserOnly;
 import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.global.apipayload.ApiResponse;
-import com.coastee.server.global.apipayload.exception.GeneralException;
 import com.coastee.server.global.util.CookieUtil;
 import com.coastee.server.login.domain.AuthTokens;
-import com.coastee.server.login.domain.OAuthLoginParams;
 import com.coastee.server.login.dto.request.SignupRequest;
 import com.coastee.server.login.dto.response.AccessTokenResponse;
 import com.coastee.server.login.facade.LoginFacade;
@@ -41,40 +39,24 @@ public class LoginController {
     private final CookieUtil cookieUtil;
 
     @GetMapping("/api/v1/login/naver-callback")
-    public void naverLogin(
-            @ModelAttribute final NaverLoginParams naverLoginParams,
-            final HttpServletResponse response
+    public ApiResponse<AuthTokens> naverLogin(
+            @ModelAttribute final NaverLoginParams naverLoginParams
     ) throws IOException {
-        login(naverLoginParams, response);
+        return ApiResponse.onSuccess(loginFacade.login(naverLoginParams));
     }
 
     @GetMapping("/api/v1/login/kakao-callback")
-    public void kakaoLogin(
-            @ModelAttribute final KakaoLoginParams kakaoLoginParams,
-            final HttpServletResponse response
+    public ApiResponse<AuthTokens> kakaoLogin(
+            @ModelAttribute final KakaoLoginParams kakaoLoginParams
     ) throws IOException {
-        login(kakaoLoginParams, response);
+        return ApiResponse.onSuccess(loginFacade.login(kakaoLoginParams));
     }
 
     @GetMapping("/api/v1/login/google-callback")
-    public void googleLogin(
-            @ModelAttribute final GoogleLoginParams googleLoginParams,
-            final HttpServletResponse response
+    public ApiResponse<AuthTokens> googleLogin(
+            @ModelAttribute final GoogleLoginParams googleLoginParams
     ) throws IOException {
-        login(googleLoginParams, response);
-    }
-
-    private void login(final OAuthLoginParams loginParams, final HttpServletResponse response) throws IOException {
-        try {
-            AuthTokens authTokens = loginFacade.login(loginParams);
-            cookieUtil.setAuthCookie(response, authTokens);
-            response.sendRedirect(authTokens.isNewUser() ?
-                    redirectUriUtil.getProfileSettingUri() :
-                    redirectUriUtil.getHomeUri(serverFacade.findJoinServer(Accessor.user(authTokens.getUserId())))
-            );
-        } catch (GeneralException e) {
-            response.sendRedirect(redirectUriUtil.getProfileSettingUri(e.getCode().getCode()));
-        }
+        return ApiResponse.onSuccess(loginFacade.login(googleLoginParams));
     }
 
     @PostMapping("/api/v1/signup")

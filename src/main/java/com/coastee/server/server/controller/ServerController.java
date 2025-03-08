@@ -3,6 +3,7 @@ package com.coastee.server.server.controller;
 import com.coastee.server.auth.Auth;
 import com.coastee.server.auth.UserOnly;
 import com.coastee.server.auth.domain.Accessor;
+import com.coastee.server.chatroom.domain.Scope;
 import com.coastee.server.global.apipayload.ApiResponse;
 import com.coastee.server.server.dto.ServerElements;
 import com.coastee.server.server.dto.response.ServerHomeResponse;
@@ -19,8 +20,10 @@ public class ServerController {
     private final ServerFacade serverFacade;
 
     @GetMapping("")
-    public ApiResponse<ServerElements> findAll() {
-        return ApiResponse.onSuccess(serverFacade.findAll());
+    public ApiResponse<ServerElements> findAll(
+            @RequestParam(value = "scope", required = false) final Scope scope
+    ) {
+        return ApiResponse.onSuccess(serverFacade.findWithConditions(scope));
     }
 
     @GetMapping("/{serverId}")

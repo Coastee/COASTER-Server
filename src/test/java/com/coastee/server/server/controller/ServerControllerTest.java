@@ -23,8 +23,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.requestHe
 import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 
 @DisplayName("서버 컨트롤러 테스트")
@@ -41,13 +40,25 @@ class ServerControllerTest extends ControllerTest {
     void findAll() throws Exception {
         // given
         List<Server> servers = serverRepository.saveAll(ServerFixture.getAll());
-        when(serverFacade.findAll()).thenReturn(new ServerElements(servers));
+        when(serverFacade.findWithConditions(any())).thenReturn(new ServerElements(servers));
 
         // when & then
         RestAssured.given(spec).log().all()
+                .header(ACCESS_TOKEN_HEADER, ACCESS_TOKEN)
+                .param("scope", "joined")
                 .contentType(ContentType.JSON)
                 .filter(
-                        document("find-all-server",
+                        document("find-servers",
+                                requestHeaders(
+                                        headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰 - scope : `joined` 시에만 전송해도 됨.")
+                                ),
+                                queryParameters(
+                                        parameterWithName("scope")
+                                                .description("""
+                                                        조회 기준 - `joined` : 참여한 서버 조회(단, joined 사용 시 header로 token 전송 필수),
+                                                        `all` : 전체 서버 조회(header token 전송 필수 X) (default: 전체 조회)
+                                                        """)
+                                ),
                                 responseFields(
                                         fieldWithPath("isSuccess").type(BOOLEAN).description("성공 여부"),
                                         fieldWithPath("code").type(STRING).description("결과 코드"),
