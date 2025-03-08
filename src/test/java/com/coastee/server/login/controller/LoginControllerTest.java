@@ -1,5 +1,6 @@
 package com.coastee.server.login.controller;
 
+import com.coastee.server.login.domain.AuthTokens;
 import com.coastee.server.login.dto.request.SignupRequest;
 import com.coastee.server.login.facade.LoginFacade;
 import com.coastee.server.util.ControllerTest;
@@ -20,6 +21,8 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 
 @DisplayName("로그인 컨트롤러 테스트")
@@ -30,6 +33,44 @@ class LoginControllerTest extends ControllerTest {
     @BeforeEach
     void setUp() {
 
+    }
+
+    @DisplayName("소셜 로그인을 한다.")
+    @Test
+    void login() throws Exception {
+        // given
+        when(loginFacade.login(any()))
+                .thenReturn(
+                        AuthTokens.of()
+                                .accessToken(ACCESS_TOKEN)
+                                .refreshToken(REFRESH_TOKEN)
+                                .subject(currentUser.getId().toString())
+                                .build()
+                );
+
+        // when & then
+        RestAssured.given(spec).log().all()
+                .param("code", "12345")
+                .contentType(ContentType.JSON)
+                .filter(
+                        document("login",
+                                queryParameters(
+                                        parameterWithName("code").description("callback 결과값 코드")
+                                ),
+                                responseFields(
+                                        fieldWithPath("isSuccess").type(BOOLEAN).description("성공 여부"),
+                                        fieldWithPath("code").type(STRING).description("결과 코드"),
+                                        fieldWithPath("message").type(STRING).description("결과 메세지"),
+                                        fieldWithPath("result").type(OBJECT).description("결과 데이터"),
+                                        fieldWithPath("result.tokenType").type(STRING).description("토큰 타입: Bearer로 고정"),
+                                        fieldWithPath("result.userId").type(NUMBER).description("유저 아이디"),
+                                        fieldWithPath("result.accessToken").type(STRING).description("액세스 토큰"),
+                                        fieldWithPath("result.refreshToken").type(STRING).description("리프레시 토큰"),
+                                        fieldWithPath("result.newUser").type(BOOLEAN).description("새로운 유저인지에 대한 여부")
+                                )
+                        ))
+                .when().get("/api/v1/login/naver-callback")
+                .then().log().all().statusCode(200);
     }
 
     @DisplayName("토큰을 재발급한다.")
