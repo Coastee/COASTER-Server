@@ -70,7 +70,7 @@ include::{snippets}/enter-server/response-fields.adoc[]
 == `DELETE` Exit Server
 서버 탈퇴
 ```
-/api/v1/{serverId}
+/api/v1/servers/{serverId}
 ```
 include::{snippets}/exit-server/curl-request.adoc[]
 
