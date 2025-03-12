@@ -36,7 +36,12 @@ public class ChatRoomEntryService {
             final User user,
             final List<ChatRoom> chatRoomList
     ) {
-        return chatRoomEntryCustomRepository.findHasEnteredByChatRoomList(user, chatRoomList)
+        List<FindHasEntered> hasEnteredByChatRoomList = chatRoomEntryCustomRepository
+                .findHasEnteredByChatRoomList(
+                        user,
+                        chatRoomList.stream().map(ChatRoom::getId).toList()
+                );
+        return hasEnteredByChatRoomList
                 .stream()
                 .collect(Collectors.toMap(FindHasEntered::getChatRoomId, FindHasEntered::getHasJoined));
     }

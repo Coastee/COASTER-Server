@@ -14,17 +14,17 @@ public interface ChatRoomEntryCustomRepository extends JpaRepository<ChatRoomEnt
 
     @Query("""
             select new com.coastee.server.chatroom.domain.repository.dto.FindHasEntered(
-                e.chatRoom.id,
-                (c.id is not null)
-            ) from ChatRoomEntry e
-            left join ChatRoom c
-                on e.chatRoom = c
+                c.id,
+                (e.id is not null)
+            ) from ChatRoom c
+            left join ChatRoomEntry e
+                on c.id in :chatRoomList
+                and e.chatRoom = c
                 and e.user = :user
-                and e.chatRoom in :chatRoomList
                 and e.status = 'ACTIVE'
             """)
     List<FindHasEntered> findHasEnteredByChatRoomList(
             @Param("user") final User user,
-            @Param("chatRoomList") final List<ChatRoom> chatRoomList
+            @Param("chatRoomList") final List<Long> chatRoomIdList
     );
 }
