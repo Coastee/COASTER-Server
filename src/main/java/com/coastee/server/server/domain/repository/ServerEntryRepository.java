@@ -19,4 +19,10 @@ public interface ServerEntryRepository extends JpaRepository<ServerEntry, Long> 
 
     @EntityGraph(attributePaths = {"server"})
     List<ServerEntry> findByUserAndStatus(final User user, final BaseEntityStatus baseEntityStatus);
+
+    @EntityGraph(attributePaths = {"server"})
+    List<ServerEntry> findByUserAndServerIn(
+            final User user,
+            final List<Server> serverList
+    );
 }

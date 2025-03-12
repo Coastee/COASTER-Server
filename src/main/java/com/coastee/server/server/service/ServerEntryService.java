@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.coastee.server.global.apipayload.code.status.ErrorStatus.NOT_IN_ANY_SERVER;
 import static com.coastee.server.global.apipayload.code.status.ErrorStatus.NOT_IN_SERVER;
@@ -45,9 +47,20 @@ public class ServerEntryService {
 
     @Transactional
     public void enter(final User user, final List<Server> serverList) {
-        List<ServerEntry> serverEntryList = serverList.stream()
-                .map(server -> new ServerEntry(user, server)).toList();
-        serverEntryRepository.saveAll(serverEntryList);
+        List<ServerEntry> existingEntries = serverEntryRepository
+                .findByUserAndServerIn(user, serverList);
+        existingEntries.forEach(ServerEntry::activate);
+
+        Set<Server> existingServers = existingEntries.stream()
+                .map(ServerEntry::getServer)
+                .collect(Collectors.toSet());
+
+        List<ServerEntry> newEntries = serverList.stream()
+                .filter(server -> !existingServers.contains(server))
+                .map(server -> new ServerEntry(user, server))
+                .toList();
+
+        serverEntryRepository.saveAll(newEntries);
     }
 
     @Transactional

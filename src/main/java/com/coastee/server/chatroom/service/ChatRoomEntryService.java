@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.coastee.server.global.apipayload.code.status.ErrorStatus.NOT_IN_CHATROOM;
@@ -60,13 +61,28 @@ public class ChatRoomEntryService {
 
     @Transactional
     public List<ChatRoomEntry> enter(final User user, final List<ChatRoom> chatRoomList) {
-        List<ChatRoomEntry> entryList = chatRoomList.stream().map(
-                chatRoom -> {
-                    chatRoom.enter();
-                    return new ChatRoomEntry(user, chatRoom);
-                }
-        ).toList();
-        return chatRoomEntryRepository.saveAll(entryList);
+        List<ChatRoomEntry> existingEntries = chatRoomEntryRepository
+                .findByUserAndChatRoomIn(user, chatRoomList);
+        existingEntries.stream()
+                .filter(ChatRoomEntry::isDeleted)
+                .forEach(entry -> {
+                    entry.activate();
+                    entry.getChatRoom().enter();
+                });
+
+        Set<ChatRoom> existingChatRooms = existingEntries.stream()
+                .map(ChatRoomEntry::getChatRoom)
+                .collect(Collectors.toSet());
+
+        List<ChatRoomEntry> newEntries = chatRoomList.stream()
+                .filter(room -> !existingChatRooms.contains(room))
+                .map(room -> {
+                    room.enter();
+                    return new ChatRoomEntry(user, room);
+                })
+                .toList();
+
+        return chatRoomEntryRepository.saveAll(newEntries);
     }
 
     private ChatRoomEntry createAndSave(final User user, final ChatRoom chatRoom) {
