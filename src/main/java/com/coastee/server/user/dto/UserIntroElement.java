@@ -16,8 +16,10 @@ public class UserIntroElement {
     private int expYears;
 
     public UserIntroElement(final UserIntro userIntro) {
-        this.headline = userIntro.getHeadline();
-        this.job = userIntro.getJob();
-        this.expYears = userIntro.getExpYears();
+        if (userIntro != null) {
+            this.headline = userIntro.getHeadline();
+            this.job = userIntro.getJob();
+            this.expYears = userIntro.getExpYears();
+        }
     }
 }

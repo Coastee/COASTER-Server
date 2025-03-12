@@ -22,6 +22,7 @@ public interface ChatRoomEntryCustomRepository extends JpaRepository<ChatRoomEnt
                 and e.chatRoom = c
                 and e.user = :user
                 and e.status = 'ACTIVE'
+            where c.id in :chatRoomList
             """)
     List<FindHasEntered> findHasEnteredByChatRoomList(
             @Param("user") final User user,

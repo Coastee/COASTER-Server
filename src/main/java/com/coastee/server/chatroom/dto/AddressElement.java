@@ -15,7 +15,9 @@ public class AddressElement {
     private String details;
 
     public AddressElement(final Address address) {
-        this.location = address.getLocation();
-        this.details = address.getDetails();
+        if (address != null) {
+            this.location = address.getLocation();
+            this.details = address.getDetails();
+        }
     }
 }

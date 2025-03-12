@@ -17,7 +17,9 @@ public class PeriodElement {
     private LocalDateTime endDate;
 
     public PeriodElement(final Period period) {
-        this.startDate = period.getStartDate();
-        this.endDate = period.getEndDate();
+        if (period != null) {
+            this.startDate = period.getStartDate();
+            this.endDate = period.getEndDate();
+        }
     }
 }
