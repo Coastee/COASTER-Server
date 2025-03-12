@@ -4,8 +4,8 @@ import com.coastee.server.auth.Auth;
 import com.coastee.server.auth.UserOnly;
 import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.global.apipayload.ApiResponse;
-import com.coastee.server.user.dto.response.UserDetailElement;
 import com.coastee.server.user.dto.request.UserUpdateRequest;
+import com.coastee.server.user.dto.response.UserDetailElement;
 import com.coastee.server.user.facade.UserFacade;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +38,7 @@ public class UserController {
             @Auth final Accessor accessor,
             @PathVariable("id") final Long userId,
             @RequestPart @Valid final UserUpdateRequest request,
-            @RequestPart final MultipartFile image
+            @RequestPart(name = "image", required = false) final MultipartFile image
     ) {
         userFacade.validateAccess(accessor, userId);
         userFacade.update(userId, request, image);

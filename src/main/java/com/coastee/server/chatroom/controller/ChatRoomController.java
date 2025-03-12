@@ -69,7 +69,7 @@ public class ChatRoomController {
             @Auth final Accessor accessor,
             @PathVariable("serverId") final Long serverId,
             @RequestPart @Valid final MeetingCreateRequest request,
-            @RequestPart final MultipartFile image
+            @RequestPart(name = "image", required = false) final MultipartFile image
     ) {
         chatRoomFacade.create(accessor, serverId, ChatRoomType.MEETING, request, image);
         return ApiResponse.onSuccess();
