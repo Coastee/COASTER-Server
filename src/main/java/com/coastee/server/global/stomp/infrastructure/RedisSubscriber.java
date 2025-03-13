@@ -1,7 +1,7 @@
 package com.coastee.server.global.stomp.infrastructure;
 
 import com.coastee.server.chat.dto.ChatElement;
-import com.coastee.server.dm.dto.DMElement;
+import com.coastee.server.dmroom.dto.redis.DMSendRequest;
 import com.coastee.server.global.apipayload.exception.handler.JsonException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,13 +36,22 @@ public class RedisSubscriber {
 
     public void sendDM(final String publishMessage) {
         try {
-            DMElement dmElement = objectMapper.readValue(
+            DMSendRequest sendRequest = objectMapper.readValue(
                     publishMessage,
-                    DMElement.class
+                    DMSendRequest.class
+            );
+
+            operations.convertAndSend(
+                    "/sub/dms/" + sendRequest.getDmRoom().getId(),
+                    sendRequest.getDm()
             );
             operations.convertAndSend(
-                    "/sub/dms/" + dmElement.getDmRoomId(),
-                    dmElement
+                    "/sub/users/dms/" + sendRequest.getReceiverId(),
+                    sendRequest.getDmRoom()
+            );
+            operations.convertAndSend(
+                    "/sub/users/dms/" + sendRequest.getSenderId(),
+                    sendRequest.getDmRoom()
             );
         } catch (JsonProcessingException e) {
             throw new JsonException(JSON_EXCEPTION);
