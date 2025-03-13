@@ -7,6 +7,7 @@ import com.coastee.server.dm.dto.DMElement;
 import com.coastee.server.dm.dto.request.DMRequest;
 import com.coastee.server.dm.service.DMService;
 import com.coastee.server.dmroom.domain.DirectMessageRoom;
+import com.coastee.server.dmroom.dto.redis.DMSendRequest;
 import com.coastee.server.dmroom.service.DMRoomEntryService;
 import com.coastee.server.dmroom.service.DMRoomService;
 import com.coastee.server.user.domain.User;
@@ -48,7 +49,12 @@ public class DMFacade {
         DirectMessage dm = dmService.save(dmRequest.toEntity(sender, dmRoom, DMType.TALK));
         redisTemplate.convertAndSend(
                 channelTopicMap.get(DMROOM_TOPIC_KEY).getTopic(),
-                new DMElement(dm)
+                new DMSendRequest(
+                        sender,
+                        receiver,
+                        dm,
+                        dmRoom
+                )
         );
     }
 
@@ -61,11 +67,17 @@ public class DMFacade {
         User sender = userService.findById(accessor.getUserId());
         DirectMessageRoom dmRoom = dmRoomService.findById(roomId);
         dmRoomEntryService.validateJoin(sender, dmRoom);
+        User receiver = dmRoomEntryService.findAnotherUser(sender, dmRoom);
 
         DirectMessage dm = dmService.save(dmRequest.toEntity(sender, dmRoom, DMType.TALK));
         redisTemplate.convertAndSend(
                 channelTopicMap.get(DMROOM_TOPIC_KEY).getTopic(),
-                new DMElement(dm)
+                new DMSendRequest(
+                        sender,
+                        receiver,
+                        dm,
+                        dmRoom
+                )
         );
     }
 

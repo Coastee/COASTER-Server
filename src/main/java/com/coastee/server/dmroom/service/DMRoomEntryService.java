@@ -17,6 +17,13 @@ import static com.coastee.server.global.apipayload.code.status.ErrorStatus.NOT_I
 public class DMRoomEntryService {
     private final DMRoomEntryRepository dmRoomEntryRepository;
 
+    public User findAnotherUser(final User user, final DirectMessageRoom dmRoom) {
+        DirectMessageRoomEntry entry = dmRoomEntryRepository
+                .findAnotherEntryByUserAndDirectMessageRoom(user, dmRoom)
+                .orElseThrow(() -> new GeneralException(NOT_IN_DMROOM));
+        return entry.getUser();
+    }
+
     public DirectMessageRoomEntry validateJoin(final User user, final DirectMessageRoom dmRoom) {
         DirectMessageRoomEntry entry = dmRoomEntryRepository
                 .findByUserAndDirectMessageRoom(user, dmRoom)
