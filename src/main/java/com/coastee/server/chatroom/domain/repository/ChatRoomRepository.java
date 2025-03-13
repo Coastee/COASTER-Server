@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
@@ -27,6 +28,23 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     Page<ChatRoom> findByServerInAndChatRoomType(
             final List<Server> serverList,
             final ChatRoomType type,
+            final Pageable pageable
+    );
+
+    @Query("""
+            select c from ChatRoom c
+            join ChatRoomEntry e
+                on c = e.chatRoom
+                and e.user = :user
+                and e.status = 'ACTIVE'
+                and c.chatRoomType = :type
+            where :nowDate <= c.period.endDate
+            order by c.period.startDate desc
+            """)
+    Page<ChatRoom> findByUserAndTypeAndDate(
+            @Param("user") final User user,
+            @Param("type") final ChatRoomType chatRoomType,
+            @Param("date") final LocalDateTime nowDate,
             final Pageable pageable
     );
 
