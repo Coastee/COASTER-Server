@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.coastee.server.global.apipayload.code.status.ErrorStatus.FAIL_FIND_SERVER_CHATROOM;
@@ -53,6 +54,19 @@ public class ChatRoomService {
         ).getContent();
         if (chatRoomList.size() != serverList.size()) throw new GeneralException(FAIL_FIND_SERVER_CHATROOM);
         return chatRoomList;
+    }
+
+    public Page<ChatRoom> findByUserAndType(
+            final User user,
+            final ChatRoomType chatRoomType,
+            final Pageable pageable
+    ) {
+        return chatRoomRepository.findByUserAndTypeAndDate(
+                user,
+                chatRoomType,
+                LocalDateTime.now(),
+                pageable
+        );
     }
 
     public Page<ChatRoom> findAllByServersAndType(

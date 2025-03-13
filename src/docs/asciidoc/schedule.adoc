@@ -1,0 +1,33 @@
+= Schedule API
+coaster server
+:doctype: book
+:icons: font
+:source-highlighter: highlishtjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+== `GET` Get Schedule
+
+=== Request
+
+```
+/api/v1/schedules
+```
+
+include::{snippets}/get-schedule/curl-request.adoc[]
+
+==== header
+
+include::{snippets}/get-schedule/request-headers.adoc[]
+
+=== Response
+
+==== response body
+
+include::{snippets}/get-schedule/response-body.adoc[]
+include::{snippets}/get-schedule/response-fields.adoc[]

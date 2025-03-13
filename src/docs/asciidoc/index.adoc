@@ -37,6 +37,7 @@ coaster server
 * link:login.html[로그인 기능]
 * link:user.html[유저 기능]
 * link:experience.html[경력 기능]
+* link:schedule.html[스케줄 기능]
 * link:dmroom.html[DM 기능]
 
 === Server
