@@ -20,8 +20,8 @@ public class ChatRoomFixture {
                 user,
                 "title",
                 "content",
-                LocalDateTime.now(),
-                LocalDateTime.now(),
+                LocalDateTime.now().plusDays(3),
+                LocalDateTime.now().plusDays(3).plusHours(2),
                 LOCATION,
                 DETAIL,
                 5
@@ -38,8 +38,8 @@ public class ChatRoomFixture {
                 user,
                 title,
                 "content",
-                LocalDateTime.now(),
-                LocalDateTime.now(),
+                LocalDateTime.now().plusDays(3),
+                LocalDateTime.now().plusDays(3).plusHours(2),
                 LOCATION,
                 DETAIL,
                 5
