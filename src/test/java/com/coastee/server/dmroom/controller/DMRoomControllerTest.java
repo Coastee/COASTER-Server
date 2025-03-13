@@ -88,9 +88,6 @@ class DMRoomControllerTest extends ControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .filter(
                         document("find-all-dmroom",
-                                pathParameters(
-                                        parameterWithName("userId").description("유저 아이디")
-                                ),
                                 queryParameters(
                                         parameterWithName("page").description("페이지 번호 (default: 0)")
                                 ),
@@ -135,7 +132,7 @@ class DMRoomControllerTest extends ControllerTest {
                                         fieldWithPath("result.dmRoomList[].dm.dmRoomId").type(NUMBER).description("DM의 채팅방 아이디")
                                 )
                         ))
-                .when().get("/api/v1/users/{userId}/dms", 1)
+                .when().get("/api/v1/dms")
                 .then().log().all().statusCode(200);
     }
 
@@ -169,7 +166,6 @@ class DMRoomControllerTest extends ControllerTest {
                 .filter(
                         document("find-all-dms",
                                 pathParameters(
-                                        parameterWithName("userId").description("유저 아이디"),
                                         parameterWithName("roomId").description("DM 채팅방 아이디")
                                 ),
                                 queryParameters(
@@ -205,7 +201,7 @@ class DMRoomControllerTest extends ControllerTest {
                                         fieldWithPath("result.dmList[].dmRoomId").type(NUMBER).description("DM의 채팅방 아이디")
                                 )
                         ))
-                .when().get("/api/v1/users/{userId}/dms/{roomId}", currentUser.getId(), dmRoom.getId())
+                .when().get("/api/v1/dms/{roomId}", dmRoom.getId())
                 .then().log().all().statusCode(200);
     }
 }
