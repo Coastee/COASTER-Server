@@ -38,9 +38,11 @@ public class UserFacade {
         User user = userService.findById(userId);
         Page<Experience> experiencePage = experienceService.findAllByUser(user, pageable);
         User currentUser = userService.findById(accessor.getUserId());
-        Long dmRoomId = dmRoomService.findByUserAndUser(user, currentUser)
-                .map(DirectMessageRoom::getId)
-                .orElseGet(() -> null);
+        Long dmRoomId = user != currentUser ?
+                dmRoomService.findByUserAndUser(user, currentUser)
+                        .map(DirectMessageRoom::getId)
+                        .orElseGet(() -> null)
+                : null;
 
         return UserDetailElement.from()
                 .user(user)
