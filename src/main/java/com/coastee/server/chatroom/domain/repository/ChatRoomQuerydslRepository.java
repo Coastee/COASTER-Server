@@ -55,19 +55,39 @@ public class ChatRoomQuerydslRepository {
     ) {
         return query
                 .selectFrom(chatRoom)
+                .join(chatRoom.user)
                 .where(
                         chatRoom.server.eq(server)
                                 .and(chatRoom.chatRoomType.eq(chatRoomType))
-                                .and(likeKeyword(keyword))
+                                .and(containsKeyword(keyword))
                                 .and(eqTagList(tagList))
                 );
     }
 
-    private BooleanExpression likeKeyword(final String keyword) {
+    private BooleanExpression containsKeyword(final String keyword) {
         if (keyword == null) {
             return null;
         }
-        return chatRoom.title.like(keyword);
+        return chatRoom.title.contains(keyword)
+                .or(chatRoom.content.contains(keyword))
+                .or(chatRoom.user.nickname.contains(keyword))
+                .or(eqTagList(containsTagList(List.of(keyword))))
+                ;
+    }
+
+    private List<HashTag> containsTagList(final List<String> tagNameList) {
+        if (tagNameList == null || tagNameList.isEmpty()) {
+            return null;
+        }
+
+        BooleanExpression condition = tagNameList.stream()
+                .map(hashTag.content::contains)
+                .reduce(BooleanExpression::or)
+                .orElse(null);
+
+        return query.selectFrom(hashTag)
+                .where(condition)
+                .fetch();
     }
 
     private BooleanExpression eqTagList(final List<HashTag> tagList) {
@@ -78,8 +98,7 @@ public class ChatRoomQuerydslRepository {
                 query
                         .select(chatRoomTag.chatRoom).from(chatRoomTag)
                         .join(hashTag).on(
-                                hashTag.eq(chatRoomTag.hashTag)
-                                        .and(hashTag.in(tagList))
+                                hashTag.eq(chatRoomTag.hashTag).and(hashTag.in(tagList))
                         )
                         .where(chatRoom.eq(chatRoomTag.chatRoom))
                         .groupBy(chatRoomTag.chatRoom)

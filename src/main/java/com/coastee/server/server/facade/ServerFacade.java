@@ -103,7 +103,6 @@ public class ServerFacade {
         );
         if (isSearch(keyword, tagNameList))
             return new ServerHomeResponse(hashTagList, groupPage, meetingPage);
-
         Page<Notice> noticePage = noticeService.findAllByServer(
                 server,
                 PageRequest.of(0, 10, Sort.by(DESC, "createdDate"))

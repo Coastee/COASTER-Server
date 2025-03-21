@@ -34,7 +34,7 @@ public class ServerController {
             @RequestParam(value = "keyword", required = false) final String keyword,
             @RequestParam(value = "tags", required = false) final List<String> tagList
     ) {
-        return ApiResponse.onSuccess(serverFacade.getHomeWithConditions(accessor, serverId, keyword, tagList));
+        return ApiResponse.onSuccess(serverFacade.getHomeWithConditions(accessor, serverId, keyword.strip(), tagList));
     }
 
     @PostMapping("/{serverId}")
