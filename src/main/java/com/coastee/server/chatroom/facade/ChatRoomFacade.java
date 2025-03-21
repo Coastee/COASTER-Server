@@ -12,7 +12,6 @@ import com.coastee.server.chatroom.dto.ChatRoomElements;
 import com.coastee.server.chatroom.dto.request.ChatRoomCreateRequest;
 import com.coastee.server.chatroom.service.ChatRoomEntryService;
 import com.coastee.server.chatroom.service.ChatRoomService;
-import com.coastee.server.hashtag.domain.HashTag;
 import com.coastee.server.hashtag.service.HashTagService;
 import com.coastee.server.image.domain.DirName;
 import com.coastee.server.image.service.BlobStorageService;
@@ -28,8 +27,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -170,15 +167,11 @@ public class ChatRoomFacade {
             final List<String> tagNameList,
             final Pageable pageable
     ) {
-        List<HashTag> hashTagList = new ArrayList<>();
-        if (tagNameList != null && !tagNameList.isEmpty())
-            hashTagList = hashTagService.findAllByContentIn(new HashSet<>(tagNameList));
-
         Page<ChatRoom> chatRoomPage = chatRoomService.findByServerAndTypeAndKeywordAndTagList(
                 server,
                 type,
                 keyword,
-                hashTagList,
+                tagNameList,
                 pageable
         );
         Map<Long, Boolean> hasEnteredMap = chatRoomEntryService.findHasEnteredByChatRoomList(

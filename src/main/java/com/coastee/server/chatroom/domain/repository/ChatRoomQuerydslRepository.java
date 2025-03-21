@@ -3,7 +3,6 @@ package com.coastee.server.chatroom.domain.repository;
 import com.coastee.server.chatroom.domain.ChatRoom;
 import com.coastee.server.chatroom.domain.ChatRoomType;
 import com.coastee.server.global.util.QuerydslUtil;
-import com.coastee.server.hashtag.domain.HashTag;
 import com.coastee.server.server.domain.Server;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
@@ -30,10 +29,10 @@ public class ChatRoomQuerydslRepository {
             final Server server,
             final ChatRoomType chatRoomType,
             final String keyword,
-            final List<HashTag> tagList,
+            final List<String> tagNameList,
             final Pageable pageable
     ) {
-        List<ChatRoom> chatRoomList = findByServerAndTypeAndKeywordAndTagList(server, chatRoomType, keyword, tagList)
+        List<ChatRoom> chatRoomList = findByServerAndTypeAndKeywordAndTagList(server, chatRoomType, keyword, tagNameList)
                 .orderBy(QuerydslUtil.getSort(pageable, chatRoom))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -42,7 +41,7 @@ public class ChatRoomQuerydslRepository {
         JPAQuery<Long> countQuery = query
                 .select(chatRoom.count())
                 .from(chatRoom)
-                .where(chatRoom.in(findByServerAndTypeAndKeywordAndTagList(server, chatRoomType, keyword, tagList)));
+                .where(chatRoom.in(findByServerAndTypeAndKeywordAndTagList(server, chatRoomType, keyword, tagNameList)));
 
         return PageableExecutionUtils.getPage(chatRoomList, pageable, countQuery::fetchOne);
     }
@@ -51,7 +50,7 @@ public class ChatRoomQuerydslRepository {
             final Server server,
             final ChatRoomType chatRoomType,
             final String keyword,
-            final List<HashTag> tagList
+            final List<String> tagNameList
     ) {
         return query
                 .selectFrom(chatRoom)
@@ -60,7 +59,7 @@ public class ChatRoomQuerydslRepository {
                         chatRoom.server.eq(server)
                                 .and(chatRoom.chatRoomType.eq(chatRoomType))
                                 .and(containsKeyword(keyword))
-                                .and(eqTagList(tagList))
+                                .and(eqTagList(tagNameList))
                 );
     }
 
@@ -71,11 +70,35 @@ public class ChatRoomQuerydslRepository {
         return chatRoom.title.contains(keyword)
                 .or(chatRoom.content.contains(keyword))
                 .or(chatRoom.user.nickname.contains(keyword))
-                .or(eqTagList(containsTagList(List.of(keyword))))
+                .or(containsTagList(List.of(keyword)))
                 ;
     }
 
-    private List<HashTag> containsTagList(final List<String> tagNameList) {
+    private BooleanExpression eqTagList(
+            final List<String> tagNameList
+    ) {
+        if (tagNameList == null || tagNameList.isEmpty()) {
+            return null;
+        }
+
+        BooleanExpression condition = tagNameList.stream()
+                .map(hashTag.content::eq)
+                .reduce(BooleanExpression::or)
+                .orElse(null);
+
+        return chatRoom.in(
+                query
+                        .select(chatRoomTag.chatRoom).from(chatRoomTag)
+                        .join(hashTag).on(condition.and(hashTag.eq(chatRoomTag.hashTag)))
+                        .where(chatRoom.eq(chatRoomTag.chatRoom))
+                        .groupBy(chatRoomTag.chatRoom)
+                        .having(chatRoomTag.chatRoom.count().eq(Long.valueOf(tagNameList.size())))
+        );
+    }
+
+    private BooleanExpression containsTagList(
+            final List<String> tagNameList
+    ) {
         if (tagNameList == null || tagNameList.isEmpty()) {
             return null;
         }
@@ -85,24 +108,12 @@ public class ChatRoomQuerydslRepository {
                 .reduce(BooleanExpression::or)
                 .orElse(null);
 
-        return query.selectFrom(hashTag)
-                .where(condition)
-                .fetch();
-    }
-
-    private BooleanExpression eqTagList(final List<HashTag> tagList) {
-        if (tagList == null || tagList.isEmpty()) {
-            return null;
-        }
         return chatRoom.in(
                 query
                         .select(chatRoomTag.chatRoom).from(chatRoomTag)
-                        .join(hashTag).on(
-                                hashTag.eq(chatRoomTag.hashTag).and(hashTag.in(tagList))
-                        )
+                        .join(hashTag).on(condition.and(hashTag.eq(chatRoomTag.hashTag)))
                         .where(chatRoom.eq(chatRoomTag.chatRoom))
                         .groupBy(chatRoomTag.chatRoom)
-                        .having(chatRoomTag.chatRoom.count().eq(Long.valueOf(tagList.size())))
         );
     }
 }

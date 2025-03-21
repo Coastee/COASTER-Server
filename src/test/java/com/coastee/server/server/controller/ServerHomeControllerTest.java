@@ -113,7 +113,7 @@ public class ServerHomeControllerTest extends ControllerTest {
                 .header(ACCESS_TOKEN_HEADER, ACCESS_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .param("keyword", "검색하는키워드")
-                .param("tagList", "#검색", "#해시태그")
+                .param("tags", "#검색", "#해시태그")
                 .filter(
                         document("get-server-home",
                                 pathParameters(
@@ -121,7 +121,7 @@ public class ServerHomeControllerTest extends ControllerTest {
                                 ),
                                 queryParameters(
                                         parameterWithName("keyword").description("검색 키워드"),
-                                        parameterWithName("tagList").description("검색 해시태그")
+                                        parameterWithName("tags").description("검색 해시태그")
                                 ),
                                 requestHeaders(
                                         headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰")
