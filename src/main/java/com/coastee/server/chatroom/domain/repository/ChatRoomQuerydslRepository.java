@@ -63,8 +63,8 @@ public class ChatRoomQuerydslRepository {
                 );
     }
 
-    private BooleanExpression likeKeyword(final String keyword) {
-        if (keyword == null) {
+    private BooleanExpression containsKeyword(final String keyword) {
+        if (keyword == null || keyword.isBlank()) {
             return null;
         }
         return chatRoom.title.like(keyword);
