@@ -107,14 +107,14 @@ public class ChatRoomService {
             final Server server,
             final ChatRoomType type,
             final String keyword,
-            final List<HashTag> tagList,
+            final List<String> tagNameList,
             final Pageable pageable
     ) {
         return chatRoomQueryDSLRepository.findByServerAndTypeAndKeywordAndTagList(
                 server,
                 type,
                 keyword,
-                tagList,
+                tagNameList,
                 pageable
         );
     }

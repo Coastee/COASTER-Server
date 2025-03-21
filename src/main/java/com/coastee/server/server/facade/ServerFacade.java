@@ -84,26 +84,22 @@ public class ServerFacade {
                 PageRequest.of(0, 10)
         );
 
-        List<HashTag> searchTagList = new ArrayList<>();
-        if (tagNameList != null && !tagNameList.isEmpty())
-            searchTagList = hashTagService.findAllByContentIn(new HashSet<>(tagNameList));
         Page<ChatRoom> groupPage = chatRoomService.findByServerAndTypeAndKeywordAndTagList(
                 server,
                 ChatRoomType.GROUP,
                 keyword,
-                searchTagList,
+                tagNameList,
                 PageRequest.of(0, 3, Sort.by(DESC, "createdDate"))
         );
         Page<ChatRoom> meetingPage = chatRoomService.findByServerAndTypeAndKeywordAndTagList(
                 server,
                 ChatRoomType.MEETING,
                 keyword,
-                searchTagList,
+                tagNameList,
                 PageRequest.of(0, 3, Sort.by(DESC, "remainCount"))
         );
         if (isSearch(keyword, tagNameList))
             return new ServerHomeResponse(hashTagList, groupPage, meetingPage);
-
         Page<Notice> noticePage = noticeService.findAllByServer(
                 server,
                 PageRequest.of(0, 10, Sort.by(DESC, "createdDate"))
