@@ -28,8 +28,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import static org.springframework.data.domain.Sort.Direction.DESC;
@@ -100,6 +98,7 @@ public class ServerFacade {
         );
         if (isSearch(keyword, tagNameList))
             return new ServerHomeResponse(hashTagList, groupPage, meetingPage);
+
         Page<Notice> noticePage = noticeService.findAllByServer(
                 server,
                 PageRequest.of(0, 10, Sort.by(DESC, "createdDate"))
@@ -119,7 +118,7 @@ public class ServerFacade {
     }
 
     private boolean isSearch(final String keyword, final List<String> tagNameList) {
-        return keyword != null || (tagNameList != null && !tagNameList.isEmpty());
+        return !keyword.isBlank() || !tagNameList.isEmpty();
     }
 
     @Transactional
