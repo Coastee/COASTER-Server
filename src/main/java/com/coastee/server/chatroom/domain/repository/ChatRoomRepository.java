@@ -88,8 +88,8 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     @Query(value = """
             update ChatRoom c
             set c.currentCount = c.currentCount - 1, c.remainCount = c.remainCount + 1
-            where c in (select e.chatRoom from ChatRoomEntry e where e.user = :user)
-            and c.server = :server
+            where c in (select e.chatRoom from ChatRoomEntry e where e.user = :user and e.status = 'ACTIVE')
+                and c.server = :server
             """)
     void exitByUserAndServer(
             @Param("user") final User user,
