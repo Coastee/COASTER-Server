@@ -7,6 +7,7 @@ import com.coastee.server.hashtag.domain.HashTag;
 import com.coastee.server.hashtag.domain.repository.HashTagRepository;
 import com.coastee.server.server.domain.Server;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,5 +58,12 @@ public class HashTagService {
             newTags = hashTagRepository.saveAll(newTags);
         }
         return Stream.concat(existingTagList.stream(), newTags.stream()).toList();
+    }
+
+    public Page<HashTag> findAllByKeyword(
+            final String keyword,
+            final Pageable pageable
+    ) {
+        
     }
 }
