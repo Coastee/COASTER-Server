@@ -46,6 +46,6 @@ public abstract class BaseEntity {
     }
 
     public boolean isDeleted() {
-        return this.status.equals(INACTIVE);
+        return this.status.equals(DELETED);
     }
 }
