@@ -51,11 +51,15 @@ class LoginControllerTest extends ControllerTest {
         // when & then
         RestAssured.given(spec).log().all()
                 .param("code", "12345")
+                .param("redirect_uri", "https://coasterchat.com/redirect-google")
                 .contentType(ContentType.JSON)
                 .filter(
                         document("login",
                                 queryParameters(
-                                        parameterWithName("code").description("callback 결과값 코드")
+                                        parameterWithName("code")
+                                                .description("callback 결과값 코드"),
+                                        parameterWithName("redirect_uri")
+                                                .description("redirect uri 값 : 초기 로그인 창에서 작성한 redirect_uri와 동일하게 전송 필요 (구글만 전달)")
                                 ),
                                 responseFields(
                                         fieldWithPath("isSuccess").type(BOOLEAN).description("성공 여부"),
