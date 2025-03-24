@@ -24,8 +24,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.requestHe
 import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 
 @DisplayName("해시태그 컨트롤러 테스트")
@@ -59,9 +58,12 @@ class HashTagControllerTest extends ControllerTest {
                 .param("page", "0")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .filter(
-                        document("find-all-dmroom",
+                        document("find-hashtag",
                                 queryParameters(
                                         parameterWithName("page").description("페이지 번호 (default: 0)")
+                                ),
+                                pathParameters(
+                                        parameterWithName("serverId").description("서버 아이디")
                                 ),
                                 requestHeaders(
                                         headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰")
@@ -76,12 +78,12 @@ class HashTagControllerTest extends ControllerTest {
                                         fieldWithPath("result.pageInfo.totalPages").type(NUMBER).description("총 페이지 개수"),
                                         fieldWithPath("result.pageInfo.totalElements").type(NUMBER).description("총 요소 개수"),
                                         fieldWithPath("result.pageInfo.size").type(NUMBER).description("페이지 사이즈"),
-                                        fieldWithPath("result.hashTagList").type(ARRAY).description("DM방 리스트"),
+                                        fieldWithPath("result.hashTagList").type(ARRAY).description("해시태그 리스트"),
                                         fieldWithPath("result.hashTagList[].id").type(NUMBER).description("아이디"),
-                                        fieldWithPath("result.hashTagList[].content").type(OBJECT).description("나와 dm을 나눈 유저")
+                                        fieldWithPath("result.hashTagList[].content").type(STRING).description("해시태그 내용")
                                 )
                         ))
-                .when().get("/api/v1/dms")
+                .when().get("/api/v1/servers/{serverId}/tags", 1)
                 .then().log().all().statusCode(200);
     }
 }

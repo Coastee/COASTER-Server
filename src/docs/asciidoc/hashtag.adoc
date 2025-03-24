@@ -1,0 +1,33 @@
+= HashTag API
+coaster server
+:doctype: book
+:icons: font
+:source-highlighter: highlishtjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+== `GET` Find HashTag
+
+=== Request
+```
+/api/v1/servers/{serverId}/tags
+```
+include::{snippets}/find-hashtag/curl-request.adoc[]
+
+==== header
+include::{snippets}/find-hashtag/request-headers.adoc[]
+
+==== path parameter
+include::{snippets}/find-hashtag/path-parameters.adoc[]
+
+==== query parameter
+include::{snippets}/find-hashtag/query-parameters.adoc[]
+
+=== Response
+include::{snippets}/find-hashtag/response-body.adoc[]
+include::{snippets}/find-hashtag/response-fields.adoc[]
