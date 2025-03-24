@@ -44,3 +44,4 @@ coaster server
 
 * link:server.html[서버 기능]
 * link:chatroom.html[채팅방 기능]
+* link:hashtag.html[해시태그 기능]
