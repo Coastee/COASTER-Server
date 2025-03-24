@@ -77,10 +77,11 @@ public class ServerFacade {
         Server server = serverService.findById(serverId);
         serverEntryService.validateJoin(user, server);
 
-        List<HashTag> hashTagList = hashTagService.findPopularTagByServer(
+        List<HashTag> hashTagList = hashTagService.findAllByKeywordAndServer(
+                keyword,
                 server,
                 PageRequest.of(0, 10)
-        );
+        ).getContent();
 
         Page<ChatRoom> groupPage = chatRoomService.findByServerAndTypeAndKeywordAndTagList(
                 server,
