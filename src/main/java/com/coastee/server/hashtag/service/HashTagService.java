@@ -7,6 +7,7 @@ import com.coastee.server.hashtag.domain.HashTag;
 import com.coastee.server.hashtag.domain.repository.HashTagRepository;
 import com.coastee.server.server.domain.Server;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,14 +30,6 @@ public class HashTagService {
         connectTag(chatRoom, hashTagList);
     }
 
-    public List<HashTag> findPopularTagByServer(final Server server, final Pageable pageable) {
-        return hashTagRepository.findPopularTagByServer(server, pageable).getContent();
-    }
-
-    public List<HashTag> findAllByContentIn(final Set<String> tagNameSet) {
-        return hashTagRepository.findAllByContentIn(tagNameSet);
-    }
-
     private void connectTag(final ChatRoom chatRoom, final List<HashTag> hashTagList) {
         List<ChatRoomTag> chatRoomTagList = hashTagList.stream()
                 .map(tag -> new ChatRoomTag(chatRoom, tag))
@@ -57,5 +50,16 @@ public class HashTagService {
             newTags = hashTagRepository.saveAll(newTags);
         }
         return Stream.concat(existingTagList.stream(), newTags.stream()).toList();
+    }
+
+    public Page<HashTag> findAllByKeywordAndServer(
+            final String keyword,
+            final Server server,
+            final Pageable pageable
+    ) {
+        if (keyword == null || keyword.isBlank()) {
+            return hashTagRepository.findPopularTagByServer(server, pageable);
+        }
+        return hashTagRepository.findAllByContentContainingAndServer(keyword, server, pageable);
     }
 }

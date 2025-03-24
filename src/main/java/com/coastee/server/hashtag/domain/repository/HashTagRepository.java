@@ -26,4 +26,17 @@ public interface HashTagRepository extends JpaRepository<HashTag, Long> {
             @Param("server") final Server server,
             final Pageable pageable
     );
+
+    @Query("""
+            select h from ChatRoomTag t
+                    join HashTag h on t.hashTag = h
+                    join ChatRoom r on t.chatRoom = r and r.server = :server
+            group by h having h.content like concat('%', :keyword, '%')
+            order by count (h) desc
+            """)
+    Page<HashTag> findAllByContentContainingAndServer(
+            @Param("keyword") final String keyword,
+            @Param("server") final Server server,
+            final Pageable pageable
+    );
 }
