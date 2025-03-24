@@ -15,7 +15,7 @@ import static com.coastee.server.global.domain.Constant.DEFAULT_PAGING_SIZE;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/servers/{serverId}/tags")
 public class HashTagController {
-    private HashTagFacade hashTagFacade;
+    private final HashTagFacade hashTagFacade;
 
     @GetMapping("")
     public ApiResponse<HashTagElements> findAll(

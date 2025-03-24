@@ -60,10 +60,14 @@ public class HashTagService {
         return Stream.concat(existingTagList.stream(), newTags.stream()).toList();
     }
 
-    public Page<HashTag> findAllByKeyword(
+    public Page<HashTag> findAllByKeywordAndServer(
             final String keyword,
+            final Server server,
             final Pageable pageable
     ) {
-        
+        if (keyword == null || keyword.isBlank()) {
+            return hashTagRepository.findPopularTagByServer(server, pageable);
+        }
+        return hashTagRepository.findAllByContentContainingAndServer(keyword, server, pageable);
     }
 }
