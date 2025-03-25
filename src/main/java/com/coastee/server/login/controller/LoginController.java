@@ -88,7 +88,7 @@ public class LoginController {
         Long userId = sessionManager.getUserId(request);
         loginFacade.connect(Accessor.user(userId), linkedInLoginParams);
         sessionManager.removeSession(request);
-        response.sendRedirect(redirectUriUtil.getLinkedinRedirectUri());
+        response.sendRedirect(redirectUriUtil.getProfileUri(userId));
         return ApiResponse.onSuccess();
     }
 
