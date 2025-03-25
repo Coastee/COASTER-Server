@@ -32,7 +32,7 @@ public interface ChatRoomEntryRepository extends JpaRepository<ChatRoomEntry, Lo
 
     @Modifying
     @Query(value = """
-            update ChatRoomEntry e set e.status= "DELETED"
+            update ChatRoomEntry e set e.status = "DELETED"
             where e.user = :user
             and e.chatRoom in (select c from ChatRoom c where c.server = :server)
             """)
@@ -40,6 +40,13 @@ public interface ChatRoomEntryRepository extends JpaRepository<ChatRoomEntry, Lo
             @Param("user") final User user,
             @Param("server") final Server server
     );
+
+    @Modifying
+    @Query("""
+            update ChatRoomEntry e set e.status = "DELETED"
+            where e.chatRoom = :chatRoom
+            """)
+    void deleteAllByChatRoom(@Param("chatRoom") final ChatRoom chatRoom);
 
     @EntityGraph(attributePaths = {"chatRoom"})
     List<ChatRoomEntry> findByUserAndChatRoomIn(final User user, final List<ChatRoom> chatRoomList);

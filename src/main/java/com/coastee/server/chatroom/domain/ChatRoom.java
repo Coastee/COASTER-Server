@@ -158,6 +158,10 @@ public class ChatRoom extends BaseEntity {
         remainCount = maxCount - currentCount;
     }
 
+    public boolean isOwner(final User user) {
+        return this.user.equals(user);
+    }
+
     public void updateThumbnail(final String thumbnail) {
         this.thumbnail = thumbnail;
     }

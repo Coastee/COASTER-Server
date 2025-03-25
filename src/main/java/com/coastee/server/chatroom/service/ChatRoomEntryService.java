@@ -2,6 +2,7 @@ package com.coastee.server.chatroom.service;
 
 import com.coastee.server.chatroom.domain.ChatRoom;
 import com.coastee.server.chatroom.domain.ChatRoomEntry;
+import com.coastee.server.chatroom.domain.ChatRoomType;
 import com.coastee.server.chatroom.domain.repository.ChatRoomEntryCustomRepository;
 import com.coastee.server.chatroom.domain.repository.ChatRoomEntryRepository;
 import com.coastee.server.chatroom.domain.repository.dto.FindHasEntered;
@@ -101,6 +102,28 @@ public class ChatRoomEntryService {
         ChatRoomEntry chatRoomEntry = validateJoin(user, chatRoom);
         chatRoom.exit();
         chatRoomEntry.delete();
+        if (chatRoom.getChatRoomType() == ChatRoomType.GROUP) {
+            groupChatExit(chatRoom);
+        } else if (chatRoom.getChatRoomType() == ChatRoomType.MEETING) {
+            meetingChatExit(user, chatRoom);
+        }
+    }
+
+    private void groupChatExit(
+            final ChatRoom chatRoom
+    ) {
+        if (chatRoom.getCurrentCount() != 0) return;
+        chatRoomEntryRepository.deleteAllByChatRoom(chatRoom);
+        chatRoom.delete();
+    }
+
+    private void meetingChatExit(
+            final User user,
+            final ChatRoom chatRoom
+    ) {
+        if (!chatRoom.isOwner(user)) return;
+        chatRoomEntryRepository.deleteAllByChatRoom(chatRoom);
+        chatRoom.delete();
     }
 
     @Transactional
