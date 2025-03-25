@@ -56,11 +56,13 @@ class HashTagControllerTest extends ControllerTest {
         RestAssured.given(spec).log().all()
                 .header(ACCESS_TOKEN_HEADER, ACCESS_TOKEN)
                 .param("page", "0")
+                .param("keyword", "검색키워드")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .filter(
                         document("find-hashtag",
                                 queryParameters(
-                                        parameterWithName("page").description("페이지 번호 (default: 0)")
+                                        parameterWithName("page").description("페이지 번호 (default: 0)"),
+                                        parameterWithName("keyword").description("검색 키워드")
                                 ),
                                 pathParameters(
                                         parameterWithName("serverId").description("서버 아이디")

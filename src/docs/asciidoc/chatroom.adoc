@@ -231,6 +231,40 @@ include::{snippets}/favorite-chatroom/response-body.adoc[]
 include::{snippets}/favorite-chatroom/response-fields.adoc[]
 
 
+== 'GET' Find Participants
+
+채팅방 참여자 조회
+
+=== Request
+
+```
+/api/v1/servers/{serverId}/{chatRoomType}/{groupId}/users
+```
+
+include::{snippets}/get-participants/curl-request.adoc[]
+
+==== header
+
+include::{snippets}/get-participants/request-headers.adoc[]
+
+==== query parameters
+
+include::{snippets}/get-participants/query-parameters.adoc[]
+
+==== path parameters
+
+(사실 chatRoomId만 잘 보내면 됨)
+
+include::{snippets}/get-participants/path-parameters.adoc[]
+
+=== Response
+
+==== response body
+
+include::{snippets}/get-participants/response-body.adoc[]
+include::{snippets}/get-participants/response-fields.adoc[]
+
+
 == `POST` Enter ChatRoom
 
 채팅방 입장
