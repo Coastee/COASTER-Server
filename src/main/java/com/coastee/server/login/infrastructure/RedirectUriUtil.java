@@ -23,11 +23,7 @@ public class RedirectUriUtil {
                 "&state=STATE_STRING&scope=profile%20email%20openid";
     }
 
-    public String getProfileSettingUri() {
-        return "https://localhost:5173/signup";
-    }
-
-    public String getProfileSettingUri(final String errorCode) {
-        return "https://localhost:5173/signup?error=" + errorCode;
+    public String getProfileUri(final Long userId) {
+        return "https://coasterchat.com/mypage/" + userId;
     }
 }

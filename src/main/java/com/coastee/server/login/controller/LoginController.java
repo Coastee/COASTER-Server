@@ -82,11 +82,13 @@ public class LoginController {
     @GetMapping("/api/v1/login/linkedin-callback")
     public ApiResponse<Void> connectLinkedIn(
             @ModelAttribute final LinkedInLoginParams linkedInLoginParams,
-            final HttpServletRequest request
-    ) {
+            final HttpServletRequest request,
+            final HttpServletResponse response
+    ) throws IOException {
         Long userId = sessionManager.getUserId(request);
         loginFacade.connect(Accessor.user(userId), linkedInLoginParams);
         sessionManager.removeSession(request);
+        response.sendRedirect(redirectUriUtil.getLinkedinRedirectUri());
         return ApiResponse.onSuccess();
     }
 
