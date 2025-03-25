@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.coastee.server.chatroom.domain.QChatRoom.chatRoom;
@@ -58,9 +59,17 @@ public class ChatRoomQuerydslRepository {
                 .where(
                         chatRoom.server.eq(server)
                                 .and(chatRoom.chatRoomType.eq(chatRoomType))
+                                .and(exceptPastMeeting(chatRoomType))
                                 .and(containsKeyword(keyword))
                                 .and(eqTagList(tagNameList))
                 );
+    }
+
+    private BooleanExpression exceptPastMeeting(final ChatRoomType chatRoomType) {
+        if (chatRoomType != ChatRoomType.MEETING) {
+            return null;
+        }
+        return chatRoom.period.startDate.after(LocalDateTime.now());
     }
 
     private BooleanExpression containsKeyword(final String keyword) {
