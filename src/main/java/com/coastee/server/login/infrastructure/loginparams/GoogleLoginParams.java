@@ -32,4 +32,9 @@ public class GoogleLoginParams implements OAuthLoginParams {
     public void updateClientSecret(final String clientSecret) {
         this.client_secret = clientSecret;
     }
+
+    @Override
+    public void updateRedirectUri(final String uri) {
+        this.redirect_uri = uri;
+    }
 }

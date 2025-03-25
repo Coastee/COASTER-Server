@@ -1,7 +1,6 @@
 package com.coastee.server.login.controller;
 
 import com.coastee.server.auth.Auth;
-import com.coastee.server.auth.UserOnly;
 import com.coastee.server.auth.domain.Accessor;
 import com.coastee.server.global.apipayload.ApiResponse;
 import com.coastee.server.global.util.CookieUtil;
@@ -17,8 +16,6 @@ import com.coastee.server.login.infrastructure.loginparams.KakaoLoginParams;
 import com.coastee.server.login.infrastructure.loginparams.LinkedInLoginParams;
 import com.coastee.server.login.infrastructure.loginparams.NaverLoginParams;
 import com.coastee.server.server.facade.ServerFacade;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -68,27 +65,12 @@ public class LoginController {
         return ApiResponse.onSuccess();
     }
 
-    @GetMapping("/api/v1/connect/linkedin")
-    @UserOnly
-    public void connectLinkedin(
-            @Auth final Accessor accessor,
-            final HttpServletRequest request,
-            final HttpServletResponse response
-    ) throws IOException {
-        sessionManager.setSession(accessor.getUserId(), request);
-        response.sendRedirect(redirectUriUtil.getLinkedinRedirectUri());
-    }
-
     @GetMapping("/api/v1/login/linkedin-callback")
     public ApiResponse<Void> connectLinkedIn(
-            @ModelAttribute final LinkedInLoginParams linkedInLoginParams,
-            final HttpServletRequest request,
-            final HttpServletResponse response
-    ) throws IOException {
-        Long userId = sessionManager.getUserId(request);
-        loginFacade.connect(Accessor.user(userId), linkedInLoginParams);
-        sessionManager.removeSession(request);
-        response.sendRedirect(redirectUriUtil.getProfileUri(userId));
+            @Auth final Accessor accessor,
+            @ModelAttribute final LinkedInLoginParams linkedInLoginParams
+    ) {
+        loginFacade.connect(accessor, linkedInLoginParams);
         return ApiResponse.onSuccess();
     }
 

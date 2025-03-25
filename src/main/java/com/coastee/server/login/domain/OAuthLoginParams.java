@@ -11,4 +11,6 @@ public interface OAuthLoginParams {
     void updateClientId(final String clientId);
 
     void updateClientSecret(final String clientSecret);
+
+    void updateRedirectUri(final String uri);
 }

@@ -20,12 +20,17 @@ import java.net.URI;
 @FeignClient(value = "linkedinApiClient", url = "https://www.linkedin.com")
 public interface LinkedInApiClient extends OAuthApiClient {
     URI OAUTH_INFO_BASEURL = URI.create("https://api.linkedin.com");
+    String DEFAULT_REDIRECT_URI = "https://coasterchat.com/linkedin-callback";
 
     @Override
     default SocialTokens requestAccessToken(final OAuthLoginParams params) {
         params.updateClientId(PropertyUtil.getProperty("login.linkedin.client-id"));
         params.updateClientSecret(PropertyUtil.getProperty("login.linkedin.client-secret"));
-        return requestAccessToken((LinkedInLoginParams) params);
+        LinkedInLoginParams linkedInLoginParams = (LinkedInLoginParams) params;
+        if (linkedInLoginParams.getRedirect_uri() == null) {
+            linkedInLoginParams.updateRedirectUri(DEFAULT_REDIRECT_URI);
+        }
+        return requestAccessToken(linkedInLoginParams);
     }
 
     @PostMapping(value = "/oauth/v2/accessToken", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)

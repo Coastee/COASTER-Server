@@ -33,4 +33,9 @@ public class NaverLoginParams implements OAuthLoginParams {
     public void updateClientSecret(final String clientSecret) {
         this.client_secret = clientSecret;
     }
+
+    @Override
+    public void updateRedirectUri(final String uri) {
+
+    }
 }

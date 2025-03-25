@@ -29,4 +29,9 @@ public class KakaoLoginParams implements OAuthLoginParams {
     @Override
     public void updateClientSecret(final String clientSecret) {
     }
+
+    @Override
+    public void updateRedirectUri(final String uri) {
+
+    }
 }
