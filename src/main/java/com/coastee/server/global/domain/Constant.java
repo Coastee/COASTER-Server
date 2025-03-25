@@ -22,5 +22,5 @@ public class Constant {
     public static final int MAX_COUNT = 1000;
     public static final int UNLIMITED = Integer.MAX_VALUE;
     // experience
-    public static final LocalDateTime CURRENT_DATE = LocalDateTime.of(999999999, 12, 31, 23, 59, 59);
+    public static final LocalDateTime CURRENT_DATE = LocalDateTime.of(9999, 12, 31, 23, 59, 59);
 }
