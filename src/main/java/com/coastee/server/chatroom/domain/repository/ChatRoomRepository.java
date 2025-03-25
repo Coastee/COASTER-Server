@@ -44,7 +44,7 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     Page<ChatRoom> findByUserAndTypeAndDate(
             @Param("user") final User user,
             @Param("type") final ChatRoomType chatRoomType,
-            @Param("date") final LocalDateTime nowDate,
+            @Param("nowDate") final LocalDateTime nowDate,
             final Pageable pageable
     );
 
