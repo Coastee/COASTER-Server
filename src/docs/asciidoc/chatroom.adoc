@@ -264,6 +264,35 @@ include::{snippets}/get-participants/path-parameters.adoc[]
 include::{snippets}/get-participants/response-body.adoc[]
 include::{snippets}/get-participants/response-fields.adoc[]
 
+== `DELETE` Remove Participants
+
+채팅방 참여자 강제 퇴장
+
+- 해당 채팅방의 방장만 수행 가능하도록 막아둠.
+
+=== Request
+
+```
+/api/v1/servers/{serverId}/{chatRoomType}/{groupId}/users/{userId}
+```
+
+include::{snippets}/remove-participants/curl-request.adoc[]
+
+==== header
+
+include::{snippets}/remove-participants/request-headers.adoc[]
+
+==== path parameters
+
+include::{snippets}/remove-participants/path-parameters.adoc[]
+
+=== Response
+
+==== response body
+
+include::{snippets}/remove-participants/response-body.adoc[]
+include::{snippets}/remove-participants/response-fields.adoc[]
+
 
 == `POST` Enter ChatRoom
 

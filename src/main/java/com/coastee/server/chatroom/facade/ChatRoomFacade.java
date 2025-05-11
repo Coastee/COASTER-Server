@@ -109,6 +109,19 @@ public class ChatRoomFacade {
     }
 
     @Transactional
+    public void removeParticipant(
+            final Accessor accessor,
+            final Long chatRoomId,
+            final Long userId
+    ) {
+        User user = userService.findById(accessor.getUserId());
+        ChatRoom chatRoom = chatRoomService.findById(chatRoomId);
+        chatRoom.validateOwner(user);
+        User removedUser = userService.findById(userId);
+        chatRoomEntryService.exit(removedUser, chatRoom);
+    }
+
+    @Transactional
     public void toggleFavorite(final Accessor accessor, final Long chatRoomId) {
         User user = userService.findById(accessor.getUserId());
         ChatRoom chatRoom = chatRoomService.findById(chatRoomId);

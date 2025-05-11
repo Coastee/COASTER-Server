@@ -298,6 +298,48 @@ class ChatRoomControllerTest extends ControllerTest {
                 .then().log().all().statusCode(200);
     }
 
+    @DisplayName("채팅방 참여자를 강제 퇴장한다.")
+    @Test
+    void removeParticipants() throws Exception {
+        // given
+        User userA = userRepository.save(UserFixture.get("userA"));
+        User userB = userRepository.save(UserFixture.get("userB"));
+        Server server = serverRepository.save(ServerFixture.get());
+        ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.groupChatRoom(server, userA, "titleA", "contentA"));
+
+        doNothing().when(chatRoomFacade).removeParticipant(any(), any(), any());
+
+        // when & then
+        RestAssured.given(spec).log().all()
+                .header(ACCESS_TOKEN_HEADER, ACCESS_TOKEN)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .filter(
+                        document("remove-participants",
+                                pathParameters(
+                                        parameterWithName("serverId").description("서버 아이디"),
+                                        parameterWithName("chatRoomType").description("채팅방 타입 - `groups` : 그룹챗, `meetings` 커피챗"),
+                                        parameterWithName("chatRoomId").description("채팅방 아이디"),
+                                        parameterWithName("userId").description("유저 아이디")
+                                ),
+                                requestHeaders(
+                                        headerWithName(ACCESS_TOKEN_HEADER).description("액세스 토큰")
+                                ),
+                                responseFields(
+                                        fieldWithPath("isSuccess").type(BOOLEAN).description("성공 여부"),
+                                        fieldWithPath("code").type(STRING).description("결과 코드"),
+                                        fieldWithPath("message").type(STRING).description("결과 메세지")
+                                )
+                        ))
+                .when().delete(
+                        "/api/v1/servers/{serverId}/{chatRoomType}/{chatRoomId}/users/{userId}",
+                        1,
+                        "groups",
+                        chatRoom.getId(),
+                        userB.getId()
+                )
+                .then().log().all().statusCode(200);
+    }
+
     @DisplayName("채팅 이력을 조회한다.")
     @Test
     void getChats() throws Exception {

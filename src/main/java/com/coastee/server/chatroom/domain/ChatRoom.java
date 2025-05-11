@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.coastee.server.global.apipayload.code.status.ErrorStatus.MAX_PARTICIPANT;
+import static com.coastee.server.global.apipayload.code.status.ErrorStatus.NOT_OWNER;
 import static com.coastee.server.global.domain.Constant.MAX_COUNT;
 import static com.coastee.server.global.domain.Constant.UNLIMITED;
 import static jakarta.persistence.EnumType.STRING;
@@ -160,6 +161,10 @@ public class ChatRoom extends BaseEntity {
 
     public boolean isOwner(final User user) {
         return this.user.equals(user);
+    }
+
+    public void validateOwner(final User user) {
+        if (!isOwner(user)) throw new GeneralException(NOT_OWNER);
     }
 
     public void updateThumbnail(final String thumbnail) {

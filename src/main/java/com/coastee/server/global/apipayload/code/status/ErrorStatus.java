@@ -53,6 +53,7 @@ public enum ErrorStatus implements BaseErrorCode {
     MAX_PARTICIPANT(BAD_REQUEST, "CHATROOM4002", "최대 참여자 수에 도달하여 더 이상 참여할 수 없는 채팅방입니다."),
     NOT_IN_CHATROOM(BAD_REQUEST, "CHATROOM4003", "현재 유저는 이 채팅방에 참여하고 있지 않습니다."),
     FAIL_CREATE_CHATROOM(BAD_REQUEST, "CHATROOM4004", "채팅방 생성 과정에 실패하였습니다. 요청 엔드포인트가 잘못되었습니다."),
+    NOT_OWNER(FORBIDDEN, "CHATROOM4005", "해당 유저에게 강제 퇴장 권한이 존재하지 않습니다."),
 
     FAIL_FIND_SERVER_CHATROOM(INTERNAL_SERVER_ERROR, "CHATROOM5001", "서버 전체 채팅방 부재, 관리자에게 문의 바랍니다."),
 

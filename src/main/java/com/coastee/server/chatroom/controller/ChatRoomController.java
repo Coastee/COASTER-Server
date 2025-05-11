@@ -99,6 +99,19 @@ public class ChatRoomController {
         return ApiResponse.onSuccess(chatRoomFacade.getParticipants(accessor, chatRoomId, pageable));
     }
 
+    @DeleteMapping("/{chatRoomType}/{chatRoomId}/users/{userId}")
+    @UserOnly
+    public ApiResponse<Void> removeParticipants(
+            @Auth final Accessor accessor,
+            @PathVariable("serverId") final Long serverId,
+            @PathVariable("chatRoomType") final ChatRoomType chatRoomType,
+            @PathVariable("chatRoomId") final Long chatRoomId,
+            @PathVariable("userId") final Long userId
+    ) {
+        chatRoomFacade.removeParticipant(accessor, chatRoomId, userId);
+        return ApiResponse.onSuccess();
+    }
+
     @PostMapping("/{chatRoomType}/{chatRoomId}/favorite")
     @UserOnly
     public ApiResponse<Void> toggleFavorite(
