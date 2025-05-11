@@ -231,7 +231,7 @@ include::{snippets}/favorite-chatroom/response-body.adoc[]
 include::{snippets}/favorite-chatroom/response-fields.adoc[]
 
 
-== 'GET' Find Participants
+== `GET` Find Participants
 
 채팅방 참여자 조회
 
